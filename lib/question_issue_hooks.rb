@@ -2,8 +2,11 @@ class QuestionIssueHooks < Redmine::Hook::ViewListener
   def view_issues_edit_notes_bottom(context = { })
     f = context[:form]
     @issue = context[:issue]
-    return content_tag(:p, select(:note, :question_assigned_to, (@issue.assignable_users.collect {|m| [m.name, m.id]}), :include_blank => true))
-
+    o = ''
+    o << content_tag(:p, 
+                     "<label>#{l(:field_question_assign_to)}</label>" + 
+                     select(:note, :question_assigned_to, (@issue.assignable_users.collect {|m| [m.name, m.id]}), :include_blank => true))
+    return o
   end
   
   def controller_issues_edit_before_save(context = { })
