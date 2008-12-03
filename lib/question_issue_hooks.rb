@@ -5,15 +5,17 @@ class QuestionIssueHooks < Redmine::Hook::ViewListener
     o = ''
     o << content_tag(:p, 
                      "<label>#{l(:field_question_assign_to)}</label>" + 
-                     select(:note, :question_assigned_to, (@issue.assignable_users.collect {|m| [m.name, m.id]}), :include_blank => true))
+                     select(:note,
+                            :question_assigned_to,
+                            [["Anyone", :anyone]] + (@issue.assignable_users.collect {|m| [m.name, m.id]}),
+                            :include_blank => true))
     return o
   end
   
   def controller_issues_edit_before_save(context = { })
     params = context[:params]
     journal = context[:journal]
-    if params[:note][:question_assigned_to]
-      user = params[:note][:question_assigned_to].to_i
+    unless params[:note][:question_assigned_to].blank?
       if journal.question
         # Update
         # TODO:
@@ -21,9 +23,12 @@ class QuestionIssueHooks < Redmine::Hook::ViewListener
         # New
         journal.question = Question.new(
                                         :author => User.current,
-                                        :assigned_to => User.find(user),
                                         :issue => journal.issue
                                         )
+        if params[:note][:question_assigned_to] != 'anyone'
+          # Assigned to a specific user
+          journal.question.assigned_to = User.find(params[:note][:question_assigned_to].to_i)
+        end
       end
     end
     
