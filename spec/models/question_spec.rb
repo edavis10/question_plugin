@@ -18,3 +18,48 @@ describe Question, 'associations' do
   end
   
 end
+
+describe Question, 'requires' do
+  include QuestionSpecHelper
+  
+  it 'a journal' do
+    question = question_factory(1)
+    user = mock_model(User)
+    question.stub!(:author).and_return(user)
+    assignee = mock_model(User)
+    question.stub!(:assigned_to).and_return(assignee)
+    issue = mock_model(Issue)
+    question.stub!(:issue).and_return(issue)
+    
+    question.should_not be_valid
+    question.errors.on(:journal).should include("activerecord_error_blank")
+  end
+
+  it 'an author' do
+    question = question_factory(1)
+    journal = mock_model(Journal)
+    question.stub!(:journal).and_return(journal)
+    assignee = mock_model(User)
+    question.stub!(:assigned_to).and_return(assignee)
+    issue = mock_model(Issue)
+    question.stub!(:issue).and_return(issue)
+    
+    question.should_not be_valid
+    question.errors.on(:author).should include("activerecord_error_blank")
+  end
+
+  it 'an issue' do
+    question = question_factory(1)
+    user = mock_model(User)
+    question.stub!(:author).and_return(user)
+    journal = mock_model(Journal)
+    question.stub!(:journal).and_return(journal)
+    assignee = mock_model(User)
+    question.stub!(:assigned_to).and_return(assignee)
+    
+    question.should_not be_valid
+    question.errors.on(:issue).should include("activerecord_error_blank")
+    
+  end
+  
+end

@@ -69,3 +69,13 @@ module AssociationMatcher
 end
 
 include AssociationMatcher
+
+module QuestionSpecHelper
+  def question_factory(id=1, options = { })
+    object_options = { 
+      :id => id
+    }.merge(options)
+    
+    return Question.new(object_options)
+  end
+end
