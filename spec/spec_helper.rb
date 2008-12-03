@@ -38,3 +38,34 @@ Spec::Runner.configure do |config|
   # config.mock_with :flexmock
   # config.mock_with :rr
 end
+
+module AssociationMatcher
+  class Association
+    def initialize(field, association_type)
+      @field = field
+      @association_type = association_type
+    end
+    
+    def matches?(model)
+      @model=model
+      association = @model.reflect_on_association(@field)
+      return false if association.nil?
+
+      return association.name == @field && association.macro == @association_type
+    end
+    
+    def failure_message
+      "expected <#{@model.name}> to have a #{@association_type} association for #{@field}"
+    end
+
+    def negative_failure_message
+      "expected <#{@model.name}> to not have a #{@association_type} association for #{@field} but one was found"
+    end
+  end
+
+  def have_association(field, association_type)
+    Association.new(field, association_type)
+  end
+end
+
+include AssociationMatcher
