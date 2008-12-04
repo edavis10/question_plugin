@@ -29,8 +29,13 @@ describe QuestionIssueHooks, 'controller_issues_edit_before_select' do
     return QuestionIssueHooks.instance.controller_issues_edit_before_save( context )
   end
   
-  it 'should do nothing when no question is asked' do
+  before(:each) do
     @journal = mock_model(Journal)
+    @issue = mock_model(Issue)
+    @question = mock_model(Question)
+  end
+  
+  it 'should do nothing when no question is asked' do
     @journal.should_not_receive(:question)
     @journal.should_not_receive(:question=)
     @context = { 
@@ -41,8 +46,6 @@ describe QuestionIssueHooks, 'controller_issues_edit_before_select' do
   end
 
   it 'should check if the journal has a question' do
-    @journal = mock_model(Journal)
-    @question = mock_model(Question)
     @journal.should_receive(:question).and_return(@question)
 
     @context = { 
@@ -53,8 +56,6 @@ describe QuestionIssueHooks, 'controller_issues_edit_before_select' do
   end
 
   it 'should create a new question for the journal' do
-    @journal = mock_model(Journal)
-    @issue = mock_model(Issue)
     @journal.stub!(:question).and_return(nil)
     @journal.stub!(:issue).and_return(@issue)
     @journal.should_receive(:question=)
@@ -72,8 +73,6 @@ describe QuestionIssueHooks, 'controller_issues_edit_before_select' do
   end  
   
   it 'should create a new question with no assigned_to user if the parameter is anyone' do
-    @journal = mock_model(Journal)
-    @issue = mock_model(Issue)
     @journal.stub!(:question).and_return(nil)
     @journal.stub!(:issue).and_return(@issue)
     @journal.should_receive(:question=)
