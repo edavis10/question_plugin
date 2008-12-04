@@ -15,7 +15,7 @@ class QuestionIssueHooks < Redmine::Hook::ViewListener
   def controller_issues_edit_before_save(context = { })
     params = context[:params]
     journal = context[:journal]
-    unless params[:note][:question_assigned_to].blank?
+    if params[:note] && !params[:note][:question_assigned_to].blank?
       if journal.question
         # Update
         # TODO:
@@ -27,11 +27,17 @@ class QuestionIssueHooks < Redmine::Hook::ViewListener
                                         )
         if params[:note][:question_assigned_to] != 'anyone'
           # Assigned to a specific user
-          journal.question.assigned_to = User.find(params[:note][:question_assigned_to].to_i)
+          assign_question_to_user(journal, User.find(params[:note][:question_assigned_to].to_i))
         end
       end
     end
     
     return ''
+  end
+  
+  private
+  
+  def assign_question_to_user(journal, user)
+    journal.question.assigned_to = user
   end
 end
