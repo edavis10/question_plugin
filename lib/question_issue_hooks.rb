@@ -9,15 +9,15 @@ class QuestionIssueHooks < Redmine::Hook::ViewListener
       question = context[:journal].question
       
       if question.assigned_to
-        html = "Question for #{question.assigned_to.to_s} <span>#{gravatar(question.assigned_to.mail, { :size => 16, :class => '' })}</span> "
+        html = "#{l(:text_question_for)} #{question.assigned_to.to_s} <span>#{gravatar(question.assigned_to.mail, { :size => 16, :class => '' })}</span> "
       else
-        html = "Question for anyone "
+        html = l(:text_question_for_anyone)
       end
 
       o += <<JS
 <script type='text/javascript'>
    $('change-#{context[:journal].id}').addClassName('question');
-   $$('#change-#{context[:journal].id} h4 div').each(function(ele) { ele.insert({ top: '#{html}' }) });
+   $$('#change-#{context[:journal].id} h4 div').each(function(ele) { ele.insert({ top: ' #{html} ' }) });
 </script>
 JS
       
@@ -33,7 +33,7 @@ JS
                      "<label>#{l(:field_question_assign_to)}</label>" + 
                      select(:note,
                             :question_assigned_to,
-                            [["Anyone", :anyone]] + (@issue.assignable_users.collect {|m| [m.name, m.id]}),
+                            [[l(:text_anyone), :anyone]] + (@issue.assignable_users.collect {|m| [m.name, m.id]}),
                             :include_blank => true))
     return o
   end
