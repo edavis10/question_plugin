@@ -1,4 +1,14 @@
 class QuestionIssueHooks < Redmine::Hook::ViewListener
+  
+  # Applies the question class to each journal div if they are questions
+  def view_issues_history_journal_bottom(context = { })
+    o = ''
+    if context[:journal] && context[:journal].question
+      o += "<script type='text/javascript'>$('change-#{context[:journal].id}').addClassName('question');</script>"
+    end
+    return o
+  end
+  
   def view_issues_edit_notes_bottom(context = { })
     f = context[:form]
     @issue = context[:issue]
