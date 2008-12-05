@@ -1,6 +1,8 @@
 require 'redmine'
 
 require 'question_journal_patch'
+require 'question_query_patch'
+require 'question_issue_patch'
 require 'question_issue_hooks'
 require 'question_layout_hooks'
 
