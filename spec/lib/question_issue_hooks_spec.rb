@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
+require 'digest/md5'
 
 describe QuestionIssueHooks, 'view_issues_edit_notes_bottom' do
   describe 'should render a select' do
@@ -99,14 +100,31 @@ describe QuestionIssueHooks, 'assign_question_to_user' do
 end
 
 describe QuestionIssueHooks, 'view_issues_history_journal_bottom with a journal and question' do
-  it 'should use JavaScript to add a CSS class' do
+  before(:each) do
+    @user = mock_model(User, :to_s => "A user", :mail => 'user@example.com')
+    @question = mock_model(Question, :assigned_to => @user)
     @context = { 
-      :journal => mock_model(Journal, :question => true)
+      :journal => mock_model(Journal, :question => @question)
     }
     
-    output = QuestionIssueHooks.instance.view_issues_history_journal_bottom( @context )
-    output.should match(/javascript/i)
-    output.should match(/addClassName/i)
+    @output = QuestionIssueHooks.instance.view_issues_history_journal_bottom( @context )
+  end
+  
+  it 'should use JavaScript' do
+    @output.should match(/javascript/i)
+  end
+
+  it 'should add a CSS class' do
+    @output.should match(/addClassName/i)
+  end
+
+  it 'should display the users gravatar' do
+    user_digest = Digest::MD5.hexdigest(@user.mail)
+    @output.should match(/#{user_digest}/i)
+  end
+  
+  it 'should insert a string into the h4>div' do
+    @output.should match(/h4 div/i)
   end
 end
 
