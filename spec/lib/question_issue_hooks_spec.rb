@@ -97,3 +97,25 @@ describe QuestionIssueHooks, 'assign_question_to_user' do
     QuestionIssueHooks.instance.send(:assign_question_to_user, @journal, @user)
   end
 end
+
+describe QuestionIssueHooks, 'view_issues_history_journal_bottom with a journal and question' do
+  it 'should use JavaScript to add a CSS class' do
+    @context = { 
+      :journal => mock_model(Journal, :question => true)
+    }
+    
+    output = QuestionIssueHooks.instance.view_issues_history_journal_bottom( @context )
+    output.should match(/javascript/i)
+    output.should match(/addClassName/i)
+  end
+end
+
+describe QuestionIssueHooks, 'view_issues_history_journal_bottom with a journal and no question' do
+  it 'should not render anything' do
+    @context = { 
+      :journal => mock_model(Journal, :question => nil)
+    }
+    
+    QuestionIssueHooks.instance.view_issues_history_journal_bottom( @context ).should eql('')
+  end
+end
