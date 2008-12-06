@@ -23,26 +23,27 @@ module QuestionIssuePatch
   
   module ClassMethods
     def find_with_questions_added_to_the_includes(*args)
-      # Second args is the options Hash
-      if args[1] && args[1].is_a?(Hash) && args[1][:conditions] && args[1][:conditions].include?('question')
-        # Add questions to includes
-        add_questions_to_the_includes(args[1])
-      end
+      scan_for_options_hash_and_add_includes_if_needed(args)
       default_find(*args)
     end
 
     def count_with_questions_added_to_the_includes(*args)
-      # find the options hash and if question is part of the conditions
+      scan_for_options_hash_and_add_includes_if_needed(args)
+      default_count(*args)
+    end
+    
+    private
+    
+    # Finds the options hash. If question is part of the conditions then
+    # add questions to the includes
+    def scan_for_options_hash_and_add_includes_if_needed(args)
       args.each do |arg|
         if arg.is_a?(Hash) && arg[:conditions] && arg[:conditions].include?('question')
           # Add questions to includes
           add_questions_to_the_includes(arg)
         end
       end
-      default_count(*args)
     end
-    
-    private
     
     def add_questions_to_the_includes(arg)
       if arg[:include]
