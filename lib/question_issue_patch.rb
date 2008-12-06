@@ -24,24 +24,9 @@ module QuestionIssuePatch
   module ClassMethods
     def find_with_questions_added_to_the_includes(*args)
       # Second args is the options Hash
-      if args[1] &&
-          args[1].is_a?(Hash) &&
-          args[1][:conditions] &&
-          args[1][:conditions].include?('question')
+      if args[1] && args[1].is_a?(Hash) && args[1][:conditions] && args[1][:conditions].include?('question')
         # Add questions to includes
-        
-        if args[1][:include]
-          if args[1][:include].is_a?(Hash)
-            # Hash includes
-            args[1][:include] << :questions
-          else
-            # single includes
-            args[1][:include] = [ args[1][:include] , :questions ]
-          end
-        else
-          # No includes
-          args[1][:include] = :questions
-        end
+        add_questions_to_the_includes(args[1])
       end
       default_find(*args)
     end
@@ -51,21 +36,28 @@ module QuestionIssuePatch
       args.each do |arg|
         if arg.is_a?(Hash) && arg[:conditions] && arg[:conditions].include?('question')
           # Add questions to includes
-          if arg[:include]
-            if arg[:include].is_a?(Hash)
-              # Hash includes
-              arg[:include] << :questions
-            else
-              # single includes
-              arg[:include] = [ arg[:include] , :questions ]
-            end
-          else
-            # No includes
-            arg[:include] = :questions
-          end
+          add_questions_to_the_includes(arg)
         end
       end
       default_count(*args)
+    end
+    
+    private
+    
+    def add_questions_to_the_includes(arg)
+      if arg[:include]
+        # Has includes
+        if arg[:include].is_a?(Hash)
+          # Hash includes
+          arg[:include] << :questions
+        else
+          # single includes
+          arg[:include] = [ arg[:include] , :questions ]
+        end
+      else
+        # No includes
+        arg[:include] = :questions
+      end
     end
   end
   
