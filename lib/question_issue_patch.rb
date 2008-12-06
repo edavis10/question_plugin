@@ -11,6 +11,7 @@ module QuestionIssuePatch
       has_many :questions
       
       class << self
+        # I dislike alias method chain, it's not the most readable backtraces
         alias_method :default_find, :find
         alias_method :find, :find_with_questions_added_to_the_includes
 
