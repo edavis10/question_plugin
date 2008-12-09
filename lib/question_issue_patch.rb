@@ -64,6 +64,10 @@ module QuestionIssuePatch
   end
   
   module InstanceMethods
+    def formatted_questions
+      return '' if self.questions.empty?
+      return Question.formatted_list(self.questions)
+    end
   end
 end
 
