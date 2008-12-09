@@ -16,7 +16,7 @@ class Question < ActiveRecord::Base
     list = []
     questions.each do |question|
       if question.journal && !question.journal.notes.blank?
-        list << h(truncate(question.journal.notes, TruncateTo))
+        list << truncate(question.journal.notes, TruncateTo)
       end
     end
     

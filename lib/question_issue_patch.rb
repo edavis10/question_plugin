@@ -68,7 +68,7 @@ module QuestionIssuePatch
       return '' if self.questions.empty?
       html = '<ol>'
       Question.formatted_list(self.questions).each do |question|
-        html << "<li>" + question + "</li>"
+        html << "<li>" + h(question) + "</li>"
       end
       html << '</ol>'
       return html
