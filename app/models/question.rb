@@ -22,4 +22,8 @@ class Question < ActiveRecord::Base
     
     return list
   end
+  
+  def for_anyone?
+    self.assigned_to.nil?
+  end
 end

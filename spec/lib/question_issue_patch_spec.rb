@@ -43,8 +43,8 @@ describe QuestionIssuePatch,"#pending_question?" do
 
   it 'should return false if there are no open questions for the current user' do
     @other_user = mock_model(User)
-    question_one = mock_model(Question, :assigned_to => @other_user)
-    question_two = mock_model(Question, :assigned_to => @other_user)
+    question_one = mock_model(Question, :assigned_to => @other_user, :for_anyone? => false)
+    question_two = mock_model(Question, :assigned_to => @other_user, :for_anyone? => false)
     question_mock = mock('question_mock')
     question_mock.should_receive(:find).and_return([question_one, question_two])
     
@@ -55,8 +55,8 @@ describe QuestionIssuePatch,"#pending_question?" do
 
   it 'should return true if there is an open question for the current user' do
     @other_user = mock_model(User)
-    question_one = mock_model(Question, :assigned_to => @other_user)
-    question_two = mock_model(Question, :assigned_to => @user)
+    question_one = mock_model(Question, :assigned_to => @other_user, :for_anyone? => false)
+    question_two = mock_model(Question, :assigned_to => @user, :for_anyone? => false)
     question_mock = mock('question_mock')
     question_mock.should_receive(:find).and_return([question_one, question_two])
     
@@ -68,8 +68,8 @@ describe QuestionIssuePatch,"#pending_question?" do
 
   it 'should return true if there is an open question for anyone' do
     @other_user = mock_model(User)
-    question_one = mock_model(Question, :assigned_to => @other_user)
-    question_two = mock_model(Question, :assigned_to => nil)
+    question_one = mock_model(Question, :assigned_to => @other_user, :for_anyone? => false)
+    question_two = mock_model(Question, :assigned_to => nil, :for_anyone? => true)
     question_mock = mock('question_mock')
     question_mock.should_receive(:find).and_return([question_one, question_two])
     

@@ -77,7 +77,7 @@ module QuestionIssuePatch
     
     def pending_question?(user)
       self.open_questions.find(:all).each do |question|
-        return true if question.assigned_to == user || question.assigned_to.nil?
+        return true if question.assigned_to == user || question.for_anyone?
       end
       return false
     end
