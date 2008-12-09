@@ -137,3 +137,79 @@ describe QuestionIssueHooks, 'view_issues_history_journal_bottom with a journal 
     QuestionIssueHooks.instance.view_issues_history_journal_bottom( @context ).should eql('')
   end
 end
+
+describe QuestionIssueHooks, 'view_issues_sidebar_issues_bottom with a project' do
+  before(:each) do
+    @project = mock_model(Project)
+    @context = { :project => @project }
+  end
+  
+  def call_hook(context)
+    return QuestionIssueHooks.instance.view_issues_sidebar_issues_bottom(context)
+  end
+  
+  it 'should get the number of questions for the current user on the project' do
+    Question.should_receive(:count).and_return(10)
+    call_hook(@context)
+  end
+
+  describe 'with questions' do
+    before(:each) do
+      Question.stub!(:count).and_return(10)
+    end
+
+    it 'should return a link to my_issue_filter' do
+      call_hook(@context).should match(/my_issue_filter/)
+    end
+    
+    it 'should display the number of questions in the link body' do
+      call_hook(@context).should match(/10/)
+    end
+  end
+  
+  describe 'without questions' do
+    it 'should not return anything' do
+      Question.should_receive(:count).and_return(0)
+      call_hook(@context).should eql('')
+    end
+  end
+end
+
+describe QuestionIssueHooks, 'view_issues_sidebar_issues_bottom without a project' do
+  before(:each) do
+    @context = { }
+    @user = mock_model(User)
+    User.stub!(:current).and_return(@user)
+  end
+  
+  def call_hook(context)
+    return QuestionIssueHooks.instance.view_issues_sidebar_issues_bottom(context)
+  end
+  
+  it 'should get the number of questions for the current user on all projects' do
+    Question.should_receive(:count).with(:conditions => { :assigned_to_id => @user}).and_return(10)
+    call_hook(@context)
+  end
+
+  describe 'with questions' do
+    before(:each) do
+      Question.stub!(:count).and_return(10)
+    end
+
+    it 'should return a link to my_issue_filter' do
+      call_hook(@context).should match(/my_issue_filter/)
+    end
+    
+    it 'should display the number of questions in the link body' do
+      call_hook(@context).should match(/10/)
+    end
+  end
+  
+  describe 'without questions' do
+    it 'should not return anything' do
+      Question.should_receive(:count).and_return(0)
+      call_hook(@context).should eql('')
+    end
+  end
+end
+

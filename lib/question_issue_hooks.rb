@@ -61,6 +61,34 @@ JS
     return ''
   end
   
+  def view_issues_sidebar_issues_bottom(context = { })
+    project = context[:project]
+    if project
+      question_count = Question.count(:conditions => ["#{Question.table_name}.assigned_to_id = ? AND #{Project.table_name}.id = ?",
+                                                      User.current,
+                                                      project.id],
+                                      :include => [:issue => [:project]])
+    else
+      question_count = Question.count(:conditions => {:assigned_to_id => User.current})
+    end
+    
+    if question_count > 0
+      return link_to(l(:text_questions_for_me) + "(#{question_count})",
+                     {
+                       :controller => 'questions',
+                       :action => 'my_issue_filter',
+                       :project => project,
+                       :protocol => Setting.protocol,
+                       :host => Setting.host_name
+                     },
+                     { :class => 'question-link' }
+                     )
+    else
+      return ''
+    end
+    
+  end
+
   private
   
   def assign_question_to_user(journal, user)
