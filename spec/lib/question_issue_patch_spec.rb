@@ -27,3 +27,55 @@ describe QuestionIssuePatch,"#formatted_questions with questions" do
     question_content.should match(/This is a journal note/)
   end
 end
+
+describe QuestionIssuePatch,"#pending_question?" do
+  before(:each) do
+    @user = mock_model(User)
+  end
+  
+  it 'should return false if there are no open questions' do
+    question_mock = mock('question_mock')
+    question_mock.stub!(:find).and_return([])
+    @issue = Issue.new
+    @issue.should_receive(:open_questions).and_return(question_mock)
+    @issue.pending_question?(@user).should be_false
+  end
+
+  it 'should return false if there are no open questions for the current user' do
+    @other_user = mock_model(User)
+    question_one = mock_model(Question, :assigned_to => @other_user)
+    question_two = mock_model(Question, :assigned_to => @other_user)
+    question_mock = mock('question_mock')
+    question_mock.should_receive(:find).and_return([question_one, question_two])
+    
+    @issue = Issue.new
+    @issue.should_receive(:open_questions).and_return(question_mock)
+    @issue.pending_question?(@user).should be_false
+  end
+
+  it 'should return true if there is an open question for the current user' do
+    @other_user = mock_model(User)
+    question_one = mock_model(Question, :assigned_to => @other_user)
+    question_two = mock_model(Question, :assigned_to => @user)
+    question_mock = mock('question_mock')
+    question_mock.should_receive(:find).and_return([question_one, question_two])
+    
+    @issue = Issue.new
+    @issue.should_receive(:open_questions).and_return(question_mock)
+    @issue.pending_question?(@user).should be_true
+    
+  end
+
+  it 'should return true if there is an open question for anyone' do
+    @other_user = mock_model(User)
+    question_one = mock_model(Question, :assigned_to => @other_user)
+    question_two = mock_model(Question, :assigned_to => nil)
+    question_mock = mock('question_mock')
+    question_mock.should_receive(:find).and_return([question_one, question_two])
+    
+    @issue = Issue.new
+    @issue.should_receive(:open_questions).and_return(question_mock)
+    @issue.pending_question?(@user).should be_true
+    
+  end
+end
