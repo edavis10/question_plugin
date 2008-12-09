@@ -16,10 +16,10 @@ class Question < ActiveRecord::Base
     list = []
     questions.each do |question|
       if question.journal && !question.journal.notes.blank?
-        list << truncate(question.journal.notes, TruncateTo)
+        list << h(truncate(question.journal.notes, TruncateTo))
       end
     end
     
-    return list.join('\n')
+    return list
   end
 end

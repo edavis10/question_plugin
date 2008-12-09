@@ -65,8 +65,8 @@ describe Question, 'requires' do
 end
 
 describe Question,"#formatted_list with no questions" do
-  it 'should return an empty string' do
-    Question.formatted_list([]).should eql('')
+  it 'should return an empty array' do
+    Question.formatted_list([]).should eql([])
   end
 end
 
@@ -84,12 +84,12 @@ describe QuestionIssuePatch,"#formatted_list with one question" do
   
   it 'should return the first 120 characters of the question' do
     question_content = Question.formatted_list(@questions)
-    question_content.should_not match(/really work/)
-    question_content.should match(/This is a journal note/)
+    question_content[0].should_not match(/really work/)
+    question_content[0].should match(/This is a journal note/)
   end
   
   it 'should have ellipses if when over 120 characters of content' do
-    Question.formatted_list(@questions).should match(/\.\.\./)
+    Question.formatted_list(@questions)[0].should match(/\.\.\./)
   end
 
   it 'should not have ellipses when there are under 120 characters of content' do
@@ -98,7 +98,7 @@ describe QuestionIssuePatch,"#formatted_list with one question" do
     question = mock_model(Question, :journal => journal)
     questions = [question]
     
-    Question.formatted_list(questions).should_not match(/\.\.\./)
+    Question.formatted_list(questions)[0].should_not match(/\.\.\./)
   end
 
 end
@@ -116,22 +116,17 @@ describe QuestionIssuePatch,"#formatted_questions with multiple questions" do
     @questions = [@question, @question_two]
   end
   
-  it 'should not be blank' do
-    Question.formatted_list(@questions).should_not be_blank
+  it 'should not be empty' do
+    Question.formatted_list(@questions).should_not be_empty
   end
   
   it 'should return the first 120 characters of each question' do
     question_content = Question.formatted_list(@questions)
-    question_content.should_not match(/really work/)
-    question_content.should match(/This is a journal note/)
+    question_content[0].should_not match(/really work/)
+    question_content[0].should match(/This is a journal note/)
     
-    question_content.should_not match(/maybe/i)
-    question_content.should match(/unique/)
+    question_content[1].should_not match(/maybe/i)
+    question_content[1].should match(/unique/)
     
-  end
-  
-  it 'should separate each question with a line break' do
-    questions = Question.formatted_list(@questions).split('\n')
-    questions.should have(2).things
   end
 end

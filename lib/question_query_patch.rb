@@ -9,6 +9,8 @@ module QuestionQueryPatch
     # Same as typing in the class 
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in development
+      base.add_available_column(QueryColumn.new(:formatted_questions))
+
       
       alias_method :redmine_available_filters, :available_filters
       alias_method :available_filters, :question_available_filters
@@ -20,6 +22,19 @@ module QuestionQueryPatch
   end
   
   module ClassMethods
+    unless Query.respond_to?(:available_columns=)
+      # Setter for +available_columns+ that isn't provided by the core.
+      def available_columns=(v)
+        self.available_columns = (v)
+      end
+    end
+    
+    unless Query.respond_to?(:add_available_column)
+      # Method to add a column to the +available_columns+ that isn't provided by the core.
+      def add_available_column(column)
+        self.available_columns << (column)
+      end
+    end
   end
   
   module InstanceMethods

@@ -9,7 +9,7 @@ module QuestionIssuePatch
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in development
       has_many :questions
-      
+
       class << self
         # I dislike alias method chain, it's not the most readable backtraces
         alias_method :default_find, :find
@@ -66,7 +66,12 @@ module QuestionIssuePatch
   module InstanceMethods
     def formatted_questions
       return '' if self.questions.empty?
-      return Question.formatted_list(self.questions)
+      html = '<ol>'
+      Question.formatted_list(self.questions).each do |question|
+        html << "<li>" + question + "</li>"
+      end
+      html << '</ol>'
+      return html
     end
   end
 end
