@@ -70,12 +70,13 @@ JS
   def view_issues_sidebar_issues_bottom(context = { })
     project = context[:project]
     if project
-      question_count = Question.count(:conditions => ["#{Question.table_name}.assigned_to_id = ? AND #{Project.table_name}.id = ?",
+      question_count = Question.count(:conditions => ["#{Question.table_name}.assigned_to_id = ? AND #{Project.table_name}.id = ? AND #{Question.table_name}.opened = ?",
                                                       User.current,
-                                                      project.id],
+                                                      project.id,
+                                                      true],
                                       :include => [:issue => [:project]])
     else
-      question_count = Question.count(:conditions => {:assigned_to_id => User.current})
+      question_count = Question.count(:conditions => {:assigned_to_id => User.current, :opened => true})
     end
     
     if question_count > 0

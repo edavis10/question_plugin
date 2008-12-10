@@ -66,9 +66,9 @@ module QuestionIssuePatch
   
   module InstanceMethods
     def formatted_questions
-      return '' if self.questions.empty?
+      return '' if self.open_questions.empty?
       html = '<ol>'
-      Question.formatted_list(self.questions).each do |question|
+      Question.formatted_list(self.open_questions).each do |question|
         html << "<li>" + h(question) + "</li>"
       end
       html << '</ol>'

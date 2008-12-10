@@ -18,7 +18,7 @@ describe QuestionIssuePatch,"#formatted_questions with questions" do
     content = 'This is a journal note that is supposed to have the question content in it but only up the 120th character, but does it really work?'
     question = mock_model(Question)
     @issue = Issue.new
-    @issue.should_receive(:questions).twice.and_return([question])
+    @issue.should_receive(:open_questions).twice.and_return([question])
     Question.should_receive(:formatted_list).with([question]).and_return(content[0,120])
     
     question_content = @issue.formatted_questions
