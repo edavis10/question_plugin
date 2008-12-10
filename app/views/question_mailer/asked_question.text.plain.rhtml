@@ -1,0 +1,9 @@
+<%= l(:text_question_asked, "##{@issue.id}", @question.author) %>
+
+<% for detail in @journal.details -%>
+<%= show_detail(detail, true) %>
+<% end -%>
+
+<%= @journal.notes if @journal.notes? %>
+----------------------------------------
+<%= render :partial => "mailer/issue_text_plain", :locals => { :issue => @issue, :issue_url => @issue_url } %>
