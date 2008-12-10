@@ -8,6 +8,6 @@ class QuestionMailer < Mailer
          :issue => question.issue,
          :journal => journal,
          :issue_url => url_for(:controller => 'issues', :action => 'show', :id => question.issue))
-    
+    RAILS_DEFAULT_LOGGER.debug 'Sending QuestionMailer#asked_question'
   end
 end
