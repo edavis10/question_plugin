@@ -6,6 +6,7 @@ require 'question_issue_patch'
 require 'question_queries_helper_patch'
 require 'question_issue_hooks'
 require 'question_layout_hooks'
+require 'question_journal_hooks'
 
 Redmine::Plugin.register :question_plugin do
   name 'Redmine Question plugin'
