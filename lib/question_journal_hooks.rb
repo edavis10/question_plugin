@@ -49,8 +49,8 @@ class QuestionJournalHooks < Redmine::Hook::ViewListener
     @journal = context[:journal]
     page = context[:page]
     unless @journal.frozen?
+      @journal.reload
       if @journal && @journal.question && @journal.question.opened?
-        @journal.reload
         question = @journal.question
       
         if question.assigned_to
