@@ -1,5 +1,7 @@
 class QuestionJournalHooks < Redmine::Hook::ViewListener
-  
+  # Have to inclue Gravatars because ApplicationHelper will not get it
+  include GravatarHelper::PublicMethods
+
   def view_journals_notes_form_after_notes(context = { })
     @journal = context[:journal]
     if @journal.question && @journal.question.opened
@@ -40,6 +42,29 @@ class QuestionJournalHooks < Redmine::Hook::ViewListener
 
     end
     
+    return ''
+  end
+  
+  def view_journals_update_rjs_bottom(context = { })
+    @journal = context[:journal]
+    page = context[:page]
+    unless @journal.frozen?
+      if @journal && @journal.question && @journal.question.opened?
+        @journal.reload
+        question = @journal.question
+      
+        if question.assigned_to
+          html = "<span class=\"question-line\">#{l(:text_question_for)} #{question.assigned_to.to_s} <span>#{gravatar(question.assigned_to.mail, { :size => 16, :class => '' })}</span> </span>"
+        else
+          html = "<span class=\"question-line\">" + l(:text_question_for_anyone) + "</span>"
+        end
+        
+        page << "$('change-#{@journal.id}').addClassName('question');"
+        page << "$$('#change-#{@journal.id} h4 div span.question-line').each(function(ele) {ele.remove()});"
+        page << "$$('#change-#{@journal.id} h4 div').each(function(ele) { ele.insert({ top: ' #{html} ' }) });"
+      
+      end
+    end
     return ''
   end
   

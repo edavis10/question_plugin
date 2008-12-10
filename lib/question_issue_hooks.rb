@@ -9,9 +9,9 @@ class QuestionIssueHooks < Redmine::Hook::ViewListener
       question = context[:journal].question
       
       if question.assigned_to
-        html = "#{l(:text_question_for)} #{question.assigned_to.to_s} <span>#{gravatar(question.assigned_to.mail, { :size => 16, :class => '' })}</span> "
+        html = "<span class=\"question-line\">#{l(:text_question_for)} #{question.assigned_to.to_s} <span>#{gravatar(question.assigned_to.mail, { :size => 16, :class => '' })}</span> </span>"
       else
-        html = l(:text_question_for_anyone)
+        html = "<span class=\"question-line\">" + l(:text_question_for_anyone) + "</span>"
       end
 
       o += <<JS
