@@ -102,7 +102,7 @@ end
 describe QuestionIssueHooks, 'view_issues_history_journal_bottom with a journal and question' do
   before(:each) do
     @user = mock_model(User, :to_s => "A user", :mail => 'user@example.com')
-    @question = mock_model(Question, :assigned_to => @user)
+    @question = mock_model(Question, :assigned_to => @user, :opened? => true)
     @context = { 
       :journal => mock_model(Journal, :question => @question)
     }

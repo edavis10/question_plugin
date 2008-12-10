@@ -5,7 +5,7 @@ class QuestionIssueHooks < Redmine::Hook::ViewListener
   # Applies the question class to each journal div if they are questions
   def view_issues_history_journal_bottom(context = { })
     o = ''
-    if context[:journal] && context[:journal].question
+    if context[:journal] && context[:journal].question && context[:journal].question.opened?
       question = context[:journal].question
       
       if question.assigned_to
