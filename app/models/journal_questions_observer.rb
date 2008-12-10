@@ -4,7 +4,6 @@ class JournalQuestionsObserver < ActiveRecord::Observer
   observe :journal
   
   def after_save(journal)
-    debugger
-    RAILS_DEFAULT_LOGGER.debug 'in observer'
+    QuestionMailer.deliver_asked_question(journal.question) if journal.question
   end
 end
