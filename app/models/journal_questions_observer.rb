@@ -4,6 +4,6 @@ class JournalQuestionsObserver < ActiveRecord::Observer
   observe :journal
   
   def after_save(journal)
-    QuestionMailer.deliver_asked_question(journal.question) if journal.question
+    QuestionMailer.deliver_asked_question(journal) if journal.question
   end
 end

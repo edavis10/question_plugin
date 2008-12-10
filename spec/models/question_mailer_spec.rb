@@ -12,10 +12,10 @@ describe QuestionMailer, '#asked_question with a question' do
     @author = mock_model(User, :name => 'Author', :mail => 'author@example.org')
     @tracker = mock_model(Tracker, :name => 'Bugs')
     @issue = mock_model(Issue, :id => 1000, :tracker => @tracker, :author => nil, :subject => "Add new stuff", :status => nil, :priority => nil, :assigned_to => nil, :category => nil, :fixed_version => nil, :custom_values => [], :description => 'Issue description')
-    @journal = mock_model(Journal, :details => [], :notes => "This is the question for the user", :notes? => true)
-    @question = mock_model(Question, :assigned_to => @user, :author => @author, :issue => @issue, :journal => @journal)
+    @question = mock_model(Question, :assigned_to => @user, :author => @author, :issue => @issue)
+    @journal = mock_model(Journal, :details => [], :notes => "This is the question for the user", :notes? => true, :question => @question)
     
-    @mail = QuestionMailer.create_asked_question(@question)
+    @mail = QuestionMailer.create_asked_question(@journal)
     Setting.stub!(:bcc_recipients?).and_return(true)
   end
   
@@ -54,10 +54,10 @@ describe QuestionMailer, '#asked_question with a question for anyone' do
     author = mock_model(User, :name => 'Author', :mail => 'author@example.org')
     tracker = mock_model(Tracker, :name => 'Bugs')
     issue = mock_model(Issue, :id => 1000, :tracker => tracker, :author => nil, :subject => "Add new stuff", :status => nil, :priority => nil, :assigned_to => nil, :category => nil, :fixed_version => nil, :custom_values => [], :description => 'Issue description')
-    journal = mock_model(Journal, :details => [], :notes => "This is the question for the user", :notes? => true)
-    question = mock_model(Question, :assigned_to => nil, :issue => issue, :journal => journal, :author => author)
+    question = mock_model(Question, :assigned_to => nil, :issue => issue, :author => author)
+    journal = mock_model(Journal, :details => [], :notes => "This is the question for the user", :notes? => true, :question => question)
     
-    @mail = QuestionMailer.create_asked_question(question)
+    @mail = QuestionMailer.create_asked_question(journal)
     @mail.to.should be_nil
     @mail.cc.should be_nil
     @mail.bcc.should be_nil

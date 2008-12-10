@@ -18,7 +18,7 @@ describe JournalQuestionsObserver, '#after_save with a question' do
   it 'should deliver an email' do
     question = mock_model(Question)
     journal = mock_model(Journal, :question => question)
-    QuestionMailer.should_receive(:deliver_asked_question).with(question)
+    QuestionMailer.should_receive(:deliver_asked_question).with(journal)
     JournalQuestionsObserver.instance.after_save(journal)
   end
 end
