@@ -20,8 +20,8 @@ describe QuestionJournalHooks, '#views_journals_notes_form_after_notes' do
       QuestionJournalHooks.instance.view_journals_notes_form_after_notes( @context ).should have_tag('option',/Anyone/)
     end
 
-    it 'with a blank option' do
-      QuestionJournalHooks.instance.view_journals_notes_form_after_notes( @context ).should have_tag('option','')
+    it 'with a "Remove" option' do
+      QuestionJournalHooks.instance.view_journals_notes_form_after_notes( @context ).should have_tag('option',/remove/i)
     end
 
     it 'with the current user selected option' do
@@ -32,19 +32,56 @@ end
 
 
 describe QuestionJournalHooks, '#controller_journals_edit_post with an empty question' do
-  it 'should do nothing'
+  it 'should do nothing' do
+    journal = mock_model(Journal)
+    context = { 
+      :journal => journal,
+      :params => { }
+    }
+    journal.should_not_receive(:question)
+    journal.should_not_receive(:question=)
+    QuestionJournalHooks.instance.controller_journals_edit_post( context ).should eql('')
+  end
 end
 
 describe QuestionJournalHooks, '#controller_journals_edit_post with a new question' do
-  it 'should create a new question'
-  it 'should assign the user to the question if the assignee is a valid user'
-  it 'should assign the "Anyone" user to the question if the "anyone" user is used'
+  it 'should create a new question' do
+    issue = mock_model(Issue)
+    journal = mock_model(Journal, :question => nil, :issue => issue)
+    journal.should_receive(:question=).and_return(true)
+    journal.should_receive(:save).and_return(true)
+    context = { 
+      :journal => journal,
+      :params => { :question => { :assigned_to_id => 'anyone'}}
+    }
+    QuestionJournalHooks.instance.controller_journals_edit_post( context ).should eql('')
+  end
 end
 
 describe QuestionJournalHooks, '#controller_journals_edit_post with a reassigned question' do
-  it 'should change the assignment of the question'
+  it 'should change the assignment of the question' do
+    issue = mock_model(Issue)
+    question = mock_model(Question, :assigned_to_id => 2, :opened => true)
+    question.should_receive(:update_attributes).with({ :assigned_to_id => 'anyone'}).and_return(true)
+    journal = mock_model(Journal, :question => nil, :issue => issue, :question => question)
+    context = { 
+      :journal => journal,
+      :params => { :question => { :assigned_to_id => 'anyone'}}
+    }
+    QuestionJournalHooks.instance.controller_journals_edit_post( context ).should eql('')
+  end
 end
 
 describe QuestionJournalHooks, '#controller_journals_edit_post with a removed question' do
-  it 'should destroy the question'
+  it 'should destroy the question' do
+    issue = mock_model(Issue)
+    question = mock_model(Question, :assigned_to_id => 2, :opened => true)
+    journal = mock_model(Journal, :question => nil, :issue => issue, :question => question)
+    question.should_receive(:destroy).and_return(true)
+    context = { 
+      :journal => journal,
+      :params => { :question => { :assigned_to_id => 'remove'}}
+    }
+    QuestionJournalHooks.instance.controller_journals_edit_post( context ).should eql('')
+  end
 end
