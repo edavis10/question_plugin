@@ -41,6 +41,7 @@ JS
   def controller_issues_edit_before_save(context = { })
     params = context[:params]
     journal = context[:journal]
+    issue = context[:issue]
     if params[:note] && !params[:note][:question_assigned_to].blank?
       if journal.question
         # Update
@@ -56,6 +57,11 @@ JS
           assign_question_to_user(journal, User.find(params[:note][:question_assigned_to].to_i))
         end
       end
+    end
+    
+    # Clear any question
+    if issue && issue.pending_question?(User.current)
+      issue.close_pending_questions(User.current)
     end
     
     return ''

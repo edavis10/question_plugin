@@ -81,6 +81,12 @@ module QuestionIssuePatch
       end
       return false
     end
+    
+    def close_pending_questions(user)
+      self.open_questions.find(:all).each do |question|
+        question.close! if question.assigned_to == user || question.for_anyone?
+      end
+    end
   end
 end
 

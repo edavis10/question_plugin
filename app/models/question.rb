@@ -26,4 +26,11 @@ class Question < ActiveRecord::Base
   def for_anyone?
     self.assigned_to.nil?
   end
+  
+  def close!
+    if self.opened
+      self.opened = false
+      self.save!
+    end
+  end
 end

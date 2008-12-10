@@ -32,7 +32,7 @@ describe QuestionIssueHooks, 'controller_issues_edit_before_select' do
   
   before(:each) do
     @journal = mock_model(Journal)
-    @issue = mock_model(Issue)
+    @issue = mock_model(Issue, :pending_question? => false)
     @question = mock_model(Question)
   end
   

@@ -79,3 +79,46 @@ describe QuestionIssuePatch,"#pending_question?" do
     
   end
 end
+
+describe QuestionIssuePatch,"#close_pending_questions" do
+  it 'should close any open questions for user' do
+    @user = mock_model(User)
+    question = mock_model(Question, :opened => true, :assigned_to => @user)
+    question.should_receive(:close!).and_return(question)
+    question_mock = mock('question_mock')
+    question_mock.should_receive(:find).and_return([question])
+
+    
+    @issue = Issue.new
+    @issue.should_receive(:open_questions).and_return(question_mock)
+    @issue.close_pending_questions(@user)
+  end
+  
+  it 'should close any questions for anyone' do
+    @user = mock_model(User)
+    question = mock_model(Question, :opened => true, :assigned_to => nil, :for_anyone? => true)
+    question.should_receive(:close!).and_return(question)
+    question_mock = mock('question_mock')
+    question_mock.should_receive(:find).and_return([question])
+
+    
+    @issue = Issue.new
+    @issue.should_receive(:open_questions).and_return(question_mock)
+    @issue.close_pending_questions(@user)
+  end
+
+  it 'should not close any questions for other users' do
+    @user = mock_model(User)
+    @other_user = mock_model(User)
+    question = mock_model(Question, :opened => true, :assigned_to => @other_user, :for_anyone? => false)
+    question.should_not_receive(:close!)
+    question_mock = mock('question_mock')
+    question_mock.should_receive(:find).and_return([question])
+
+    
+    @issue = Issue.new
+    @issue.should_receive(:open_questions).and_return(question_mock)
+    @issue.close_pending_questions(@user)
+  end
+
+end

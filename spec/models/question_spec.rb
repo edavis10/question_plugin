@@ -70,7 +70,7 @@ describe Question,"#formatted_list with no questions" do
   end
 end
 
-describe QuestionIssuePatch,"#formatted_list with one question" do
+describe Question,"#formatted_list with one question" do
   before(:each) do
     @content = 'This is a journal note that is supposed to have the question content in it but only up the 120th character, but does it really work?'
     @journal = mock_model(Journal, :notes => @content)
@@ -103,7 +103,7 @@ describe QuestionIssuePatch,"#formatted_list with one question" do
 
 end
 
-describe QuestionIssuePatch,"#formatted_questions with multiple questions" do
+describe Question,"#formatted_questions with multiple questions" do
   before(:each) do
     @content_one = 'This is a journal note that is supposed to have the question content in it but only up the 120th character, but does it really work?'
     @journal_one = mock_model(Journal, :notes => @content_one)
@@ -128,5 +128,26 @@ describe QuestionIssuePatch,"#formatted_questions with multiple questions" do
     question_content[1].should_not match(/maybe/i)
     question_content[1].should match(/unique/)
     
+  end
+end
+
+describe Question, "#close!" do
+  include QuestionSpecHelper
+
+  it 'should change an open question to a closed one' do
+    question = question_factory(1, { :opened => true })
+    question.should_receive(:save!)
+    proc { 
+      question.close!
+    }.should change(question, :opened).to(false)
+  end
+
+  it 'should do nothing to a closed question' do
+    question = question_factory(1, { :opened => false })
+    question.should_not_receive(:save)
+    question.should_not_receive(:save!)
+    proc { 
+      question.close!
+    }.should_not change(question, :opened)
   end
 end
