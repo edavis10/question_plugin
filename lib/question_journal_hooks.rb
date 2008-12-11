@@ -89,7 +89,7 @@ class QuestionJournalHooks < Redmine::Hook::ViewListener
       # Assigned to a specific user
       journal.question.assigned_to = User.find(assigned_to.to_i)
     end
-        
+    journal.question.save!
     journal.save
   end
 end

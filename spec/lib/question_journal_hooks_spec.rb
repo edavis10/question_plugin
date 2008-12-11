@@ -48,8 +48,7 @@ describe QuestionJournalHooks, '#controller_journals_edit_post with a new questi
   it 'should create a new question' do
     issue = mock_model(Issue)
     journal = mock_model(Journal, :question => nil, :issue => issue)
-    journal.should_receive(:question=).and_return(true)
-    journal.should_receive(:save).and_return(true)
+    QuestionJournalHooks.instance.should_receive(:add_new_question).with(journal, 'anyone')
     context = { 
       :journal => journal,
       :params => { :question => { :assigned_to_id => 'anyone'}}
