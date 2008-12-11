@@ -83,6 +83,7 @@ end
 describe QuestionIssuePatch,"#close_pending_questions" do
   it 'should close any open questions for user' do
     @user = mock_model(User)
+    @journal = mock_model(Journal)
     question = mock_model(Question, :opened => true, :assigned_to => @user)
     question.should_receive(:close!).and_return(question)
     question_mock = mock('question_mock')
@@ -91,11 +92,12 @@ describe QuestionIssuePatch,"#close_pending_questions" do
     
     @issue = Issue.new
     @issue.should_receive(:open_questions).and_return(question_mock)
-    @issue.close_pending_questions(@user)
+    @issue.close_pending_questions(@user, @journal)
   end
   
   it 'should close any questions for anyone' do
     @user = mock_model(User)
+    @journal = mock_model(Journal)
     question = mock_model(Question, :opened => true, :assigned_to => nil, :for_anyone? => true)
     question.should_receive(:close!).and_return(question)
     question_mock = mock('question_mock')
@@ -104,11 +106,12 @@ describe QuestionIssuePatch,"#close_pending_questions" do
     
     @issue = Issue.new
     @issue.should_receive(:open_questions).and_return(question_mock)
-    @issue.close_pending_questions(@user)
+    @issue.close_pending_questions(@user, @journal)
   end
 
   it 'should not close any questions for other users' do
     @user = mock_model(User)
+    @journal = mock_model(Journal)
     @other_user = mock_model(User)
     question = mock_model(Question, :opened => true, :assigned_to => @other_user, :for_anyone? => false)
     question.should_not_receive(:close!)
@@ -118,7 +121,7 @@ describe QuestionIssuePatch,"#close_pending_questions" do
     
     @issue = Issue.new
     @issue.should_receive(:open_questions).and_return(question_mock)
-    @issue.close_pending_questions(@user)
+    @issue.close_pending_questions(@user, @journal)
   end
 
 end

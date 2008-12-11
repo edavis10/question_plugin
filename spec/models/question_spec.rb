@@ -154,19 +154,21 @@ describe Question, "#close! on an open question" do
   include QuestionSpecHelper
 
   it 'should change an open question to a closed one' do
+    journal = mock_model(Journal)
     question = question_factory(1, { :opened => true })
     question.should_receive(:save!)
     QuestionMailer.stub!(:deliver_answered_question)
     proc { 
-      question.close!
+      question.close!(journal)
     }.should change(question, :opened).to(false)
   end
 
   it 'should send a Question Mail when closing an open question' do
+    journal = mock_model(Journal)
     question = question_factory(1, { :opened => true })
     question.stub!(:save!)
-    QuestionMailer.should_receive(:deliver_answered_question).with(question)
-    question.close!
+    QuestionMailer.should_receive(:deliver_answered_question).with(question, journal)
+    question.close!(journal)
   end
 end
 

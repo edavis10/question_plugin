@@ -61,7 +61,7 @@ JS
     
     # Clear any question
     if issue && issue.pending_question?(User.current)
-      issue.close_pending_questions(User.current)
+      issue.close_pending_questions(User.current, journal)
     end
     
     return ''

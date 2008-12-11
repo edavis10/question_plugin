@@ -2,6 +2,8 @@ field_question_assign_to: Assign question to
 field_question_assigned_to: Question is assigned to
 field_question_asked_by: Question was asked by
 field_formatted_questions: Questions
+text_question: Question
+text_answer: Answer
 text_anyone: Anyonesss
 text_question_for: Question for
 text_question_for_anyone: Question for anyone

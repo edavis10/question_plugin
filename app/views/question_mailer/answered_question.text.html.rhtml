@@ -1,0 +1,16 @@
+<%= l(:text_question_answered, "##{@issue.id}", @question.author) %>
+
+<ul>
+<% for detail in @journal.details %>
+    <li><%= show_detail(detail, true) %></li>
+<% end %>
+</ul>
+
+<h1><%= l(:text_question) %></h1>
+<%= textilizable(@question.journal, :notes, :only_path => false) %>
+
+<h1><%= l(:text_answer) %></h1>
+<%= textilizable(@journal, :notes, :only_path => false) %>
+
+<hr />
+<%= render :partial => "mailer/issue_text_html", :locals => { :issue => @issue, :issue_url => @issue_url } %>

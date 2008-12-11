@@ -63,3 +63,50 @@ describe QuestionMailer, '#asked_question with a question for anyone' do
     @mail.bcc.should be_nil
   end
 end
+
+describe QuestionMailer, '#answered_question' do
+  before(:each) do
+    @user = mock_model(User, :name => 'Test User', :mail => 'test@example.org')
+    @author = mock_model(User, :name => 'Author', :mail => 'author@example.org')
+    @tracker = mock_model(Tracker, :name => 'Bugs')
+    @issue = mock_model(Issue, :id => 1000, :tracker => @tracker, :author => nil, :subject => "Add new stuff", :status => nil, :priority => nil, :assigned_to => nil, :category => nil, :fixed_version => nil, :custom_values => [], :description => 'Issue description')
+    @journal_with_question = mock_model(Journal, :details => [], :notes => "This is the question for the user", :notes? => true)
+    @journal_with_answer = mock_model(Journal, :details => [], :notes => "This is the answer for the user", :notes? => true)
+    @question = mock_model(Question, :assigned_to => @user, :author => @author, :issue => @issue, :journal => @journal_with_question)
+    
+    @mail = QuestionMailer.create_answered_question(@question, @journal_with_answer)
+    Setting.stub!(:bcc_recipients?).and_return(true)
+  end
+  
+  it 'should create a mail message' do
+    @mail.should be_an_instance_of(TMail::Mail)
+  end
+
+  it 'should have the subject prefixed with [Answered]' do
+    @mail.subject.should match(/\[Answered\]/)
+  end
+
+  it 'should use the issue subject for the subject line' do
+    @mail.subject.should match(/add new stuff/i)
+  end
+
+  it 'should use the issue id in the subject line' do
+    @mail.subject.should match(/#1000/)
+  end
+
+  it 'should be sent to the question author' do
+    @mail.bcc.should include(@author.mail)
+  end
+
+  it 'should have a link to the issue' do
+    @mail.body.should match(/issues\/show\/1000/)
+  end
+
+  it 'should have the question in the body' do
+    @mail.body.should match(/is the question for the user/)
+  end
+
+  it 'should have the answer in the body' do
+    @mail.body.should match(/is the answer for the user/)
+  end
+end
