@@ -143,7 +143,11 @@ describe Question, "#close! on a closed question" do
     }.should_not change(question, :opened)
   end
   
-  it 'should not send a Question Mail'
+  it 'should not send a Question Mail' do
+    question = question_factory(1, { :opened => false })
+    QuestionMailer.should_not_receive(:deliver_answered_question)
+    question.close!
+  end
 end
 
 describe Question, "#close! on an open question" do
@@ -152,11 +156,17 @@ describe Question, "#close! on an open question" do
   it 'should change an open question to a closed one' do
     question = question_factory(1, { :opened => true })
     question.should_receive(:save!)
+    QuestionMailer.stub!(:deliver_answered_question)
     proc { 
       question.close!
     }.should change(question, :opened).to(false)
   end
 
-  it 'should send a Question Mail when closing an open question'
+  it 'should send a Question Mail when closing an open question' do
+    question = question_factory(1, { :opened => true })
+    question.stub!(:save!)
+    QuestionMailer.should_receive(:deliver_answered_question).with(question)
+    question.close!
+  end
 end
 

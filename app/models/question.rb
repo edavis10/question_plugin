@@ -31,6 +31,7 @@ class Question < ActiveRecord::Base
     if self.opened
       self.opened = false
       self.save!
+      QuestionMailer.deliver_answered_question(self)
     end
   end
 end
