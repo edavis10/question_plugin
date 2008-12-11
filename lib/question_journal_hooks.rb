@@ -12,7 +12,7 @@ class QuestionJournalHooks < Redmine::Hook::ViewListener
     
     o = ''
     o << content_tag(:p, 
-                     "<label>#{l(:field_question_assign_to)}</label>" + 
+                     "<label>#{l(:field_question_assign_to)}</label> " + 
                      select(:question,
                             :assigned_to_id,
                             [[l(:text_question_remove), :remove]] + [[l(:text_anyone), :anyone]] + (@journal.issue.assignable_users.collect {|m| [m.name, m.id]}),

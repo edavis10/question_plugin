@@ -30,7 +30,7 @@ JS
     @issue = context[:issue]
     o = ''
     o << content_tag(:p, 
-                     "<label>#{l(:field_question_assign_to)}</label>" + 
+                     "<label>#{l(:field_question_assign_to)}</label> " + 
                      select(:note,
                             :question_assigned_to,
                             [[l(:text_anyone), :anyone]] + (@issue.assignable_users.collect {|m| [m.name, m.id]}),
