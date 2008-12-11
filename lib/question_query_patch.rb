@@ -51,18 +51,26 @@ module QuestionQueryPatch
         user_values += User.current.projects.collect(&:users).flatten.uniq.sort.collect{|s| [s.name, s.id.to_s] }
       end
 
-      question_filters = { "question_assigned_to_id" => { :type => :list, :order => 14, :values => user_values }}
+      question_filters = {
+        "question_assigned_to_id" => { :type => :list, :order => 14, :values => user_values },
+        "question_asked_by_id" => { :type => :list, :order => 14, :values => user_values }
+      }
       
       return @available_filters.merge(question_filters)
     end
     
     # Wrapper for +sql_for_field+ so Questions can use a different table than Issues
     def question_sql_for_field(field, v, db_table, db_field, is_custom_filter)
-      if field == "question_assigned_to_id"
+      if field == "question_assigned_to_id" || field == "question_asked_by_id"
         v = values_for(field).clone
 
         db_table = Question.table_name
-        db_field = 'assigned_to_id'
+        if field == "question_assigned_to_id"
+          db_field = 'assigned_to_id'
+        else
+          db_field = 'author_id'
+        end
+        
         
         # "me" value subsitution
         v.push(User.current.logged? ? User.current.id.to_s : "0") if v.delete("me")
