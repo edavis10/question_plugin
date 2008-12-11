@@ -131,7 +131,22 @@ describe Question,"#formatted_questions with multiple questions" do
   end
 end
 
-describe Question, "#close!" do
+describe Question, "#close! on a closed question" do
+  include QuestionSpecHelper
+
+  it 'should do nothing' do
+    question = question_factory(1, { :opened => false })
+    question.should_not_receive(:save)
+    question.should_not_receive(:save!)
+    proc { 
+      question.close!
+    }.should_not change(question, :opened)
+  end
+  
+  it 'should not send a Question Mail'
+end
+
+describe Question, "#close! on an open question" do
   include QuestionSpecHelper
 
   it 'should change an open question to a closed one' do
@@ -142,12 +157,6 @@ describe Question, "#close!" do
     }.should change(question, :opened).to(false)
   end
 
-  it 'should do nothing to a closed question' do
-    question = question_factory(1, { :opened => false })
-    question.should_not_receive(:save)
-    question.should_not_receive(:save!)
-    proc { 
-      question.close!
-    }.should_not change(question, :opened)
-  end
+  it 'should send a Question Mail when closing an open question'
 end
+
