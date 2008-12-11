@@ -5,18 +5,27 @@ class QuestionJournalHooks < Redmine::Hook::ViewListener
   def view_journals_notes_form_after_notes(context = { })
     @journal = context[:journal]
     if @journal.question && @journal.question.opened
+      # Allow the Remove option and no blank option
+      options = [[l(:text_question_remove), :remove]] + [[l(:text_anyone), :anyone]] + (@journal.issue.assignable_users.collect {|m| [m.name, m.id]})
       selected = @journal.question.assigned_to.id
+      blank = false
     else
+      # No Remove option but a blank option
+      options = [[l(:text_anyone), :anyone]] + (@journal.issue.assignable_users.collect {|m| [m.name, m.id]})
       selected = nil
+      blank = true
     end
+    
+    
     
     o = ''
     o << content_tag(:p, 
                      "<label>#{l(:field_question_assign_to)}</label> " + 
                      select(:question,
                             :assigned_to_id,
-                            [[l(:text_question_remove), :remove]] + [[l(:text_anyone), :anyone]] + (@journal.issue.assignable_users.collect {|m| [m.name, m.id]}),
-                            :selected => selected))
+                            options,
+                            :selected => selected,
+                            :include_blank => blank ))
     return o
   end
   
