@@ -12,10 +12,10 @@ module QuestionQueryPatch
       base.add_available_column(QueryColumn.new(:formatted_questions))
 
       
-      alias_method :redmine_available_filters, :available_filters
+      alias_method :available_filters_before_question, :available_filters
       alias_method :available_filters, :question_available_filters
 
-      alias_method :redmine_sql_for_field, :sql_for_field
+      alias_method :sql_for_field_before_question, :sql_for_field
       alias_method :sql_for_field, :question_sql_for_field
     end
 
@@ -41,7 +41,7 @@ module QuestionQueryPatch
     
     # Wrapper around the +available_filters+ to add a new Question filter
     def question_available_filters
-      @available_filters = redmine_available_filters
+      @available_filters = available_filters_before_question
       
       user_values = []
       user_values << ["<< #{l(:label_me)} >>", "me"] if User.current.logged?
@@ -85,7 +85,7 @@ module QuestionQueryPatch
         return sql
         
       else
-        return redmine_sql_for_field(field, v, db_table, db_field, is_custom_filter)
+        return sql_for_field_before_question(field, v, db_table, db_field, is_custom_filter)
       end
       
     end
