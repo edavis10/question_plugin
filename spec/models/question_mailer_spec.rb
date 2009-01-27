@@ -14,9 +14,10 @@ describe QuestionMailer, '#asked_question with a question' do
     @issue = mock_model(Issue, :id => 1000, :tracker => @tracker, :author => nil, :subject => "Add new stuff", :status => nil, :priority => nil, :assigned_to => nil, :category => nil, :fixed_version => nil, :custom_values => [], :description => 'Issue description')
     @question = mock_model(Question, :assigned_to => @user, :author => @author, :issue => @issue)
     @journal = mock_model(Journal, :details => [], :notes => "This is the question for the user", :notes? => true, :question => @question)
+    Setting.stub!(:mail_from).and_return("redmine@example.com")
     
-    @mail = QuestionMailer.create_asked_question(@journal)
     Setting.stub!(:bcc_recipients?).and_return(true)
+    @mail = QuestionMailer.create_asked_question(@journal)
   end
   
   it 'should create a mail message' do
@@ -46,6 +47,18 @@ describe QuestionMailer, '#asked_question with a question' do
   it 'should have a question in the body' do
     @mail.body.should match(/is the question for the user/)
   end
+  
+  it "should use the User's name in the from" do
+    @mail.encoded.should match(/From:.*#{@author.name}/)
+  end
+
+  it "should have (Redmine) in the from to show it came from Redmine" do
+    @mail.encoded.should match(/From:.*Redmine/)
+  end
+
+  it "should have the redmine system email address as the from" do
+    @mail.encoded.should match(/From:.*#{Setting.mail_from}/)
+  end
 end
 
 
@@ -73,9 +86,10 @@ describe QuestionMailer, '#answered_question' do
     @journal_with_question = mock_model(Journal, :details => [], :notes => "This is the question for the user", :notes? => true)
     @journal_with_answer = mock_model(Journal, :details => [], :notes => "This is the answer for the user", :notes? => true)
     @question = mock_model(Question, :assigned_to => @user, :author => @author, :issue => @issue, :journal => @journal_with_question)
+    Setting.stub!(:mail_from).and_return("redmine@example.com")
     
-    @mail = QuestionMailer.create_answered_question(@question, @journal_with_answer)
     Setting.stub!(:bcc_recipients?).and_return(true)
+    @mail = QuestionMailer.create_answered_question(@question, @journal_with_answer)
   end
   
   it 'should create a mail message' do
@@ -108,5 +122,17 @@ describe QuestionMailer, '#answered_question' do
 
   it 'should have the answer in the body' do
     @mail.body.should match(/is the answer for the user/)
+  end
+
+  it "should use the User's name in the from" do
+    @mail.encoded.should match(/From:.*#{@user.name}/)
+  end
+
+  it "should have (Redmine) in the from to show it came from Redmine" do
+    @mail.encoded.should match(/From:.*Redmine/)
+  end
+
+  it "should have the redmine system email address as the from" do
+    @mail.encoded.should match(/From:.*#{Setting.mail_from}/)
   end
 end
