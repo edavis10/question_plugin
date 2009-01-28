@@ -53,7 +53,7 @@ describe QueriesHelper,"#format_questions with one question" do
 
 end
 
-describe Question,"#format_questions with multiple questions" do
+describe QueriesHelper,"#format_questions with multiple questions" do
   before(:each) do
     @content_one = 'This is a journal note that is supposed to have the question content in it but only up the 120th character, but does it really work?'
     @journal_one = mock_model(Journal, :notes => @content_one, :created_on => Date.today)
