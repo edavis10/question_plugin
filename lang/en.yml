@@ -11,3 +11,5 @@ text_question_for_anyone: Question for anyone
 text_questions_for_me: Questions for me
 text_question_asked: Question asked
 text_question_remove: "<< Remove Question>>"
+question_text_asked_by: "Asked By"
+question_text_assigned_to: "Assigned To"

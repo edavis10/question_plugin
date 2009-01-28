@@ -18,10 +18,32 @@ module QuestionQueriesHelperPatch
   module InstanceMethods
     def question_column_content(column, issue)
       if column.name == :formatted_questions
-        return issue.formatted_questions
+        return format_questions(issue.open_questions)
       else
         default_column_content(column, issue)
       end
+    end
+    
+    def format_questions(questions)
+      return '' if questions.empty?
+      html = '<ol>'
+      questions.each do |question|
+        html << "<li>"
+        html << "  <div class='tooltip'>"
+        html << "    <span class='question_summary'>"
+        html << h(truncate(question.journal.notes, Question::TruncateTo))
+        html << "    </span>"
+        html << "    <span class='tip'>"
+        html << link_to_issue(question.issue)
+        html << ": #{h(question.journal.notes)}<br /><br />" +
+          "<strong>#{l(:question_text_asked_by)}</strong>: #{question.author.to_s}<br />" +
+          "<strong>#{l(:question_text_assigned_to)}</strong>: #{question.assigned_to.to_s}"
+        html << "    </span>"
+        html << "  </div>"
+        html << "</li>"
+      end
+      html << '</ol>'
+      return html
     end
   end
 end

@@ -65,16 +65,6 @@ module QuestionIssuePatch
   end
   
   module InstanceMethods
-    def formatted_questions
-      return '' if self.open_questions.empty?
-      html = '<ol>'
-      Question.formatted_list(self.open_questions).each do |question|
-        html << "<li>" + h(question) + "</li>"
-      end
-      html << '</ol>'
-      return html
-    end
-    
     def pending_question?(user)
       self.open_questions.find(:all).each do |question|
         return true if question.assigned_to == user || question.for_anyone?
