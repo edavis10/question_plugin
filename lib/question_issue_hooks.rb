@@ -43,10 +43,7 @@ JS
     journal = context[:journal]
     issue = context[:issue]
     if params[:note] && !params[:note][:question_assigned_to].blank?
-      if journal.question
-        # Update
-        # TODO:
-      else
+      unless journal.question # Update handled by Journal hooks
         # New
         journal.question = Question.new(
                                         :author => User.current,
