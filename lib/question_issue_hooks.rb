@@ -1,7 +1,4 @@
-class QuestionIssueHooks < Redmine::Hook::ViewListener
-  # Have to inclue Gravatars because ApplicationHelper will not get it
-  include GravatarHelper::PublicMethods
-
+class QuestionIssueHooks < QuestionHooksBase
   # Applies the question class to each journal div if they are questions
   def view_issues_history_journal_bottom(context = { })
     o = ''
@@ -9,17 +6,9 @@ class QuestionIssueHooks < Redmine::Hook::ViewListener
       question = context[:journal].question
       
       if question.assigned_to
-        html = "<span class=\"question-line\">"
-        html << "  <a name=\"question-#{h(question.id)}\" href=\"#question-#{h(question.id)}\">"
-        html << "#{l(:text_question_for)} #{question.assigned_to.to_s}"
-        html << "  </a>"
-        html << "<span>#{gravatar(question.assigned_to.mail, { :size => 16, :class => '' })}</span> </span>"
+        html = assigned_question_html(question)
       else
-        html = "<span class=\"question-line\">"
-        html << "  <a name=\"question-#{h(question.id)}\" href=\"#question-#{h(question.id)}\">"
-        html << l(:text_question_for_anyone)
-        html << "  </a>"
-        html << "</span>"
+        html = unassigned_question_html(question)
       end
 
       o += <<JS
