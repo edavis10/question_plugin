@@ -1,9 +1,14 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 class QueriesHelperWrapper
+  include ApplicationHelper
   include QueriesHelper
   include ActionView::Helpers::TextHelper
-  include IssuesHelper
+
+  # Mock
+  def link_to(name, options = {}, html_options = nil)
+    "<a href='/test'>#{name}</a>"
+  end
 end
 
 
@@ -23,7 +28,6 @@ describe QueriesHelper,"#format_questions with one question" do
     @question = mock_model(Question, :journal => @journal, :issue => @issue, :author => @author, :assigned_to => @assignee)
     @questions = [@question]
     @helper = QueriesHelperWrapper.new
-    @helper.stub!(:link_to).and_return('<a href="/test">Test</a>')
   end
   
   it 'should not be blank' do
@@ -67,7 +71,6 @@ describe QueriesHelper,"#format_questions with multiple questions" do
     @question_two = mock_model(Question, :journal => @journal_two, :issue => @issue, :author => @author, :assigned_to => @author)
     @questions = [@question, @question_two]
     @helper = QueriesHelperWrapper.new
-    @helper.stub!(:link_to).and_return('<a href="/test">Test</a>')
   end
   
   it 'should not be empty' do

@@ -31,7 +31,11 @@ module QuestionQueriesHelperPatch
         html << "<li>"
         html << "  <div class='tooltip'>"
         html << "    <span class='question_summary'>"
-        html << h(truncate(question.journal.notes, Question::TruncateTo))
+        html << link_to(h(truncate(question.journal.notes, Question::TruncateTo)),
+                        :controller => 'issues',
+                        :action => 'show',
+                        :id => question.issue,
+                        :anchor => "question-#{question.id}")
         html << "    </span>"
         html << "    <span class='tip'>"
         html << link_to_issue(question.issue)
