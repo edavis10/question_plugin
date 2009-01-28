@@ -81,7 +81,6 @@ class QuestionJournalHooks < QuestionHooksBase
   private
   
   def add_new_question(journal, assigned_to)
-    # TODO: Duplicated in question_issue_hook
     journal.question = Question.new(
                                     :author => User.current,
                                     :issue => journal.issue
