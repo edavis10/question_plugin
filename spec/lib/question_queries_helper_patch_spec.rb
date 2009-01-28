@@ -84,3 +84,25 @@ describe QueriesHelper,"#format_questions with multiple questions" do
   end
 end
 
+describe QueriesHelper, "#question_column_content" do
+  it 'should use a special format for the questions column' do
+    issue = mock_model(Issue)
+    issue.should_receive(:open_questions)
+    column = mock_model(QueryColumn, :name => :formatted_questions)
+
+    helper = QueriesHelperWrapper.new
+    helper.should_receive(:format_questions)
+    helper.question_column_content(column, issue)
+  end
+
+  it 'should use the default format for all other columns' do
+    issue = mock_model(Issue)
+    helper = QueriesHelperWrapper.new
+    Query.available_columns.each do |column|
+      next if column.name == :formatted_questions
+      helper.should_receive(:default_column_content).with(column, issue)
+      helper.question_column_content(column, issue)
+    end
+  end
+  
+end
