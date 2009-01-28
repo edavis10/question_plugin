@@ -13,3 +13,4 @@ text_question_asked: Question asked
 text_question_remove: "<< Remove Question>>"
 question_text_asked_by: "Asked By"
 question_text_assigned_to: "Assigned To"
+question_text_created_on: "Created On"

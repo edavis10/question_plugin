@@ -37,7 +37,8 @@ module QuestionQueriesHelperPatch
         html << link_to_issue(question.issue)
         html << ": #{h(question.journal.notes)}<br /><br />" +
           "<strong>#{l(:question_text_asked_by)}</strong>: #{question.author.to_s}<br />" +
-          "<strong>#{l(:question_text_assigned_to)}</strong>: #{question.assigned_to.to_s}"
+          "<strong>#{l(:question_text_assigned_to)}</strong>: #{question.assigned_to.to_s}<br />" +
+          "<strong>#{l(:question_text_created_on)}</strong>: #{format_date(question.journal.created_on)}"
         html << "    </span>"
         html << "  </div>"
         html << "</li>"
