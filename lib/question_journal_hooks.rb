@@ -72,6 +72,10 @@ class QuestionJournalHooks < Redmine::Hook::ViewListener
         page << "$$('#change-#{@journal.id} h4 div span.question-line').each(function(ele) {ele.remove()});"
         page << "$$('#change-#{@journal.id} h4 div').each(function(ele) { ele.insert({ top: ' #{html} ' }) });"
       
+      elsif @journal && @journal.question.nil?
+        # No question found, make sure the UI reflects this
+        page << "$('change-#{@journal.id}').removeClassName('question');"
+        page << "$$('#change-#{@journal.id} h4 div span.question-line').each(function(ele) {ele.remove()});"
       end
     end
     return ''

@@ -84,3 +84,43 @@ describe QuestionJournalHooks, '#controller_journals_edit_post with a removed qu
     QuestionJournalHooks.instance.controller_journals_edit_post( context ).should eql('')
   end
 end
+
+describe QuestionJournalHooks, '#view_journals_update_rjs_bottom with a question for anyone' do
+  before(:each) do
+    @rjs_page = ''
+    @question = mock_model(Question, :opened? => true, :assigned_to => nil)
+    @journal = mock_model(Journal, :reload => true, :question => @question)
+    @context = { :page => @rjs_page, :journal => @journal}
+    QuestionJournalHooks.instance.view_journals_update_rjs_bottom( @context )
+  end
+  
+  it 'should add the CSS class of "question" to the journal div' do
+    @rjs_page.should match(/addClassName\('question'\)/)
+  end
+
+  it 'should remove all existing question lines using RJS' do
+    @rjs_page.should match(/question-line.*remove/)
+  end
+
+  it 'should add the generated HTML to the top of the side div' do
+    @rjs_page.should match(/insert.*top/)
+  end
+
+end
+
+describe QuestionJournalHooks, '#view_journals_update_rjs_bottom without a question' do
+  before(:each) do
+    @rjs_page = ''
+    @journal = mock_model(Journal, :reload => true, :question => nil)
+    @context = { :page => @rjs_page, :journal => @journal}
+    QuestionJournalHooks.instance.view_journals_update_rjs_bottom( @context )
+  end
+  
+  it 'should remove the CSS class of "question" from the journal div' do
+    @rjs_page.should match(/removeClassName\('question'\)/)
+  end
+
+  it 'should remove all existing question lines using RJS' do
+    @rjs_page.should match(/question-line.*remove/)
+  end
+end
