@@ -18,6 +18,9 @@ module QuestionIssuePatch
 
         alias_method :default_count, :count
         alias_method :count, :count_with_questions_added_to_the_includes
+
+        alias_method :default_sum, :sum
+        alias_method :sum, :sum_with_questions_added_to_the_includes
       end
     end
 
@@ -32,6 +35,11 @@ module QuestionIssuePatch
     def count_with_questions_added_to_the_includes(*args)
       scan_for_options_hash_and_add_includes_if_needed(args)
       default_count(*args)
+    end
+    
+    def sum_with_questions_added_to_the_includes(*args)
+      scan_for_options_hash_and_add_includes_if_needed(args)
+      default_sum(*args)
     end
     
     private
