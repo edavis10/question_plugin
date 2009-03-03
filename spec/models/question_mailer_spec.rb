@@ -41,7 +41,7 @@ describe QuestionMailer, '#asked_question with a question' do
   end
   
   it 'should have a link to the issue' do
-    @mail.body.should match(/issues\/show\/1000/)
+    @mail.body.should match(/issues\/1000/)
   end
 
   it 'should have a question in the body' do
@@ -113,7 +113,7 @@ describe QuestionMailer, '#answered_question' do
   end
 
   it 'should have a link to the issue' do
-    @mail.body.should match(/issues\/show\/1000/)
+    @mail.body.should match(/issues\/1000/)
   end
 
   it 'should have the question in the body' do
