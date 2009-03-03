@@ -24,8 +24,8 @@ describe QuestionMailer, '#asked_question with a question' do
     @mail.should be_an_instance_of(TMail::Mail)
   end
   
-  it 'should have the subject prefixed with [Question]' do
-    @mail.subject.should match(/\[Question\]/)
+  it 'should have the subject prefixed with "Question"' do
+    @mail.subject.should match(/Question/)
   end
   
   it 'should use the issue subject for the subject line' do
@@ -96,8 +96,8 @@ describe QuestionMailer, '#answered_question' do
     @mail.should be_an_instance_of(TMail::Mail)
   end
 
-  it 'should have the subject prefixed with [Answered]' do
-    @mail.subject.should match(/\[Answered\]/)
+  it 'should have the subject prefixed with "Answered"' do
+    @mail.subject.should match(/Answered/)
   end
 
   it 'should use the issue subject for the subject line' do

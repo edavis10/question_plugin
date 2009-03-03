@@ -1,7 +1,7 @@
 class QuestionMailer < Mailer
   def asked_question(journal)
     question = journal.question
-    subject "[Question] #{question.issue.subject} ##{question.issue.id}"
+    subject "[Question ##{question.issue.id}] #{question.issue.subject}"
     recipients question.assigned_to.mail unless question.assigned_to.nil?
     @from  = "#{question.author.name} (Redmine) <#{Setting.mail_from}>" unless question.author.nil?
 
