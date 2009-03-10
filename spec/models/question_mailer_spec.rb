@@ -41,11 +41,11 @@ describe QuestionMailer, '#asked_question with a question' do
   end
   
   it 'should have a link to the issue' do
-    @mail.body.should match(/issues\/1000/)
+    @mail.encoded.should match(/issues\/1000/)
   end
 
   it 'should have a question in the body' do
-    @mail.body.should match(/is the question for the user/)
+    @mail.encoded.should match(/is the question for the user/)
   end
   
   it "should use the User's name in the from" do
@@ -113,15 +113,15 @@ describe QuestionMailer, '#answered_question' do
   end
 
   it 'should have a link to the issue' do
-    @mail.body.should match(/issues\/1000/)
+    @mail.encoded.should match(/issues\/1000/)
   end
 
   it 'should have the question in the body' do
-    @mail.body.should match(/is the question for the user/)
+    @mail.encoded.should match(/is the question for the user/)
   end
 
   it 'should have the answer in the body' do
-    @mail.body.should match(/is the answer for the user/)
+    @mail.encoded.should match(/is the answer for the user/)
   end
 
   it "should use the User's name in the from" do
