@@ -3,6 +3,8 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe QuestionsController, "#my_issue_filter" do
   it 'should search for the project' do
     tracker = mock_model(Tracker, :name => 'test')
+    project_descendants = mock('project_descendants')
+    project_descendants.stub!(:active).and_return([])
     project = mock_model(Project,
                          :id => 2,
                          :rolled_up_trackers => [tracker],
@@ -10,7 +12,8 @@ describe QuestionsController, "#my_issue_filter" do
                          :issue_categories => [],
                          :versions => [],
                          :active_children => [],
-                         :all_issue_custom_fields => []
+                         :all_issue_custom_fields => [],
+                         :descendants => project_descendants
                          )
     Project.should_receive(:find).with('2').and_return(project)
     get :my_issue_filter, :project => project.id
