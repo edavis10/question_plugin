@@ -32,7 +32,7 @@ describe Question, 'requires' do
     question.stub!(:issue).and_return(issue)
     
     question.should_not be_valid
-    question.errors.on(:journal).should include("activerecord_error_blank")
+    question.errors.on(:journal).should eql("can't be blank")
   end
 
   it 'an author' do
@@ -45,7 +45,7 @@ describe Question, 'requires' do
     question.stub!(:issue).and_return(issue)
     
     question.should_not be_valid
-    question.errors.on(:author).should include("activerecord_error_blank")
+    question.errors.on(:author).should eql("can't be blank")
   end
 
   it 'an issue' do
@@ -58,7 +58,7 @@ describe Question, 'requires' do
     question.stub!(:assigned_to).and_return(assignee)
     
     question.should_not be_valid
-    question.errors.on(:issue).should include("activerecord_error_blank")
+    question.errors.on(:issue).should eql("can't be blank")
     
   end
   
