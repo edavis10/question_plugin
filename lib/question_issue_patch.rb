@@ -48,9 +48,14 @@ module QuestionIssuePatch
     # add questions to the includes
     def scan_for_options_hash_and_add_includes_if_needed(args)
       args.each do |arg|
-        if arg.is_a?(Hash) && arg[:conditions] && arg[:conditions].include?('question')
-          # Add questions to includes
-          add_questions_to_the_includes(arg)
+        if arg.is_a?(Hash) && arg[:conditions]
+          if arg[:conditions].is_a?(String) && arg[:conditions].include?('question')
+            # String conditions
+            add_questions_to_the_includes(arg)
+          elsif arg[:conditions].is_a?(Array) && arg[:conditions][0].include?('question')
+            # Array conditions
+            add_questions_to_the_includes(arg)
+          end
         end
       end
     end
