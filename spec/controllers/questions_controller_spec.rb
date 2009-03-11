@@ -27,6 +27,12 @@ describe QuestionsController, "#my_issue_filter" do
     filter[:operator].should eql("=")
   end
 
+  it 'should create a new Query object for all Issue statuses' do
+    get :my_issue_filter
+    assigns[:query].filters.should have_key('status_id')
+    assigns[:query].filters['status_id'][:operator].should eql("*")
+  end
+
   it 'should save the Query object into the session' do
     get :my_issue_filter
     session[:query].should have_key(:filters)
