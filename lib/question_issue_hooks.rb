@@ -74,8 +74,7 @@ JS
                        :controller => 'questions',
                        :action => 'my_issue_filter',
                        :project => project,
-                       :protocol => Setting.protocol,
-                       :host => Setting.host_name
+                       :only_path => true
                      },
                      { :class => 'question-link' }
                      )
