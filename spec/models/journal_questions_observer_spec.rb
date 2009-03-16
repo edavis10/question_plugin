@@ -17,7 +17,7 @@ end
 
 describe JournalQuestionsObserver, '#after_create with a question' do
   it 'should deliver an email' do
-    question = mock_model(Question)
+    question = mock_model(Question, :save => true)
     journal = mock_model(Journal, :question => question, :issue => nil)
     QuestionMailer.should_receive(:deliver_asked_question).with(journal)
     JournalQuestionsObserver.instance.after_create(journal)
