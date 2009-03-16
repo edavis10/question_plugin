@@ -60,7 +60,7 @@ module QuestionQueryPatch
     end
     
     # Wrapper for +sql_for_field+ so Questions can use a different table than Issues
-    def question_sql_for_field(field, v, db_table, db_field, is_custom_filter)
+    def question_sql_for_field(field, operator, v, db_table, db_field, is_custom_filter=false)
       if field == "question_assigned_to_id" || field == "question_asked_by_id"
         v = values_for(field).clone
 
@@ -75,7 +75,7 @@ module QuestionQueryPatch
         # "me" value subsitution
         v.push(User.current.logged? ? User.current.id.to_s : "0") if v.delete("me")
         
-        case operator_for field
+        case operator
         when "="
           sql = "#{db_table}.#{db_field} IN (" + v.collect{|val| "'#{connection.quote_string(val)}'"}.join(",") + ") AND #{db_table}.opened = true"
         when "!"
@@ -85,7 +85,7 @@ module QuestionQueryPatch
         return sql
         
       else
-        return sql_for_field_before_question(field, v, db_table, db_field, is_custom_filter)
+        return sql_for_field_before_question(field, operator, v, db_table, db_field, is_custom_filter)
       end
       
     end
