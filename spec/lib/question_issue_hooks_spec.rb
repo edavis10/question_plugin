@@ -102,7 +102,7 @@ end
 describe QuestionIssueHooks, 'view_issues_history_journal_bottom with a journal and question' do
   before(:each) do
     @user = mock_model(User, :to_s => "A user", :mail => 'user@example.com')
-    @question = mock_model(Question, :assigned_to => @user, :opened? => true)
+    @question = mock_model(Question, :assigned_to => @user)
     @context = { 
       :journal => mock_model(Journal, :question => @question)
     }
@@ -187,7 +187,7 @@ describe QuestionIssueHooks, 'view_issues_sidebar_issues_bottom without a projec
   end
   
   it 'should get the number of questions for the current user on all projects' do
-    Question.should_receive(:count).with(:conditions => { :assigned_to_id => @user, :opened => true}).and_return(10)
+    Question.should_receive(:count).with(:conditions => { :assigned_to_id => @user}).and_return(10)
     call_hook(@context)
   end
 

@@ -9,7 +9,7 @@ The Questions plugin will improve the workflow of Redmine by allowing users to a
 * Filters for the issue list:
   * Question is assigned to
   * Question was asked by
-* Question column for the Issue list showing a preview of all the open questions asked on an issue
+* Question column for the Issue list showing a preview of all the questions asked on an issue
 * Email notification when questions are asked and answered
 
 == Getting the plugin

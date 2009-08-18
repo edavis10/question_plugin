@@ -2,7 +2,7 @@ class QuestionIssueHooks < QuestionHooksBase
   # Applies the question class to each journal div if they are questions
   def view_issues_history_journal_bottom(context = { })
     o = ''
-    if context[:journal] && context[:journal].question && context[:journal].question.opened?
+    if context[:journal] && context[:journal].question
       question = context[:journal].question
       
       if question.assigned_to
@@ -59,13 +59,12 @@ JS
   def view_issues_sidebar_issues_bottom(context = { })
     project = context[:project]
     if project
-      question_count = Question.count(:conditions => ["#{Question.table_name}.assigned_to_id = ? AND #{Project.table_name}.id = ? AND #{Question.table_name}.opened = ?",
+      question_count = Question.count(:conditions => ["#{Question.table_name}.assigned_to_id = ? AND #{Project.table_name}.id = ?",
                                                       User.current,
-                                                      project.id,
-                                                      true],
+                                                      project.id],
                                       :include => [:issue => [:project]])
     else
-      question_count = Question.count(:conditions => {:assigned_to_id => User.current, :opened => true})
+      question_count = Question.count(:conditions => {:assigned_to_id => User.current})
     end
     
     if question_count > 0

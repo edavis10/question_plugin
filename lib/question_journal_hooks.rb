@@ -1,7 +1,7 @@
 class QuestionJournalHooks < QuestionHooksBase
   def view_journals_notes_form_after_notes(context = { })
     @journal = context[:journal]
-    if @journal.question && @journal.question.opened
+    if @journal.question
       # Allow the Remove option and no blank option
       options = [[l(:text_question_remove), :remove]] + [[l(:text_anyone), :anyone]] + (@journal.issue.assignable_users.collect {|m| [m.name, m.id]})
       selected = @journal.question.assigned_to.id
@@ -35,13 +35,9 @@ class QuestionJournalHooks < QuestionHooksBase
       if journal.question && params[:question][:assigned_to_id] == 'remove'
         # Wants to remove the question
         journal.question.destroy
-      elsif journal.question && journal.question.opened
+      elsif journal.question
         # Reassignment
         journal.question.update_attributes(:assigned_to_id => params[:question][:assigned_to_id])
-      elsif journal.question && !journal.question.opened
-        # Existing question, destry it first and then add a new question
-        journal.question.destroy
-        add_new_question(journal, params[:question][:assigned_to_id])
       else
         add_new_question(journal, params[:question][:assigned_to_id])
       end
@@ -56,7 +52,7 @@ class QuestionJournalHooks < QuestionHooksBase
     page = context[:page]
     unless @journal.frozen?
       @journal.reload
-      if @journal && @journal.question && @journal.question.opened?
+      if @journal && @journal.question
         question = @journal.question
       
         if question.assigned_to

@@ -64,42 +64,22 @@ describe Question, 'requires' do
   
 end
 
-describe Question, "#close! on a closed question" do
+describe Question, "#close!" do
   include QuestionSpecHelper
 
-  it 'should do nothing' do
-    question = question_factory(1, { :opened => false })
-    question.should_not_receive(:save)
-    question.should_not_receive(:save!)
-    proc { 
-      question.close!
-    }.should_not change(question, :opened)
-  end
-  
-  it 'should not send a Question Mail' do
-    question = question_factory(1, { :opened => false })
-    QuestionMailer.should_not_receive(:deliver_answered_question)
-    question.close!
-  end
-end
-
-describe Question, "#close! on an open question" do
-  include QuestionSpecHelper
-
-  it 'should change an open question to a closed one' do
+  it 'should remove a question' do
     journal = mock_model(Journal)
-    question = question_factory(1, { :opened => true })
-    question.should_receive(:save!)
+    question = question_factory(1)
     QuestionMailer.stub!(:deliver_answered_question)
-    proc { 
-      question.close!(journal)
-    }.should change(question, :opened).to(false)
+    question.should_receive(:destroy).and_return(true)
+
+    question.close!(journal)
   end
 
-  it 'should send a Question Mail when closing an open question' do
+  it 'should send a Question Mail when closing a question' do
     journal = mock_model(Journal)
-    question = question_factory(1, { :opened => true })
-    question.stub!(:save!)
+    question = question_factory(1)
+    question.stub!(:destroy)
     QuestionMailer.should_receive(:deliver_answered_question).with(question, journal)
     question.close!(journal)
   end

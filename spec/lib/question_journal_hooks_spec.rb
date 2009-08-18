@@ -7,7 +7,7 @@ describe QuestionJournalHooks, '#views_journals_notes_form_after_notes' do
       @user2 = mock_model(User, :id => 2, :name => 'Test two')
       @issue = mock_model(Issue)
       @issue.should_receive(:assignable_users).and_return([@user1, @user2])
-      @question = mock_model(Question, :assigned_to => @user2, :opened => true)
+      @question = mock_model(Question, :assigned_to => @user2)
       @journal = mock_model(Journal, :issue => @issue, :question => @question)
       @context = { :journal => @journal }
     end
@@ -60,7 +60,7 @@ end
 describe QuestionJournalHooks, '#controller_journals_edit_post with a reassigned question' do
   it 'should change the assignment of the question' do
     issue = mock_model(Issue)
-    question = mock_model(Question, :assigned_to_id => 2, :opened => true)
+    question = mock_model(Question, :assigned_to_id => 2)
     question.should_receive(:update_attributes).with({ :assigned_to_id => 'anyone'}).and_return(true)
     journal = mock_model(Journal, :question => nil, :issue => issue, :question => question)
     context = { 
@@ -74,7 +74,7 @@ end
 describe QuestionJournalHooks, '#controller_journals_edit_post with a removed question' do
   it 'should destroy the question' do
     issue = mock_model(Issue)
-    question = mock_model(Question, :assigned_to_id => 2, :opened => true)
+    question = mock_model(Question, :assigned_to_id => 2)
     journal = mock_model(Journal, :question => nil, :issue => issue, :question => question)
     question.should_receive(:destroy).and_return(true)
     context = { 
@@ -88,7 +88,7 @@ end
 describe QuestionJournalHooks, '#view_journals_update_rjs_bottom with a question for anyone' do
   before(:each) do
     @rjs_page = ''
-    @question = mock_model(Question, :opened? => true, :assigned_to => nil)
+    @question = mock_model(Question, :assigned_to => nil)
     @journal = mock_model(Journal, :reload => true, :question => @question)
     @context = { :page => @rjs_page, :journal => @journal}
     QuestionJournalHooks.instance.view_journals_update_rjs_bottom( @context )
