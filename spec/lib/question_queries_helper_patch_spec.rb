@@ -22,7 +22,7 @@ describe QueriesHelper,"#format_questions with one question" do
   before(:each) do
     @content = 'This is a journal note that is supposed to have the question content in it but only up the 120th character, but does it really work?'
     @journal = mock_model(Journal, :notes => @content, :created_on => Date.today)
-    @issue = mock_model(Issue, :closed? => false, :tracker => mock_model(Tracker, :name => 'Bug'))
+    @issue = mock_model(Issue, :closed? => false, :tracker => mock_model(Tracker, :name => 'Bug'), :css_classes => '')
     @author = mock_model(User, :name => "Author User")
     @assignee = mock_model(User, :name => "Assignee")
     @question = mock_model(Question, :journal => @journal, :issue => @issue, :author => @author, :assigned_to => @assignee)
@@ -63,7 +63,7 @@ describe QueriesHelper,"#format_questions with multiple questions" do
     @journal_one = mock_model(Journal, :notes => @content_one, :created_on => Date.today)
     @content_two = 'Another journal with a unique content that is well over 120 characters but it will be ok becasue it is truncated soon.  Maybe.'
     @journal_two = mock_model(Journal, :notes => @content_two, :created_on => Date.today)
-    @issue = mock_model(Issue, :closed? => false, :tracker => mock_model(Tracker, :name => 'Bug'))
+    @issue = mock_model(Issue, :closed? => false, :tracker => mock_model(Tracker, :name => 'Bug'), :css_classes => '')
     @author = mock_model(User, :name => "Author User")
     @assignee = mock_model(User, :name => "Assignee")
     
