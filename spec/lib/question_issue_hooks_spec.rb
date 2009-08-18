@@ -2,26 +2,26 @@ require File.dirname(__FILE__) + '/../spec_helper'
 require 'digest/md5'
 
 describe QuestionIssueHooks, 'view_issues_edit_notes_bottom' do
-  describe 'should render a select' do
+  describe 'should render a text field' do
     before(:each) do
       @user1 = mock_model(User, :id => 1, :name => 'Test one')
       @user2 = mock_model(User, :id => 2, :name => 'Test two')
-      @issue = mock_model(Issue)
-      @issue.should_receive(:assignable_users).and_return([@user1, @user2])
+      @issue = mock_model(Issue, :project => mock_model(Project))
       @context = { :issue => @issue }
     end
     
-    it 'with options for each user' do
-      QuestionIssueHooks.instance.view_issues_edit_notes_bottom( @context ).should have_tag('option',/Test one/)
+    it 'with the selected users login' do
+      QuestionIssueHooks.instance.view_issues_edit_notes_bottom( @context ).should have_tag('input#note_question_assigned_to')
     end
 
-    it 'with an "Anyone" option' do
-      QuestionIssueHooks.instance.view_issues_edit_notes_bottom( @context ).should have_tag('option',/Anyone/)
+    it 'with an area for the autocomplete choices' do
+      QuestionIssueHooks.instance.view_issues_edit_notes_bottom( @context ).should have_tag('div#note_question_assigned_to_choices')
     end
 
-    it 'with a blank option' do
-      QuestionIssueHooks.instance.view_issues_edit_notes_bottom( @context ).should have_tag('option','')
+    it 'with the autocomplete JavaScript' do
+      QuestionIssueHooks.instance.view_issues_edit_notes_bottom( @context ).should have_tag("script",/Autocompleter/)
     end
+
   end
 end
 
@@ -50,7 +50,7 @@ describe QuestionIssueHooks, 'controller_issues_edit_before_select' do
     @journal.should_receive(:question).and_return(@question)
 
     @context = { 
-      :params => { :note => { :question_assigned_to => '1'}},
+      :params => { :note => { :question_assigned_to => 'test'}},
       :journal => @journal
     }
     call_hook(@context).should eql('')
@@ -62,11 +62,11 @@ describe QuestionIssueHooks, 'controller_issues_edit_before_select' do
     @journal.should_receive(:question=)
 
     @user = mock_model(User)
-    User.stub!(:find).with(1).and_return(@user)
+    User.stub!(:find_by_login).with('test').and_return(@user)
     QuestionIssueHooks.instance.should_receive(:assign_question_to_user).with(@journal, @user)
 
     @context = { 
-      :params => { :note => { :question_assigned_to => '1'}},
+      :params => { :note => { :question_assigned_to => 'test'}},
       :journal => @journal
     }
 

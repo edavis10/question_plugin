@@ -1,28 +1,20 @@
 class QuestionJournalHooks < QuestionHooksBase
   def view_journals_notes_form_after_notes(context = { })
     @journal = context[:journal]
-    if @journal.question
-      # Allow the Remove option and no blank option
-      options = [[l(:text_question_remove), :remove]] + [[l(:text_anyone), :anyone]] + (@journal.issue.assignable_users.collect {|m| [m.name, m.id]})
-      selected = @journal.question.assigned_to.id
-      blank = false
+    if @journal.question && @journal.question.assigned_to
+      assigned_to = @journal.question.assigned_to.login
     else
-      # No Remove option but a blank option
-      options = [[l(:text_anyone), :anyone]] + (@journal.issue.assignable_users.collect {|m| [m.name, m.id]})
-      selected = nil
-      blank = true
+      assigned_to = ''
     end
-    
-    
     
     o = ''
     o << content_tag(:p, 
-                     "<label>#{l(:field_question_assign_to)}</label> " + 
-                     select(:question,
-                            :assigned_to_id,
-                            options,
-                            :selected => selected,
-                            :include_blank => blank ))
+                     "<label>#{l(:field_question_assign_to)}</label> " +
+                     text_field_tag('question[assigned_to]', assigned_to, :size => "40"))
+
+    o << content_tag(:div,'', :id => "question_assigned_to_choices", :class => "autocomplete")
+    o << javascript_tag("new Ajax.Autocompleter('question_assigned_to', 'question_assigned_to_choices', '#{ url_for(:controller => 'questions', :action => 'autocomplete_for_user_login', :id => @journal.project, :issue_id => @journal.issue) }', { minChars: 1, frequency: 0.5, paramName: 'user' });")
+
     return o
   end
   
@@ -30,16 +22,26 @@ class QuestionJournalHooks < QuestionHooksBase
     journal = context[:journal]
     params = context[:params]
 
-    if params[:question] && !params[:question][:assigned_to_id].blank?
+    if params[:question] && params[:question][:assigned_to]
 
-      if journal.question && params[:question][:assigned_to_id] == 'remove'
+      if journal.question && params[:question][:assigned_to].blank?
         # Wants to remove the question
         journal.question.destroy
       elsif journal.question
         # Reassignment
-        journal.question.update_attributes(:assigned_to_id => params[:question][:assigned_to_id])
+        if params[:question][:assigned_to].downcase == 'anyone'
+          journal.question.update_attributes(:assigned_to => nil)
+        else
+          journal.question.update_attributes(:assigned_to => User.find_by_login(params[:question][:assigned_to]))
+        end
       else
-        add_new_question(journal, params[:question][:assigned_to_id])
+        if params[:question][:assigned_to].downcase == 'anyone'
+          add_new_question(journal)
+        elsif !params[:question][:assigned_to].blank?
+          add_new_question(journal, User.find_by_login(params[:question][:assigned_to]))
+        else
+          # No question
+        end
       end
 
     end
@@ -54,7 +56,7 @@ class QuestionJournalHooks < QuestionHooksBase
       @journal.reload
       if @journal && @journal.question
         question = @journal.question
-      
+
         if question.assigned_to
           html = assigned_question_html(question)
         else
@@ -76,15 +78,12 @@ class QuestionJournalHooks < QuestionHooksBase
   
   private
   
-  def add_new_question(journal, assigned_to)
+  def add_new_question(journal, assigned_to=nil)
     journal.question = Question.new(
                                     :author => User.current,
-                                    :issue => journal.issue
+                                    :issue => journal.issue,
+                                    :assigned_to => assigned_to
                                     )
-    if assigned_to != 'anyone'
-      # Assigned to a specific user
-      journal.question.assigned_to = User.find(assigned_to.to_i)
-    end
     journal.question.save!
     journal.save
   end

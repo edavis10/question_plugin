@@ -1,31 +1,27 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe QuestionJournalHooks, '#views_journals_notes_form_after_notes' do
-  describe 'should render a select' do
+  describe 'should render a text field' do
     before(:each) do
-      @user1 = mock_model(User, :id => 1, :name => 'Test one')
-      @user2 = mock_model(User, :id => 2, :name => 'Test two')
+      @user1 = mock_model(User, :id => 1, :name => 'Test one', :login => 'test1')
+      @user2 = mock_model(User, :id => 2, :name => 'Test two', :login => 'test2')
+      @project = mock_model(Project)
       @issue = mock_model(Issue)
-      @issue.should_receive(:assignable_users).and_return([@user1, @user2])
       @question = mock_model(Question, :assigned_to => @user2)
-      @journal = mock_model(Journal, :issue => @issue, :question => @question)
+      @journal = mock_model(Journal, :issue => @issue, :question => @question, :project => @project)
       @context = { :journal => @journal }
     end
 
-    it 'with options for each user' do
-      QuestionJournalHooks.instance.view_journals_notes_form_after_notes( @context ).should have_tag('option',/Test one/)
+    it 'with the selected users login' do
+      QuestionJournalHooks.instance.view_journals_notes_form_after_notes( @context ).should have_tag('input[value=?]',/test2/)
     end
 
-    it 'with an "Anyone" option' do
-      QuestionJournalHooks.instance.view_journals_notes_form_after_notes( @context ).should have_tag('option',/Anyone/)
+    it 'with an area for the autocomplete choices' do
+      QuestionJournalHooks.instance.view_journals_notes_form_after_notes( @context ).should have_tag('div#question_assigned_to_choices')
     end
 
-    it 'with a "Remove" option' do
-      QuestionJournalHooks.instance.view_journals_notes_form_after_notes( @context ).should have_tag('option',/remove/i)
-    end
-
-    it 'with the current user selected option' do
-      QuestionJournalHooks.instance.view_journals_notes_form_after_notes( @context ).should have_tag('option[selected=selected]',/Test two/)
+    it 'with the autocomplete JavaScript' do
+      QuestionJournalHooks.instance.view_journals_notes_form_after_notes( @context ).should have_tag("script",/Autocompleter/)
     end
   end
 end
@@ -44,14 +40,29 @@ describe QuestionJournalHooks, '#controller_journals_edit_post with an empty que
   end
 end
 
-describe QuestionJournalHooks, '#controller_journals_edit_post with a new question' do
+describe QuestionJournalHooks, '#controller_journals_edit_post with a new question for anyone' do
   it 'should create a new question' do
     issue = mock_model(Issue)
     journal = mock_model(Journal, :question => nil, :issue => issue)
-    QuestionJournalHooks.instance.should_receive(:add_new_question).with(journal, 'anyone')
+    QuestionJournalHooks.instance.should_receive(:add_new_question).with(journal)
     context = { 
       :journal => journal,
-      :params => { :question => { :assigned_to_id => 'anyone'}}
+      :params => { :question => { :assigned_to => 'anyone'}}
+    }
+    QuestionJournalHooks.instance.controller_journals_edit_post( context ).should eql('')
+  end
+end
+
+describe QuestionJournalHooks, '#controller_journals_edit_post with a new question for a user' do
+  it 'should create a new question' do
+    issue = mock_model(Issue)
+    journal = mock_model(Journal, :question => nil, :issue => issue)
+    test_user = mock_model(User)
+    User.should_receive(:find_by_login).with('test_user').and_return(test_user)
+    QuestionJournalHooks.instance.should_receive(:add_new_question).with(journal, test_user)
+    context = { 
+      :journal => journal,
+      :params => { :question => { :assigned_to => 'test_user'}}
     }
     QuestionJournalHooks.instance.controller_journals_edit_post( context ).should eql('')
   end
@@ -61,11 +72,11 @@ describe QuestionJournalHooks, '#controller_journals_edit_post with a reassigned
   it 'should change the assignment of the question' do
     issue = mock_model(Issue)
     question = mock_model(Question, :assigned_to_id => 2)
-    question.should_receive(:update_attributes).with({ :assigned_to_id => 'anyone'}).and_return(true)
+    question.should_receive(:update_attributes).with({ :assigned_to => nil}).and_return(true)
     journal = mock_model(Journal, :question => nil, :issue => issue, :question => question)
     context = { 
       :journal => journal,
-      :params => { :question => { :assigned_to_id => 'anyone'}}
+      :params => { :question => { :assigned_to => 'anyone'}}
     }
     QuestionJournalHooks.instance.controller_journals_edit_post( context ).should eql('')
   end
@@ -79,7 +90,7 @@ describe QuestionJournalHooks, '#controller_journals_edit_post with a removed qu
     question.should_receive(:destroy).and_return(true)
     context = { 
       :journal => journal,
-      :params => { :question => { :assigned_to_id => 'remove'}}
+      :params => { :question => { :assigned_to => ''}}
     }
     QuestionJournalHooks.instance.controller_journals_edit_post( context ).should eql('')
   end
