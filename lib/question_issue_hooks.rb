@@ -31,7 +31,7 @@ JS
                      text_field_tag('note[question_assigned_to]', nil, :size => "40"))
 
     o << content_tag(:div,'', :id => "note_question_assigned_to_choices", :class => "autocomplete")
-    o << javascript_tag("new Ajax.Autocompleter('note_question_assigned_to', 'note_question_assigned_to_choices', '#{ url_for(:controller => 'questions', :action => 'autocomplete_for_user_login', :id => @issue.project, :issue_id => @issue) }', { minChars: 1, frequency: 0.5, paramName: 'user' });")
+    o << javascript_tag("new Ajax.Autocompleter('note_question_assigned_to', 'note_question_assigned_to_choices', '#{ url_for(:controller => 'questions', :action => 'autocomplete_for_user_login', :id => @issue.project, :issue_id => @issue) }', { minChars: 1, frequency: 0.5, paramName: 'user', select: 'field' });")
       
     return o
   end
