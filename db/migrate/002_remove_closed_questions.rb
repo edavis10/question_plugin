@@ -1,11 +1,9 @@
 class RemoveClosedQuestions < ActiveRecord::Migration
   def self.up
-    say_with_time("Removing closed questions") do
-      Question.destroy_all({:opened => false})
-    end
+    say("This migration removed based on feedback. See https://projects.littlestreamsoftware.com/issues/2230")
   end
 
   def self.down
-    raise ActiveRecord::IrreversibleMigration
+    # No-op
   end
 end

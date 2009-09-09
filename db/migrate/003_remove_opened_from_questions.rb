@@ -1,9 +1,9 @@
 class RemoveOpenedFromQuestions < ActiveRecord::Migration
   def self.up
-    remove_column :questions, :opened
+    say("This migration removed based on feedback. See https://projects.littlestreamsoftware.com/issues/2230")
   end
 
   def self.down
-    add_column :questions, :opened, :boolean, :default => true
+    # No-op
   end
 end
