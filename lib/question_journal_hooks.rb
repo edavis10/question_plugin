@@ -13,7 +13,7 @@ class QuestionJournalHooks < QuestionHooksBase
                      text_field_tag('question[assigned_to]', assigned_to, :size => "40"))
 
     o << content_tag(:div,'', :id => "question_assigned_to_choices", :class => "autocomplete")
-    o << javascript_tag("new Ajax.Autocompleter('question_assigned_to', 'question_assigned_to_choices', '#{ url_for(:controller => 'questions', :action => 'autocomplete_for_user_login', :id => @journal.project, :issue_id => @journal.issue) }', { minChars: 1, frequency: 0.5, paramName: 'user' });")
+    o << javascript_tag("new Ajax.Autocompleter('question_assigned_to', 'question_assigned_to_choices', '#{ url_for(:controller => 'questions', :action => 'autocomplete_for_user_login', :id => @journal.project, :issue_id => @journal.issue) }', { minChars: 1, frequency: 0.5, paramName: 'user', select: 'field' });")
 
     return o
   end
