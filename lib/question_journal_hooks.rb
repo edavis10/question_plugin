@@ -1,7 +1,7 @@
 class QuestionJournalHooks < QuestionHooksBase
   def view_journals_notes_form_after_notes(context = { })
     @journal = context[:journal]
-    if @journal.question && @journal.question.assigned_to
+    if @journal.question && @journal.question.opened && @journal.question.assigned_to
       assigned_to = @journal.question.assigned_to.login
     else
       assigned_to = ''
@@ -27,13 +27,17 @@ class QuestionJournalHooks < QuestionHooksBase
       if journal.question && params[:question][:assigned_to].blank?
         # Wants to remove the question
         journal.question.destroy
-      elsif journal.question
+      elsif journal.question && journal.question.opened
         # Reassignment
         if params[:question][:assigned_to].downcase == 'anyone'
           journal.question.update_attributes(:assigned_to => nil)
         else
           journal.question.update_attributes(:assigned_to => User.find_by_login(params[:question][:assigned_to]))
         end
+      elsif journal.question && !journal.question.opened
+        # Existing question, destry it first and then add a new question
+        journal.question.destroy
+        add_new_question(journal, User.find_by_login(params[:question][:assigned_to]))
       else
         if params[:question][:assigned_to].downcase == 'anyone'
           add_new_question(journal)
@@ -54,7 +58,7 @@ class QuestionJournalHooks < QuestionHooksBase
     page = context[:page]
     unless @journal.frozen?
       @journal.reload
-      if @journal && @journal.question
+      if @journal && @journal.question && @journal.question.opened?
         question = @journal.question
 
         if question.assigned_to

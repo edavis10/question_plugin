@@ -90,7 +90,7 @@ end
 describe QueriesHelper, "#question_column_content" do
   it 'should use a special format for the questions column' do
     issue = mock_model(Issue)
-    issue.should_receive(:questions)
+    issue.should_receive(:open_questions)
     column = mock_model(QueryColumn, :name => :formatted_questions)
 
     helper = QueriesHelperWrapper.new

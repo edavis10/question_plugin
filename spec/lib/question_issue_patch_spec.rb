@@ -11,15 +11,15 @@ describe QuestionIssuePatch,"#pending_question?" do
     @user = mock_model(User)
   end
   
-  it 'should return false if there are no questions' do
+  it 'should return false if there are no open questions' do
     question_mock = mock('question_mock')
     question_mock.stub!(:find).and_return([])
     @issue = Issue.new
-    @issue.should_receive(:questions).and_return(question_mock)
+    @issue.should_receive(:open_questions).and_return(question_mock)
     @issue.pending_question?(@user).should be_false
   end
 
-  it 'should return false if there are no questions for the current user' do
+  it 'should return false if there are no open questions for the current user' do
     @other_user = mock_model(User)
     question_one = mock_model(Question, :assigned_to => @other_user, :for_anyone? => false)
     question_two = mock_model(Question, :assigned_to => @other_user, :for_anyone? => false)
@@ -27,11 +27,11 @@ describe QuestionIssuePatch,"#pending_question?" do
     question_mock.should_receive(:find).and_return([question_one, question_two])
     
     @issue = Issue.new
-    @issue.should_receive(:questions).and_return(question_mock)
+    @issue.should_receive(:open_questions).and_return(question_mock)
     @issue.pending_question?(@user).should be_false
   end
 
-  it 'should return true if there is an question for the current user' do
+  it 'should return true if there is an open question for the current user' do
     @other_user = mock_model(User)
     question_one = mock_model(Question, :assigned_to => @other_user, :for_anyone? => false)
     question_two = mock_model(Question, :assigned_to => @user, :for_anyone? => false)
@@ -39,12 +39,12 @@ describe QuestionIssuePatch,"#pending_question?" do
     question_mock.should_receive(:find).and_return([question_one, question_two])
     
     @issue = Issue.new
-    @issue.should_receive(:questions).and_return(question_mock)
+    @issue.should_receive(:open_questions).and_return(question_mock)
     @issue.pending_question?(@user).should be_true
     
   end
 
-  it 'should return true if there is a question for anyone' do
+  it 'should return true if there is an open question for anyone' do
     @other_user = mock_model(User)
     question_one = mock_model(Question, :assigned_to => @other_user, :for_anyone? => false)
     question_two = mock_model(Question, :assigned_to => nil, :for_anyone? => true)
@@ -52,38 +52,38 @@ describe QuestionIssuePatch,"#pending_question?" do
     question_mock.should_receive(:find).and_return([question_one, question_two])
     
     @issue = Issue.new
-    @issue.should_receive(:questions).and_return(question_mock)
+    @issue.should_receive(:open_questions).and_return(question_mock)
     @issue.pending_question?(@user).should be_true
     
   end
 end
 
 describe QuestionIssuePatch,"#close_pending_questions" do
-  it 'should close any questions for user' do
+  it 'should close any open questions for user' do
     @user = mock_model(User)
     @journal = mock_model(Journal)
-    question = mock_model(Question, :assigned_to => @user)
+    question = mock_model(Question, :opened => true, :assigned_to => @user)
     question.should_receive(:close!).and_return(question)
     question_mock = mock('question_mock')
     question_mock.should_receive(:find).and_return([question])
 
     
     @issue = Issue.new
-    @issue.should_receive(:questions).and_return(question_mock)
+    @issue.should_receive(:open_questions).and_return(question_mock)
     @issue.close_pending_questions(@user, @journal)
   end
   
   it 'should close any questions for anyone' do
     @user = mock_model(User)
     @journal = mock_model(Journal)
-    question = mock_model(Question, :assigned_to => nil, :for_anyone? => true)
+    question = mock_model(Question, :opened => true, :assigned_to => nil, :for_anyone? => true)
     question.should_receive(:close!).and_return(question)
     question_mock = mock('question_mock')
     question_mock.should_receive(:find).and_return([question])
 
     
     @issue = Issue.new
-    @issue.should_receive(:questions).and_return(question_mock)
+    @issue.should_receive(:open_questions).and_return(question_mock)
     @issue.close_pending_questions(@user, @journal)
   end
 
@@ -91,14 +91,14 @@ describe QuestionIssuePatch,"#close_pending_questions" do
     @user = mock_model(User)
     @journal = mock_model(Journal)
     @other_user = mock_model(User)
-    question = mock_model(Question, :assigned_to => @other_user, :for_anyone? => false)
+    question = mock_model(Question, :opened => true, :assigned_to => @other_user, :for_anyone? => false)
     question.should_not_receive(:close!)
     question_mock = mock('question_mock')
     question_mock.should_receive(:find).and_return([question])
 
     
     @issue = Issue.new
-    @issue.should_receive(:questions).and_return(question_mock)
+    @issue.should_receive(:open_questions).and_return(question_mock)
     @issue.close_pending_questions(@user, @journal)
   end
 

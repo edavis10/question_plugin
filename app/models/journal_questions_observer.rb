@@ -9,7 +9,7 @@ class JournalQuestionsObserver < ActiveRecord::Observer
       QuestionMailer.deliver_asked_question(journal)
     end
 
-    # Close any questions
+    # Close any open questions
     if journal.issue && journal.issue.pending_question?(journal.user)
       journal.issue.close_pending_questions(journal.user, journal)
     end

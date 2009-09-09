@@ -18,7 +18,7 @@ module QuestionQueriesHelperPatch
   module InstanceMethods
     def question_column_content(column, issue)
       if column.name == :formatted_questions
-        return format_questions(issue.questions)
+        return format_questions(issue.open_questions)
       else
         default_column_content(column, issue)
       end

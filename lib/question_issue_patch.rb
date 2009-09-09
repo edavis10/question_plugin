@@ -9,6 +9,7 @@ module QuestionIssuePatch
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in development
       has_many :questions
+      has_many :open_questions, :class_name => 'Question', :conditions => { :opened => true }
 
       class << self
         # I dislike alias method chain, it's not the most readable backtraces
@@ -78,14 +79,14 @@ module QuestionIssuePatch
   
   module InstanceMethods
     def pending_question?(user)
-      self.questions.find(:all).each do |question|
+      self.open_questions.find(:all).each do |question|
         return true if question.assigned_to == user || question.for_anyone?
       end
       return false
     end
     
     def close_pending_questions(user, closing_journal)
-      self.questions.find(:all).each do |question|
+      self.open_questions.find(:all).each do |question|
         question.close!(closing_journal) if question.assigned_to == user || question.for_anyone?
       end
     end
