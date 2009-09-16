@@ -12,10 +12,8 @@ class QuestionMailer < Mailer
       :issue_url => url_for(:controller => 'issues', :action => 'show', :id => question.issue)
     })
 
-    part :content_type => "text/plain", :body => render_message("asked_question.erb", body)
-    part :content_type => "text/html", :body => render_message("asked_question.text.html.rhtml", body)
-
     RAILS_DEFAULT_LOGGER.debug 'Sending QuestionMailer#asked_question'
+    render_multipart('asked_question', body)
   end
   
   def answered_question(question, closing_journal)
@@ -30,10 +28,8 @@ class QuestionMailer < Mailer
       :issue_url => url_for(:controller => 'issues', :action => 'show', :id => question.issue)
     })
 
-    part :content_type => "text/plain", :body => render_message("answered_question.erb", body)
-    part :content_type => "text/html", :body => render_message("answered_question.text.html.rhtml", body)
-
     RAILS_DEFAULT_LOGGER.debug 'Sending QuestionMailer#answered_question'
+    render_multipart('answered_question', body)
   end
   
 end
