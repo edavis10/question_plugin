@@ -11,6 +11,8 @@ module QuestionIssuePatch
       has_many :questions
       has_many :open_questions, :class_name => 'Question', :conditions => { :opened => true }
 
+      include ActionView::Helpers::TextHelper # for truncate
+      
       class << self
         # I dislike alias method chain, it's not the most readable backtraces
         alias_method :default_find, :find
@@ -89,6 +91,12 @@ module QuestionIssuePatch
       self.open_questions.find(:all).each do |question|
         question.close!(closing_journal) if question.assigned_to == user || question.for_anyone?
       end
+    end
+
+    def formatted_questions
+      open_questions.collect do |question|
+        truncate(question.journal.notes, Question::TruncateTo)
+      end.join(", ")
     end
   end
 end
