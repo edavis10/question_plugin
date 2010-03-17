@@ -1,12 +1,25 @@
 require 'redmine'
 
-require 'question_journal_patch'
-require 'question_query_patch'
-require 'question_issue_patch'
-require 'question_queries_helper_patch'
 require 'question_issue_hooks'
 require 'question_layout_hooks'
 require 'question_journal_hooks'
+
+# Patches to the Redmine core.
+require 'dispatcher'
+
+Dispatcher.to_prepare :question_plugin do
+  require_dependency 'issue'
+  Issue.send(:include, QuestionIssuePatch) unless Issue.included_modules.include? QuestionIssuePatch
+
+  require_dependency 'journal'
+  Journal.send(:include, QuestionJournalPatch) unless Journal.included_modules.include? QuestionJournalPatch
+
+  require_dependency 'queries_helper'
+  QueriesHelper.send(:include, QuestionQueriesHelperPatch) unless QueriesHelper.included_modules.include? QuestionQueriesHelperPatch
+
+  require_dependency "query"
+  Query.send(:include, QuestionQueryPatch) unless Query.included_modules.include? QuestionQueryPatch
+end
 
 Redmine::Plugin.register :question_plugin do
   name 'Redmine Question plugin'

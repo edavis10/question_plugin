@@ -1,5 +1,3 @@
-require_dependency "query"
-
 module QuestionQueryPatch
   def self.included(base) # :nodoc:
     base.extend(ClassMethods)
@@ -93,4 +91,3 @@ module QuestionQueryPatch
   end  
 end
 
-Query.send(:include, QuestionQueryPatch)

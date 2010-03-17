@@ -1,5 +1,3 @@
-require_dependency 'journal'
-
 module QuestionJournalPatch
   def self.included(base) # :nodoc:
     base.extend(ClassMethods)
@@ -22,5 +20,3 @@ module QuestionJournalPatch
     end
   end
 end
-
-Journal.send(:include, QuestionJournalPatch)
