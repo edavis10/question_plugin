@@ -11,23 +11,23 @@ class QuestionKanbanHooks < QuestionHooksBase
     issue = context[:issue]
 
     if issue.questions.count == 0
-      return question_icon('c6c6c6') # gray
+      return question_icon('c6c6c6', issue) # gray
     end
     
     if issue.questions.count == issue.open_questions.count
-      return question_icon('ff0000') # red
+      return question_icon('ff0000', issue) # red
     end
 
     if issue.questions.count != 0 && issue.open_questions.count == 0 && issue.journals.last && issue.journals.last.user != issue.assigned_to
-      return question_icon('005829') # green
+      return question_icon('005829', issue) # green
     end
 
     if issue.questions.count != 0 && issue.open_questions.count <= issue.questions.count && issue.journals.last.user == issue.assigned_to
-      return question_icon('dd6a06') # orange
+      return question_icon('dd6a06', issue) # orange
     end
 
     if issue.open_questions.count == 0 && issue.journals.last.user == issue.assigned_to
-      return question_icon('000000') # black
+      return question_icon('000000', issue) # black
     end
 
     return ''
@@ -35,7 +35,12 @@ class QuestionKanbanHooks < QuestionHooksBase
 
   protected
 
-  def question_icon(color)
-    "<span class='kanban-question' style='color: ##{color}'>?</span>"
+  def question_icon(color, issue)
+    total_questions = issue.questions.count
+    open_questions = issue.open_questions.count
+    answered_questions = total_questions - open_questions
+    
+    title = l(:question_text_ratio_questions_answered, :ratio => "#{answered_questions}/#{total_questions}")
+    "<span class='kanban-question' style='color: ##{color}' title='#{title}'>?</span>"
   end
 end
