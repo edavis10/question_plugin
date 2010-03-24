@@ -1,6 +1,7 @@
 require 'redmine'
 
 require 'question_issue_hooks'
+require 'question_kanban_hooks'
 require 'question_layout_hooks'
 require 'question_journal_hooks'
 
