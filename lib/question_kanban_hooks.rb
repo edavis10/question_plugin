@@ -33,6 +33,27 @@ class QuestionKanbanHooks < QuestionHooksBase
     return ''
   end
 
+  # * :user
+  def view_kanbans_user_name(context = {})
+    user = context[:user]
+    if user
+      count = Question.count_of_open_for_user(user)
+
+      if count > 0
+        return content_tag(:p, link_to(l(:text_questions_for_me) + " (#{count})",
+                                       {
+                                         :controller => 'questions',
+                                         :action => 'my_issue_filter',
+                                         :only_path => true
+                                       },
+                                       { :class => 'question-link' }))
+      end
+    end
+
+    return ''
+
+  end
+
   protected
 
   def question_icon(color, issue)
