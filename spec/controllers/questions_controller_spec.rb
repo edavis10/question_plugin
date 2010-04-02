@@ -11,6 +11,7 @@ describe QuestionsController, "#my_issue_filter" do
                          :users => [],
                          :issue_categories => [],
                          :versions => [],
+                         :shared_versions => [],
                          :active_children => [],
                          :all_issue_custom_fields => [],
                          :descendants => project_descendants

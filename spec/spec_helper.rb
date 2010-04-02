@@ -39,6 +39,13 @@ Spec::Runner.configure do |config|
   # config.mock_with :rr
 end
 
+class ActiveSupport::TestCase
+  # just enough infrastructure to get 'assert_select' to work
+  require 'action_controller'
+  require 'action_controller/assertions/selector_assertions'
+  include ActionController::Assertions::SelectorAssertions
+end
+
 module AssociationMatcher
   class Association
     def initialize(field, association_type)
