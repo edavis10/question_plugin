@@ -40,10 +40,11 @@ class QuestionKanbanHooks < QuestionHooksBase
       count = Question.count_of_open_for_user(user)
 
       if count > 0
-        return content_tag(:p, link_to(l(:text_questions_for_me) + " (#{count})",
+        return content_tag(:p, link_to(l(:field_formatted_questions) + " (#{count})",
                                        {
                                          :controller => 'questions',
-                                         :action => 'my_issue_filter',
+                                         :action => 'user_issue_filter',
+                                         :user_id => user.id,
                                          :only_path => true
                                        },
                                        { :class => 'question-link' }))
