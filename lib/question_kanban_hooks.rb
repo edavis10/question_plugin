@@ -7,6 +7,8 @@ class QuestionKanbanHooks < QuestionHooksBase
     # BLACK if all questions are answered and the "assigned to" person has added a note - (question count is not 0 and unanswered question count is 0 and the last journal author is the assigned to)
     issue = context[:issue]
 
+    return '' unless issue
+    
     if issue.questions.count == 0
       return question_icon(:gray, issue)
     end
@@ -19,7 +21,7 @@ class QuestionKanbanHooks < QuestionHooksBase
       return question_icon(:green, issue)
     end
 
-    if issue.questions.count != 0 && issue.open_questions.count <= issue.questions.count && issue.journals.last.user == issue.assigned_to
+    if issue.questions.count != 0 && issue.open_questions.count != 0 && issue.open_questions.count <= issue.questions.count && issue.journals.last.user == issue.assigned_to
       return question_icon(:orange, issue)
     end
 
@@ -60,7 +62,7 @@ class QuestionKanbanHooks < QuestionHooksBase
     answered_questions = total_questions - open_questions
     
     title = l(:question_text_ratio_questions_answered, :ratio => "#{answered_questions}/#{total_questions}")
-    link_to(image_tag("question-#{color}.png", :plugin => 'question_plugin', :title => title, :class => 'kanban-question'),
+    link_to(image_tag("question-#{color}.png", :plugin => 'question_plugin', :title => title, :class => "kanban-question #{color}"),
             { :controller => 'issues', :action => 'show', :id => issue })
   end
 end

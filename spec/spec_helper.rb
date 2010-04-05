@@ -44,6 +44,9 @@ class ActiveSupport::TestCase
   require 'action_controller'
   require 'action_controller/assertions/selector_assertions'
   include ActionController::Assertions::SelectorAssertions
+
+  require '../../../test/object_daddy_helpers'
+  include ObjectDaddyHelpers
 end
 
 module AssociationMatcher
