@@ -1,10 +1,8 @@
 class QuestionKanbanHooks < QuestionHooksBase
   def view_kanbans_issue_details(context = {})
-    # GREY when there are no questions - (question count is 0)
-    # RED when all questions unanswered - (question count is equal to the unanswered question count)
-    # GREEN when all questions is answered and no new note by the "assigned to" person - (question count is not 0 and unanswered question count is 0 and the last journal author is not the assigned to)
-    # ORANGE if some questions are answered and the "assigned to" person has added a note - (question count is not 0 and unanswered question count is less than the total question count and the last journal author is the assigned to)
-    # BLACK if all questions are answered and the "assigned to" person has added a note - (question count is not 0 and unanswered question count is 0 and the last journal author is the assigned to)
+    # GREY when there are no questions
+    # RED when there are open questions
+    # BLACK if all questions are answered
     issue = context[:issue]
 
     return '' unless issue
@@ -13,19 +11,11 @@ class QuestionKanbanHooks < QuestionHooksBase
       return question_icon(:gray, issue)
     end
     
-    if issue.questions.count == issue.open_questions.count
+    if issue.open_questions.count > 0
       return question_icon(:red, issue)
     end
 
-    if issue.questions.count != 0 && issue.open_questions.count == 0 && issue.journals.last && issue.journals.last.user != issue.assigned_to
-      return question_icon(:green, issue)
-    end
-
-    if issue.questions.count != 0 && issue.open_questions.count != 0 && issue.open_questions.count <= issue.questions.count && issue.journals.last.user == issue.assigned_to
-      return question_icon(:orange, issue)
-    end
-
-    if issue.open_questions.count == 0 && issue.journals.last.user == issue.assigned_to
+    if issue.questions.count > 0 && issue.open_questions.count == 0
       return question_icon(:black, issue)
     end
 
@@ -56,6 +46,22 @@ class QuestionKanbanHooks < QuestionHooksBase
 
   protected
 
+  def updated_note_icon(issue)
+    if issue && issue.journals.present?
+      # Get the last Journal with a note and see if that "could" have
+      # been an answer.
+      # TODO: tracking answered directly would be a lot easier...
+      last_journal_with_note = issue.journals.select {|journal| journal.notes.present?}.last
+      question_askees = issue.questions.collect(&:assigned_to_id)
+
+      if last_journal_with_note && question_askees.include?(last_journal_with_note.user_id)
+        return image_tag('comment.png', :class => 'updated-note')
+      end
+    end
+
+    return '' # fall through
+  end
+
   def question_icon(color, issue)
     total_questions = issue.questions.count
     open_questions = issue.open_questions.count
@@ -63,6 +69,7 @@ class QuestionKanbanHooks < QuestionHooksBase
     
     title = l(:question_text_ratio_questions_answered, :ratio => "#{answered_questions}/#{total_questions}")
     link_to(image_tag("question-#{color}.png", :plugin => 'question_plugin', :title => title, :class => "kanban-question #{color}"),
-            { :controller => 'issues', :action => 'show', :id => issue })
+            { :controller => 'issues', :action => 'show', :id => issue }) +
+      updated_note_icon(issue)
   end
 end

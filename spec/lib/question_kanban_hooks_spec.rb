@@ -28,43 +28,16 @@ describe QuestionIssueHooks, '#view_kanbans_issue_details', :type => :view do
     end
   end
 
-  describe 'all open questions' do
+  describe 'any open questions' do
     it 'should be a red image' do
       journal = Journal.generate!(:issue => @issue)
       journal.question = Question.new(
                                       :author => @author,
-                                      :issue => @issue
-                                      )
-      response.body = call_hook(:issue => @issue)
-
-      response.should have_tag('a img.red')
-    end
-  end
-
-  describe 'all closed questions, last journal update from non assigned user' do
-    it 'should be a green image' do
-      journal = Journal.generate!(:issue => @issue)
-      journal.question = Question.new(
-                                      :author => @author,
-                                      :issue => @issue,
-                                      :opened => false
-                                      )
-      response.body = call_hook(:issue => @issue)
-
-      response.should have_tag('a img.green')
-    end
-  end
-
-  describe 'some closed questions, last journal update from assigned user' do
-    it 'should be a orange image' do
-      journal = Journal.generate!(:issue => @issue)
-      journal.question = Question.new(
-                                      :author => @author,
                                       :issue => @issue,
                                       :opened => false
                                       )
 
-      journal2 = Journal.generate!(:issue => @issue, :user => @assigned_to)
+      journal2 = Journal.generate!(:issue => @issue)
       journal2.question = Question.new(
                                        :author => @author,
                                        :issue => @issue,
@@ -73,11 +46,11 @@ describe QuestionIssueHooks, '#view_kanbans_issue_details', :type => :view do
 
       response.body = call_hook(:issue => @issue)
 
-      response.should have_tag('a img.orange')
+      response.should have_tag('a img.red')
     end
   end
 
-  describe 'all closed questions, last journal update from assigned user' do
+  describe 'all closed questions' do
     it 'should be a black image' do
       journal = Journal.generate!(:issue => @issue)
       journal.question = Question.new(
@@ -86,7 +59,7 @@ describe QuestionIssueHooks, '#view_kanbans_issue_details', :type => :view do
                                       :opened => false
                                       )
 
-      journal2 = Journal.generate!(:issue => @issue, :user => @assigned_to)
+      journal2 = Journal.generate!(:issue => @issue)
       journal2.question = Question.new(
                                        :author => @author,
                                        :issue => @issue,
@@ -98,5 +71,44 @@ describe QuestionIssueHooks, '#view_kanbans_issue_details', :type => :view do
       response.should have_tag('a img.black')
     end
   end
+
+  describe 'with a Journal with a note from' do
+    describe 'the assigned to user' do
+      it 'should not show a bubble' do
+        journal = Journal.generate!(:issue => @issue, :user => @assigned_to, :notes => 'a note')
+        
+        response.body = call_hook(:issue => @issue)
+        response.should_not have_tag('a img[class=updated-note]')
+      end
+    end
+
+    describe 'a random user' do
+      it 'should not show a bubble' do
+        journal = Journal.generate!(:issue => @issue, :user => User.generate!, :notes => 'a note')
+
+        response.body = call_hook(:issue => @issue)
+        response.should_not have_tag('a img[class=updated-note]')
+      end
+    end
+
+    describe 'a user who as asked a question' do
+      it 'should show the bubble' do
+        askee = User.generate!
+        questioned = Journal.generate!(:issue => @issue)
+        questioned.question = Question.new(:assigned_to => askee,
+                                           :author => @author,
+                                           :issue => @issue,
+                                           :opened => true
+                                           )
+        
+        
+        journal = Journal.generate!(:issue => @issue, :user => askee, :notes => 'a note')
+
+        response.body = call_hook(:issue => @issue)
+        response.should have_tag('img[class=updated-note]')
+      end
+    end
+  end
+  
 
 end
