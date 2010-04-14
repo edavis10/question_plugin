@@ -25,13 +25,13 @@ class Question < ActiveRecord::Base
 
   # TODO: refactor to named_scope
   def self.count_of_open_for_user(user)
-    Question.count(:conditions => {:assigned_to_id => user, :opened => true})
+    Question.count(:conditions => {:assigned_to_id => user.id, :opened => true})
   end
 
   # TODO: refactor to named_scope
   def self.count_of_open_for_user_on_project(user, project)
     Question.count(:conditions => ["#{Question.table_name}.assigned_to_id = ? AND #{Project.table_name}.id = ? AND #{Question.table_name}.opened = ?",
-                                   user,
+                                   user.id,
                                    project.id,
                                    true],
                    :include => [:issue => [:project]])
