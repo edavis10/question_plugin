@@ -1,4 +1,6 @@
 class QuestionMailer < Mailer
+  unloadable
+  
   def asked_question(journal)
     question = journal.question
     subject "[Question ##{question.issue.id}] #{question.issue.subject}"
