@@ -55,7 +55,7 @@ class QuestionKanbanHooks < QuestionHooksBase
       question_askees = issue.questions.collect(&:assigned_to_id)
 
       if last_journal_with_note && question_askees.include?(last_journal_with_note.user_id)
-        return image_tag('comment.png', :class => 'updated-note')
+        return image_tag('comment.png', :class => 'updated-note', :alt => l(:text_answer), :title => l(:text_answer))
       end
     end
 
