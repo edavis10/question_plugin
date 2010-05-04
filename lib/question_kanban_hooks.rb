@@ -46,7 +46,7 @@ class QuestionKanbanHooks < QuestionHooksBase
 
   protected
 
-  def updated_note_icon(issue)
+  def updated_note_icon(issue, title)
     if issue && issue.journals.present?
       # Get the last Journal with a note and see if that "could" have
       # been an answer.
@@ -55,7 +55,7 @@ class QuestionKanbanHooks < QuestionHooksBase
       question_askees = issue.questions.collect(&:assigned_to_id)
 
       if last_journal_with_note && question_askees.include?(last_journal_with_note.user_id)
-        return image_tag('comment.png', :class => 'updated-note', :alt => l(:text_answer), :title => l(:text_answer))
+        return image_tag('comment.png', :class => 'updated-note', :style=> 'left:0px', :alt => title, :title => title)
       end
     end
 
@@ -70,6 +70,6 @@ class QuestionKanbanHooks < QuestionHooksBase
     title = l(:question_text_ratio_questions_answered, :ratio => "#{answered_questions}/#{total_questions}")
     link_to(image_tag("question-#{color}.png", :plugin => 'question_plugin', :title => title, :class => "kanban-question #{color}"),
             { :controller => 'issues', :action => 'show', :id => issue }) +
-      updated_note_icon(issue)
+      updated_note_icon(issue, title)
   end
 end
