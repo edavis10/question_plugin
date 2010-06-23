@@ -19,7 +19,8 @@ class QuestionMailer < Mailer
   end
   
   def answered_question(question, closing_journal)
-    subject "[Answered] #{question.issue.subject} ##{question.issue.id}"
+    subject "[Answered #{question.issue.project.name} ##{question.issue.id}] #{question.issue.subject}"
+
     recipients question.author.mail unless question.author.nil?
     @from = "#{question.assigned_to.name} (Redmine) <#{Setting.mail_from}>" unless question.assigned_to.nil?
 
