@@ -35,3 +35,4 @@ Redmine::Plugin.register :question_plugin do
 end
 
 ActiveRecord::Base.observers << :journal_questions_observer
+require 'question_plugin/hooks/view_user_kanbans_show_contextual_top_hook'
