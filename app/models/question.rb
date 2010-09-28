@@ -18,8 +18,9 @@ class Question < ActiveRecord::Base
   def close!(closing_journal=nil)
     if self.opened
       self.opened = false
-      self.save!
-      QuestionMailer.deliver_answered_question(self, closing_journal) if closing_journal
+      if self.save && closing_journal
+        QuestionMailer.deliver_answered_question(self, closing_journal)
+      end
     end
   end
 
