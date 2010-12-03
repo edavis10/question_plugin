@@ -6,7 +6,7 @@ module QuestionJournalPatch
 
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in development
-      has_one :question
+      has_one :question, :dependent => :destroy
     end
 
   end
