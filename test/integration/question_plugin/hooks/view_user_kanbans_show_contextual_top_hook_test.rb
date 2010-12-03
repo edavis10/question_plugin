@@ -41,7 +41,7 @@ class QuestionPlugin::Hooks::ViewUserKanbansShowContextualTopTest < ActionContro
       
     end
 
-  rescue
+  rescue LoadError
     puts 'skipping redmine_kanban tests'
   end
 end
