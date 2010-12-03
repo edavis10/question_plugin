@@ -39,6 +39,12 @@ module IntegrationTestHelper
     assert_response :forbidden
     assert_template 'common/403'
   end
+
+  # Cleanup current_url to remove the host; sometimes it's present, sometimes it's not
+  def current_path
+    return nil if current_url.nil?
+    return current_url.gsub("http://www.example.com","")
+  end
   
 end
 
