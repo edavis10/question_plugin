@@ -34,6 +34,7 @@ class QuestionTest < ActiveSupport::TestCase
 
     context "on a closed question" do
       setup do
+        ActionMailer::Base.deliveries.clear
         @question = Question.new(:opened => false)
       end
       

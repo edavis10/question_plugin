@@ -57,6 +57,15 @@ class QuestionMailerTest < ActiveSupport::TestCase
     should "have the redmine system email address as the from" do
       assert_match /From:.*#{Setting.mail_from}/, @mail.encoded
     end
+
+    should "have the X-Redmine-Question-Asked header" do
+      assert_match /X-Redmine-Question-Asked.*#{@author.login}/, @mail.encoded
+    end
+
+    should "have the X-Redmine-Question-Assigned header" do
+      assert_match /X-Redmine-Question-Assigned-To.*#{@user.login}/, @mail.encoded
+    end
+
   end
 
 
@@ -134,6 +143,10 @@ class QuestionMailerTest < ActiveSupport::TestCase
 
     should "have the redmine system email address as the from" do
       assert_match /From:.*#{Setting.mail_from}/, @mail.encoded
+    end
+
+    should "have the X-Redmine-Question-Answer header with the issue and journal ids" do
+      assert_match /X-Redmine-Question-Answer.*#{@issue.id}-#{@journal_with_answer.id}/, @mail.encoded
     end
   end
 

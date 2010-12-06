@@ -7,6 +7,8 @@ class QuestionMailer < Mailer
     recipients question.assigned_to.mail unless question.assigned_to.nil?
     @from  = "#{question.author.name} (Redmine) <#{Setting.mail_from}>" unless question.author.nil?
     redmine_headers 'Issue-Id' => question.issue.id
+    redmine_headers 'Question-Asked' => question.author.login if question.author.present?
+    redmine_headers 'Question-Assigned-To' => question.assigned_to.login if question.assigned_to.present?
 
     body({
       :question => question,
@@ -25,6 +27,7 @@ class QuestionMailer < Mailer
     recipients question.author.mail unless question.author.nil?
     @from = "#{question.assigned_to.name} (Redmine) <#{Setting.mail_from}>" unless question.assigned_to.nil?
     redmine_headers 'Issue-Id' => question.issue.id
+    redmine_headers 'Question-Answer' => "#{question.issue.id}-#{closing_journal.id}"
 
     body({
       :question => question,
