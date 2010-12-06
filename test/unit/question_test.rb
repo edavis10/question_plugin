@@ -46,7 +46,7 @@ class QuestionTest < ActiveSupport::TestCase
       should "not send the question mail" do
         @question.close!
 
-        assert_did_not_send_email
+        assert_equal 0, ActionMailer::Base.deliveries.length
       end
       
     end
