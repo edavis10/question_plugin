@@ -1,0 +1,17 @@
+bg:
+  field_question_assign_to: Задай въпрос към
+  field_question_assigned_to: Въпросът е зададен на
+  field_question_asked_by: Въпросът е зададен от
+  field_formatted_questions: Въпроси
+  text_question: Въпрос
+  text_question_answered: Въпросът Отговорен
+  text_answer: Отговор
+  text_anyone: Всеки
+  text_question_for: Въпрос към
+  text_question_for_anyone: Въпрос към всички
+  text_questions_for_me: Въпроси към мен
+  text_question_asked: Въпрос зададен
+  text_question_remove: "<< Премахни Въпрос>>"
+  question_text_asked_by: "Зададен от"
+  question_text_assigned_to: "Зададен към"
+  question_text_created_on: "Създаден"
