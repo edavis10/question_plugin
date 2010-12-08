@@ -1,0 +1,18 @@
+it:
+  field_formatted_questions: Domande
+  field_question_asked_by: Utente che ha fatto una domanda
+  field_question_assign_to: Domanda da assegnare a
+  field_question_assigned_to: Domanda assegnata a
+  text_question: Domanda
+  text_questions_for_me: Domande per me
+  text_questions_for: Domande per
+  text_question_for_anyone: Domanda per tutti
+  text_question_for: Domanda per
+  text_anyone: Tutti
+  text_question_answered: Domande evase
+  text_answer: Risposte
+  text_question_asked: Domanda sottoposta
+  text_question_remove: Elimina la domanda
+  question_text_asked_by: Domanda fatta da
+  question_text_assigned_to: Domanda assegnata a
+  question_text_created_on: Domanda creata il
