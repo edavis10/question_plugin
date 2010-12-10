@@ -1,0 +1,26 @@
+<% questions = Question.opened.by_user(User.current) %>
+<h3><%= l(:text_questions_asked_by_me)%> (<%= h(questions.length) %>)</h3>
+
+<% if questions && questions.any? %>
+  <table class="list">
+    <thead><tr>
+    <th><%=l(:field_project)%></th>
+    <th><%=l(:field_issue)%></th>
+    <th><%=l(:text_question)%></th>
+    </tr></thead>
+    <tbody> 
+    <% questions.each do |question| %>
+    <tr id="question-<%= question.id %>" class="<%= cycle('odd', 'even') %>">
+      <td class="project"><%= link_to_project(question.issue.project) %></td>
+      <td class="issue"><%= link_to_issue(question.issue, :project => false) %></td>
+      <td class="question-content">
+        <%= link_to h(truncate(question.notes, :length => 60)), :controller => 'issues', :action => 'show', :id => question.issue %>
+      </td>
+    </tr>
+    <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% end %>
+

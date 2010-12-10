@@ -10,6 +10,16 @@ class Question < ActiveRecord::Base
   validates_presence_of :author
   validates_presence_of :issue
   validates_presence_of :journal
+
+  named_scope :opened, :conditions => {:opened => true}
+  named_scope :for_user, lambda {|user|
+    { :conditions => {:assigned_to_id => user.id }}
+  }
+  named_scope :by_user, lambda {|user|
+    { :conditions => {:author_id => user.id }}
+  }
+
+  delegate :notes, :to => :journal, :allow_nil => true
   
   def for_anyone?
     self.assigned_to.nil?
