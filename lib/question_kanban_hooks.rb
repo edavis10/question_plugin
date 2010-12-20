@@ -53,6 +53,7 @@ class QuestionKanbanHooks < QuestionHooksBase
     
     title = l(:question_text_ratio_questions_answered, :ratio => "#{answered_questions}/#{total_questions}")
     link_to(image_tag("question-#{color}.png", :plugin => 'question_plugin', :title => title, :class => "kanban-question #{color}"),
-            { :controller => 'issues', :action => 'show', :id => issue })
+            { :controller => 'issues', :action => 'show', :id => issue },
+            :class => "issue-show-popup issue-#{h(issue.id)}")
   end
 end
