@@ -46,22 +46,6 @@ class QuestionKanbanHooks < QuestionHooksBase
 
   protected
 
-  def updated_note_icon(issue, title)
-    if issue && issue.journals.present?
-      # Get the last Journal with a note and see if that "could" have
-      # been an answer.
-      # TODO: tracking answered directly would be a lot easier...
-      last_journal_with_note = issue.journals.select {|journal| journal.notes.present?}.last
-      question_askees = issue.questions.collect(&:assigned_to_id)
-
-      if last_journal_with_note && question_askees.include?(last_journal_with_note.user_id)
-        return image_tag('comment.png', :class => 'updated-note', :style=> 'left:0px', :alt => title, :title => title)
-      end
-    end
-
-    return '' # fall through
-  end
-
   def question_icon(color, issue)
     total_questions = issue.questions.count
     open_questions = issue.open_questions.count
@@ -69,7 +53,7 @@ class QuestionKanbanHooks < QuestionHooksBase
     
     title = l(:question_text_ratio_questions_answered, :ratio => "#{answered_questions}/#{total_questions}")
     link_to(image_tag("question-#{color}.png", :plugin => 'question_plugin', :title => title, :class => "kanban-question #{color}"),
-            { :controller => 'issues', :action => 'show', :id => issue }) +
-      updated_note_icon(issue, title)
+            { :controller => 'issues', :action => 'show', :id => issue },
+            :class => "issue-show-popup issue-id-#{h(issue.id)}")
   end
 end

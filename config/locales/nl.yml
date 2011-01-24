@@ -1,0 +1,19 @@
+nl:
+  field_question_assign_to: Vraag aan
+  field_question_assigned_to: Vraag is gesteld aan
+  field_question_asked_by: Vraag is gesteld door
+  field_formatted_questions: Vragen
+  text_question: Vraag
+  text_question_answered: Vraag beantwoord
+  text_answer: Antwoord
+  text_anyone: om het even wie
+  text_question_for: Vraag voor
+  text_question_for_anyone: Algemene vraag
+  text_questions_for_me: Vragen aan mij
+  text_question_asked: Vraag gesteld
+  text_question_remove: "<< Vraag verwijderen>>"
+  question_text_asked_by: "Gevraagd door"
+  question_text_assigned_to: "Toegewezen aan"
+  question_text_created_on: "Gemaakt op"
+  question_text_ratio_questions_answered: "{{ratio}} vragen beantwoord"
+  field_journal: "Logboek"

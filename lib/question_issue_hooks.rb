@@ -74,7 +74,7 @@ JS
                        :only_path => true
                      },
                      { :class => 'question-link' }
-                     )
+                     ) + '<br />'
     else
       return ''
     end
