@@ -132,6 +132,24 @@ class QuestionJournalHooksTest < ActionController::IntegrationTest
       end
 
     end
+
+    context 'with a removed journal by clearing the notes' do
+      setup do
+        @question = Question.generate!(:issue => @issue, :journal => @journal, :assigned_to => @user2, :opened => true)
+        
+        assert_difference('Journal.count',-1) do
+          assert_difference('Question.count', -1) do
+            post "/journals/edit/#{@journal.id}", :format => 'js', :notes => '', :question => { :assigned_to => ''}
+            assert_response :success
+          end
+        end
+      end
+      
+      should 'should destroy the question' do
+        assert_equal nil, Question.find_by_id(@question.id)
+      end
+    end
+
   end
 
 end
