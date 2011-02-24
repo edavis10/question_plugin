@@ -24,12 +24,6 @@ class QuestionTest < ActiveSupport::TestCase
         assert !@question.opened?
       end
 
-      should "send a question email" do
-        @question.close!
-
-        assert_sent_email
-      end
-      
     end
 
     context "on a closed question" do
@@ -42,12 +36,6 @@ class QuestionTest < ActiveSupport::TestCase
         @question.close!
 
         assert @question.new_record?
-      end
-      
-      should "not send the question mail" do
-        @question.close!
-
-        assert_equal 0, ActionMailer::Base.deliveries.length
       end
       
     end

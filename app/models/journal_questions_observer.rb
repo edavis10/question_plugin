@@ -6,7 +6,6 @@ class JournalQuestionsObserver < ActiveRecord::Observer
   def after_create(journal)
     if journal.question
       journal.question.save
-      QuestionMailer.deliver_asked_question(journal)
     end
 
     # Close any open questions

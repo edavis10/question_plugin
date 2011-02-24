@@ -26,16 +26,8 @@ class JournalQuestionsObserverTest < ActiveSupport::TestCase
     end
 
     context 'with a question' do
-      should 'deliver an email' do
-        question_journal = Journal.generate!(:user => @author, :journalized => @issue, :notes => 'Question')
-        question = Question.generate!(:assigned_to => @author, :author => @author, :issue => @issue, :journal => question_journal)
-        
-        Journal.create!(:user => @author, :journalized => @issue, :notes => 'Answer')
-
-        assert_sent_email do |email|
-          email.subject =~ /answered/i
-        end
-      end
+      should 'add the question to the outbound emails'
+      should 'notify the question reciever via email'
     end
 
     should 'close all pending questions for the journal submitter' do

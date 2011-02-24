@@ -29,7 +29,6 @@ class Question < ActiveRecord::Base
     if self.opened
       self.opened = false
       if self.save && closing_journal
-        QuestionMailer.deliver_answered_question(self, closing_journal)
       end
     end
   end
