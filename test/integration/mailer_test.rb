@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + '/../../../test_helper'
+require File.dirname(__FILE__) + '/../test_helper'
 
-class QuestionPlugin::Hooks::ViewLayoutsMailerTest < ActionController::IntegrationTest
+class MailerTest < ActionController::IntegrationTest
   include Redmine::Hook::Helper
 
   def setup
