@@ -14,6 +14,10 @@ module QuestionPlugin
               redmine_headers 'Question-Asked' => question.author.login if question.author.present?
               redmine_headers 'Question-Assigned-To' => question.assigned_to.login if question.assigned_to.present?
             end
+
+            if journal.present? && journal.issue.present? && journal.issue.pending_question?(journal.user)
+              redmine_headers 'Question-Answer' => "#{journal.issue.id}-#{journal.id}"
+            end
             
             issue_edit_without_question(journal, recipient)
           end

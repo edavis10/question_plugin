@@ -59,21 +59,28 @@ class MailerTest < ActionController::IntegrationTest
   end
 
   context "with an answer for the recipient" do
-    should "render the answer section" do
+    setup do
       @question = Question.new(:issue => @issue, :author => @asker, :assigned_to => @responder)
       @journal = Journal.new(:journalized => @issue , :user => @asker, :notes => 'Some notes')
       @journal.question = @question
       assert @journal.save!
 
       @answer = Journal.create!(:journalized => @issue, :user => @responder, :notes => 'An answer')
-
+    end
+  
+    should "render the answer section" do
       assert_sent_email do |email|
         email.body =~ /Question Answered/i
       end
     end
     
 
-    should "add the Question-Answer mail header"
+    should "add the Question-Answer mail header" do
+      assert_sent_email do |email|
+        email.header["x-redmine-question-answer"].present? &&
+          email.header["x-redmine-question-answer"].to_s == "#{@issue.id}-#{@answer.id}"
+      end
+    end
   end
   
 end
