@@ -20,6 +20,9 @@ Dispatcher.to_prepare :question_plugin do
 
   require_dependency "query"
   Query.send(:include, QuestionQueryPatch) unless Query.included_modules.include? QuestionQueryPatch
+
+  require_dependency 'mailer'
+  Mailer.send(:include, QuestionPlugin::Patches::MailerPatch)
 end
 
 Redmine::Plugin.register :question_plugin do
