@@ -4,37 +4,37 @@ module QuestionPlugin
     class ViewLayoutsMailerHook < Redmine::Hook::ViewListener
 
       def view_layouts_mailer_html_before_content(context={})
+        return render_response_string(context, :html)
+      end
 
+      def view_layouts_mailer_plain_before_content(context={})
+        return render_response_string(context, :plain)
+      end
+
+      private
+
+      def render_response_string(context, format)
         response_string = ''
 
         if has_answer?(context)
-          response_string += "<h1>#{l(:text_question_answered) }</h1>\n"
+          response_string += if format == :html
+                               "<h1>#{l(:text_question_answered) }</h1>\n"
+                             else
+                               "#{l(:text_question_answered) }\n\n"
+                             end
         end
         
         if has_question?(context)
           journal = context[:journal]
-          response_string += "<h1>#{l(:text_question_for) } #{ journal.question.assigned_to.name }</h1>\n"
+          response_string += if format == :html
+                               "<h1>#{l(:text_question_for) } #{ journal.question.assigned_to.name }</h1>\n"
+                             else
+                               "#{l(:text_question_for) } #{ journal.question.assigned_to.name }\n\n"
+                             end
         end
 
-        return response_string
+        response_string
       end
-
-      def view_layouts_mailer_plain_before_content(context={})
-        response_string = ''
-
-        if has_answer?(context)
-          response_string += "#{l(:text_question_answered) }\n\n"
-        end
-
-        if has_question?(context)
-          journal = context[:journal]
-          response_string += "#{l(:text_question_for) } #{ journal.question.assigned_to.name }\n\n"
-        end
-
-        return response_string
-      end
-
-      private
 
       def has_question?(context)
         context[:journal].present? && context[:journal].question.present?
