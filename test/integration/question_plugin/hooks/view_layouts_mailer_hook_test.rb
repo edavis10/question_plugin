@@ -18,10 +18,11 @@ class QuestionPlugin::Hooks::ViewLayoutsMailerTest < ActionController::Integrati
 
   context "with no question for the recipient" do
     should "not render a question section" do
-      Journal.create!(:issue => @issue, :user => @asker)
+      Journal.create!(:journalized => @issue, :user => @asker)
 
-      assert_did_not_send_email do |email|
-        email.body =~ /question/i
+      assert_equal 4, ActionMailer::Base.deliveries.length # Create and Edit for 2 users
+      ActionMailer::Base.deliveries.each do |mail|
+        assert !mail.body.include?("Question"), "Question found in the email body"
       end
       
     end
@@ -44,7 +45,19 @@ class QuestionPlugin::Hooks::ViewLayoutsMailerTest < ActionController::Integrati
   end
 
   context "with an answer for the recipient" do
-    should "render the answer section"
+    should "render the answer section" do
+      @question = Question.new(:issue => @issue, :author => @asker, :assigned_to => @responder)
+      @journal = Journal.new(:journalized => @issue , :user => @asker, :notes => 'Some notes')
+      @journal.question = @question
+      assert @journal.save!
+
+      @answer = Journal.create!(:journalized => @issue, :user => @responder, :notes => 'An answer')
+
+      assert_sent_email do |email|
+        email.body =~ /Question Answered/i
+      end
+    end
+    
 
     should "add the Question-Answer mail header"
   end
