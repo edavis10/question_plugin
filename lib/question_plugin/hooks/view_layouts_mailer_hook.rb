@@ -27,9 +27,9 @@ module QuestionPlugin
         if has_question?(context)
           journal = context[:journal]
           response_string += if format == :html
-                               "<h1>#{l(:text_question_for) } #{ journal.question.assigned_to.name }</h1>\n"
+                               "<h1>#{l(:text_question_for) } #{ journal.question.assigned_to.try(:name) }</h1>\n"
                              else
-                               "#{l(:text_question_for) } #{ journal.question.assigned_to.name }\n\n"
+                               "#{l(:text_question_for) } #{ journal.question.assigned_to.try(:name) }\n\n"
                              end
         end
 
