@@ -81,6 +81,32 @@ class MailerTest < ActionController::IntegrationTest
 
   end
 
+  context "with a question asked to the recipient with their mail notification disabled" do
+    setup do
+      @responder.update_attribute(:mail_notification, 'none')
+    end
+    
+    should "force the email to the recipient, overriding mail_notification" do
+      @question = Question.new(:issue => @issue, :author => @asker, :assigned_to => @responder)
+      @journal = Journal.new(:journalized => @issue , :user => @asker, :notes => 'Some notes')
+      @journal.question = @question
+
+      ActionMailer::Base.deliveries.clear # issue creation
+      
+      # One for asker, one for responder
+      assert_difference('ActionMailer::Base.deliveries.length',2) do
+        assert @journal.save!
+      end
+
+      assert_sent_email do |email|
+        email.to.include?(@responder.mail)
+      end
+    
+    end
+    
+
+  end
+
   context "with an answer for the recipient" do
     setup do
       @question = Question.new(:issue => @issue, :author => @asker, :assigned_to => @responder)

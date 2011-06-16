@@ -9,6 +9,9 @@ require 'question_journal_hooks'
 require 'dispatcher'
 
 Dispatcher.to_prepare :question_plugin do
+
+  require_dependency 'journal_observer'
+  JournalObserver.send(:include, QuestionPlugin::Patches::JournalObserverPatch)
   require_dependency 'issue'
   Issue.send(:include, QuestionIssuePatch) unless Issue.included_modules.include? QuestionIssuePatch
 
