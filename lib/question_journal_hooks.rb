@@ -24,11 +24,12 @@ class QuestionJournalHooks < QuestionHooksBase
 
     # Handle destroying journals through the 'edit' action (done by clearing notes)
     return '' if journal.destroyed?
-    
+
     if params[:question] && params[:question][:assigned_to]
       if journal.question && params[:question][:assigned_to].blank?
         # Wants to remove the question
         journal.question.destroy
+        journal.question = nil
       elsif journal.question && journal.question.opened
         # Reassignment
         if params[:question][:assigned_to].downcase == 'anyone'

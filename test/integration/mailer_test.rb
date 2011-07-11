@@ -18,7 +18,8 @@ class MailerTest < ActionController::IntegrationTest
 
   context "with no question for the recipient" do
     should "not render a question section" do
-      Journal.create!(:journalized => @issue, :user => @asker)
+      @issue.init_journal(@asker, "Test")
+      assert @issue.save
 
       assert_equal 4, ActionMailer::Base.deliveries.length # Create and Edit for 2 users
       ActionMailer::Base.deliveries.each do |mail|
@@ -31,9 +32,11 @@ class MailerTest < ActionController::IntegrationTest
   context "with a question asked to anyone" do
     setup do
       @question = Question.new(:issue => @issue, :author => @asker, :assigned_to => nil)
-      @journal = Journal.new(:journalized => @issue , :user => @asker, :notes => 'Some notes')
-      @journal.question = @question
-      assert @journal.save!
+      @issue.journal_user = @asker
+      @issue.journal_notes = "Test"
+      @issue.extra_journal_attributes = { :question => @question }
+      assert @issue.save
+      @journal = @issue.journals.last
     end
   
     should "render the question section" do
@@ -44,8 +47,8 @@ class MailerTest < ActionController::IntegrationTest
 
     should "add the Question-Asked mail header" do
       assert_sent_email do |email|
-        email.header["x-redmine-question-asked"].present? &&
-          email.header["x-redmine-question-asked"].to_s == @asker.login
+        email.header["x-chiliproject-question-asked"].present? &&
+          email.header["x-chiliproject-question-asked"].to_s == @asker.login
       end
     end
     
@@ -54,9 +57,11 @@ class MailerTest < ActionController::IntegrationTest
   context "with a question asked to the recipient" do
     setup do
       @question = Question.new(:issue => @issue, :author => @asker, :assigned_to => @responder)
-      @journal = Journal.new(:journalized => @issue , :user => @asker, :notes => 'Some notes')
-      @journal.question = @question
-      assert @journal.save!
+      @issue.journal_user = @asker
+      @issue.journal_notes = "Test"
+      @issue.extra_journal_attributes = { :question => @question }
+      assert @issue.save
+      @journal = @issue.journals.last
     end
   
     should "render the question section" do
@@ -67,15 +72,15 @@ class MailerTest < ActionController::IntegrationTest
 
     should "add the Question-Asked mail header" do
       assert_sent_email do |email|
-        email.header["x-redmine-question-asked"].present? &&
-          email.header["x-redmine-question-asked"].to_s == @asker.login
+        email.header["x-chiliproject-question-asked"].present? &&
+          email.header["x-chiliproject-question-asked"].to_s == @asker.login
       end
     end
     
     should "add the Question-Assigned-To mail header" do
       assert_sent_email do |email|
-        email.header["x-redmine-question-assigned-to"].present? &&
-          email.header["x-redmine-question-assigned-to"].to_s == @responder.login
+        email.header["x-chiliproject-question-assigned-to"].present? &&
+          email.header["x-chiliproject-question-assigned-to"].to_s == @responder.login
       end
     end
 
@@ -88,14 +93,15 @@ class MailerTest < ActionController::IntegrationTest
     
     should "force the email to the recipient, overriding mail_notification" do
       @question = Question.new(:issue => @issue, :author => @asker, :assigned_to => @responder)
-      @journal = Journal.new(:journalized => @issue , :user => @asker, :notes => 'Some notes')
-      @journal.question = @question
+      @issue.journal_user = @asker
+      @issue.journal_notes = "Test"
+      @issue.extra_journal_attributes = { :question => @question }
 
       ActionMailer::Base.deliveries.clear # issue creation
-      
+
       # One for asker, one for responder
       assert_difference('ActionMailer::Base.deliveries.length',2) do
-        assert @journal.save!
+        assert @issue.save
       end
 
       assert_sent_email do |email|
@@ -110,11 +116,17 @@ class MailerTest < ActionController::IntegrationTest
   context "with an answer for the recipient" do
     setup do
       @question = Question.new(:issue => @issue, :author => @asker, :assigned_to => @responder)
-      @journal = Journal.new(:journalized => @issue , :user => @asker, :notes => 'Some notes')
-      @journal.question = @question
-      assert @journal.save!
+      @issue.journal_user = @asker
+      @issue.journal_notes = "Test"
+      @issue.extra_journal_attributes = { :question => @question }
+      assert @issue.save
+      @journal = @issue.journals.last
+      ActionMailer::Base.deliveries.clear
 
-      @answer = Journal.create!(:journalized => @issue, :user => @responder, :notes => 'An answer')
+      @issue = Issue.find(@issue.id)
+      @issue.journal_user = @issue.updated_by = @responder
+      @issue.journal_notes = "An answer"
+      assert @issue.save
     end
   
     should "render the answer section" do
@@ -126,8 +138,8 @@ class MailerTest < ActionController::IntegrationTest
 
     should "add the Question-Answer mail header" do
       assert_sent_email do |email|
-        email.header["x-redmine-question-answer"].present? &&
-          email.header["x-redmine-question-answer"].to_s == "#{@issue.id}-#{@answer.id}"
+        email.header["x-chiliproject-question-answer"].present? &&
+          email.header["x-chiliproject-question-answer"].to_s == "#{@issue.id}-#{@issue.journals.last.id}"
       end
     end
   end

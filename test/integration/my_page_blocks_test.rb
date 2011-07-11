@@ -6,8 +6,12 @@ class MyPageBlocksTest < ActionController::IntegrationTest
     @project = Project.generate!
     User.add_to_project(@me, @project, Role.generate!(:permissions => [:view_issues, :add_issues, :edit_issues, :add_issue_notes, :edit_issues]))
     @issue = Issue.generate_for_project!(@project)
-    @question_journal = Journal.generate!(:issue => @issue, :user => @me)
-    @question = Question.generate!(:issue => @issue, :journal => @question_journal, :author => @me, :assigned_to => @me)
+    @issue.journal_user = @me
+    @issue.journal_notes = "Test"
+    @issue.extra_journal_attributes = { :question => Question.new(:issue => @issue, :author => @me, :assigned_to => @me) }
+    assert_difference("Question.count") do
+      assert @issue.save && @issue.reload
+    end
   end
   
   context "Questions asked by me" do

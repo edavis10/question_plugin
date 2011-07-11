@@ -13,8 +13,14 @@ class QuestionTest < ActiveSupport::TestCase
   context "#close!" do
     context "on an open question" do
       setup do
-        @question = Question.spawn(:opened => true)
-        @closing_journal = Journal.generate!
+        @project = Project.generate!
+        @issue = Issue.generate_for_project!(@project)
+        @question = Question.new(:opened => true,
+                                 :author => User.generate!,
+                                 :issue => @issue,
+                                 :journal => @issue.journals.first)
+        assert @question.valid?
+        @closing_journal = IssueJournal.generate!
       end
 
       should "change an open question to a closed one" do

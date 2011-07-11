@@ -42,8 +42,8 @@ module QuestionPlugin
 
       def has_answer?(context)
         context[:journal].present? &&
-          context[:journal].issue.present? &&
-          context[:journal].issue.pending_question?(context[:journal].user)
+          context[:journal].journaled.present? &&
+          context[:journal].journaled.pending_question?(context[:journal].user)
         
       end
 

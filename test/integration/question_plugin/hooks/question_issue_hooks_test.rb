@@ -10,9 +10,11 @@ class QuestionIssueHooksTest < ActionController::IntegrationTest
     @user1 = User.generate!(:firstname => 'Test', :lastname => 'one', :login => 'existing', :password => 'existing', :password_confirmation => 'existing')
     @user2 = User.generate!(:firstname => 'Test', :lastname => 'two')
     @project = Project.generate!.reload
-    @issue = Issue.generate_for_project!(@project)
-    @journal = Journal.generate!(:issue => @issue)
     User.add_to_project(@user1, @project, Role.generate!(:permissions => [:view_issues, :add_issues, :edit_issues]))
+    @issue = Issue.generate_for_project!(@project)
+    @issue.init_journal(@user1, "Journal")
+    assert @issue.save
+    @journal = @issue.journals.last
   end
   
   context 'view_issues_edit_notes_bottom' do
@@ -98,11 +100,12 @@ class QuestionIssueHooksTest < ActionController::IntegrationTest
   context 'view_issues_history_journal_bottom with a journal and question' do
     setup do
       @project = Project.generate!
-      @issue = Issue.generate_for_project!(@project)
-      @journal = Journal.generate!(:issue => @issue)
       User.add_to_project(@user1, @project, Role.generate!(:permissions => [:view_issues, :add_issues, :edit_issues]))
+      @issue = Issue.generate_for_project!(@project)
+      @issue.init_journal(@user1, "Notes")
+      assert @issue.save && @issue.reload
 
-      @question = Question.generate!(:assigned_to => @user1, :opened => true, :journal => @journal)
+      @question = Question.generate!(:assigned_to => @user1, :opened => true, :journal => @issue.journals.last)
       
       login_as
       visit_issue_page(@issue)
@@ -130,9 +133,10 @@ class QuestionIssueHooksTest < ActionController::IntegrationTest
   context 'view_issues_history_journal_bottom with a journal and no question' do
     setup do
       @project = Project.generate!
-      @issue = Issue.generate_for_project!(@project)
-      @journal = Journal.generate!(:issue => @issue)
       User.add_to_project(@user1, @project, Role.generate!(:permissions => [:view_issues, :add_issues, :edit_issues]))
+      @issue = Issue.generate_for_project!(@project)
+      @issue.init_journal(@user1, "Notes")
+      assert @issue.save && @issue.reload
 
       login_as
       visit_issue_page(@issue)

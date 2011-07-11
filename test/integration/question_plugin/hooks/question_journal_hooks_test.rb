@@ -8,9 +8,11 @@ class QuestionJournalHooksTest < ActionController::IntegrationTest
     @user1 = User.generate!(:firstname => 'Test', :lastname => 'one', :login => 'existing', :password => 'existing', :password_confirmation => 'existing')
     @user2 = User.generate!(:firstname => 'Test', :lastname => 'two')
     @project = Project.generate!.reload
-    @issue = Issue.generate_for_project!(@project)
-    @journal = Journal.generate!(:issue => @issue, :notes => 'A note')
     User.add_to_project(@user1, @project, Role.generate!(:permissions => [:view_issues, :add_issues, :edit_issues, :edit_issue_notes]))
+    @issue = Issue.generate_for_project!(@project)
+    @issue.init_journal(@user1, "A note")
+    assert @issue.save && @issue.reload
+    @journal = @issue.journals.last
   end
   
   context '#views_journals_notes_form_after_notes' do
@@ -18,7 +20,7 @@ class QuestionJournalHooksTest < ActionController::IntegrationTest
       setup do
         login_as
         @question = Question.generate!(:issue => @issue, :journal => @journal, :assigned_to => @user2, :opened => true)
-        visit "/journals/edit/#{@journal.id}" # RJS
+        get "/journals/edit/#{@journal.id}", :format => 'js' # RJS
       end
 
       should 'with the selected users login' do

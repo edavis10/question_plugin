@@ -23,9 +23,12 @@ class QuestionIssuePatchTest < ActionController::TestCase
     should 'return false if there are no open questions for the current user' do
       @other_user = User.generate!
       @issue = Issue.generate_for_project!(@project)
+      @issue.init_journal(@user, "Test")
+      @issue.save
+      @journal = @issue.journals.last
 
-      question_one = Question.generate!(:assigned_to => @other_user, :issue => @issue)
-      question_two = Question.generate!(:assigned_to => @other_user, :issue => @issue)
+      question_one = Question.generate!(:assigned_to => @other_user, :issue => @issue, :journal => @journal)
+      question_two = Question.generate!(:assigned_to => @other_user, :issue => @issue, :journal => @journal)
       
       assert_equal false, @issue.pending_question?(@user)
     end
@@ -33,9 +36,12 @@ class QuestionIssuePatchTest < ActionController::TestCase
     should 'return true if there is an open question for the current user' do
       @other_user = User.generate!
       @issue = Issue.generate_for_project!(@project)
+      @issue.init_journal(@user, "Test")
+      @issue.save
+      @journal = @issue.journals.last
 
-      question_one = Question.generate!(:assigned_to => @other_user, :issue => @issue)
-      question_two = Question.generate!(:assigned_to => @user, :issue => @issue)
+      question_one = Question.generate!(:assigned_to => @other_user, :issue => @issue, :journal => @journal)
+      question_two = Question.generate!(:assigned_to => @user, :issue => @issue, :journal => @journal)
       
       assert @issue.pending_question?(@user)
     end
@@ -43,9 +49,12 @@ class QuestionIssuePatchTest < ActionController::TestCase
     should 'return true if there is an open question for anyone' do
       @other_user = User.generate!
       @issue = Issue.generate_for_project!(@project)
+      @issue.init_journal(@user, "Test")
+      @issue.save
+      @journal = @issue.journals.last
 
-      question_one = Question.generate!(:assigned_to => @other_user, :issue => @issue)
-      question_two = Question.generate!(:assigned_to => nil, :issue => @issue)
+      question_one = Question.generate!(:assigned_to => @other_user, :issue => @issue, :journal => @journal)
+      question_two = Question.generate!(:assigned_to => nil, :issue => @issue, :journal => @journal)
 
       assert @issue.pending_question?(@user)
     end
@@ -56,7 +65,9 @@ class QuestionIssuePatchTest < ActionController::TestCase
       @user = User.generate!.reload
       @project = Project.generate!
       @issue = Issue.generate_for_project!(@project)
-      @journal = Journal.generate!(:user => @user, :journalized => @issue)
+      @issue.init_journal(@user, "Close pending question")
+      assert @issue.save && @issue.reload
+      @journal = @issue.journals.last
     end
     
     should 'close any open questions for user' do
