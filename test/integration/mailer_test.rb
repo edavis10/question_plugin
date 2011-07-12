@@ -5,6 +5,7 @@ class MailerTest < ActionController::IntegrationTest
 
   def setup
     ActionMailer::Base.deliveries.clear
+    Setting.notified_events = Redmine::Notifiable.all.collect(&:name)
     @asker = User.generate_with_protected!(:mail_notification => 'all')
     @responder = User.generate_with_protected!(:mail_notification => 'all')
     @project = Project.generate!
@@ -111,6 +112,31 @@ class MailerTest < ActionController::IntegrationTest
     end
     
 
+  end
+
+  context "with a question asked to the recipient with issue notifications disabled" do
+    should "force the email to the recipient, overriding the issue notification settings" do
+      Setting.notified_events = []
+      assert_equal [], Setting.notified_events
+      
+      @question = Question.new(:issue => @issue, :author => @asker, :assigned_to => @responder)
+      @issue.journal_user = @asker
+      @issue.journal_notes = "Test"
+      @issue.extra_journal_attributes = { :question => @question }
+
+      ActionMailer::Base.deliveries.clear # issue creation
+
+      # One for responder, no other notifications enabled
+      assert_difference('ActionMailer::Base.deliveries.length',1) do
+        assert @issue.save
+      end
+
+      assert_sent_email do |email|
+        email.to.include?(@responder.mail)
+      end
+    
+
+    end
   end
 
   context "with an answer for the recipient" do

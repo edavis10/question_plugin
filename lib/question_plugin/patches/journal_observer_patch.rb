@@ -20,7 +20,12 @@ module QuestionPlugin
         # by the core's observer.
         def will_be_sent_notification_from_main_observer?(journal, mail_to)
           issue = journal.journaled
-          (issue.recipients + issue.watcher_recipients).include?(mail_to)
+          if Setting.notified_events.include?('issue_updated') ||
+              (Setting.notified_events.include?('issue_note_added') && journal.notes.present?) ||
+              (Setting.notified_events.include?('issue_status_updated') && journal.new_status.present?) ||
+              (Setting.notified_events.include?('issue_priority_updated') && journal.new_value_for('priority_id').present?)
+            (issue.recipients + issue.watcher_recipients).include?(mail_to)
+          end
         end
         
         def after_create_with_question_assigned_to(journal)
