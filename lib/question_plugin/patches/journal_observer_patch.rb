@@ -16,6 +16,13 @@ module QuestionPlugin
       end
 
       module InstanceMethods
+        # Utility method to check if the journal update will be handled
+        # by the core's observer.
+        def will_be_sent_notification_from_main_observer?(journal, mail_to)
+          issue = journal.journaled
+          (issue.recipients + issue.watcher_recipients).include?(mail_to)
+        end
+        
         def after_create_with_question_assigned_to(journal)
           if journal.question
             journal.question.save
@@ -25,9 +32,8 @@ module QuestionPlugin
 
           if journal && journal.journaled.present? && journal.is_a?(IssueJournal) && journal.question.present? && journal.question.assigned_to.present?
             mail_to = journal.question.assigned_to.mail
-            issue = journal.journaled
 
-            unless (issue.recipients + issue.watcher_recipients).include?(mail_to)
+            unless will_be_sent_notification_from_main_observer?(journal, mail_to)
               Mailer.deliver_issue_edit(journal, mail_to)
             end
           end
