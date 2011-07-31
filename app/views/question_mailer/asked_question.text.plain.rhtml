@@ -3,7 +3,7 @@
 <%= @journal.notes if @journal.notes? %>
 
 <% for detail in @journal.details -%>
-<%= show_detail(detail, true) %>
+<%= @journal.render_detail(detail, true) %>
 <% end -%>
 
 ----------------------------------------

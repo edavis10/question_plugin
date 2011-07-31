@@ -11,8 +11,12 @@ class QuestionMailerTest < ActiveSupport::TestCase
       @author = User.generate!(:firstname => 'Author', :lastname => 'User', :mail => 'author@example.org')
       @project = Project.generate!
       @issue = Issue.generate_for_project!(@project, :subject => "Add new stuff")
-      @question = Question.generate!(:assigned_to => @user, :author => @author, :issue => @issue)
-      @journal = Journal.generate!(:details => [], :notes => "This is the question for the user", :question => @question)
+      @question = Question.new(:assigned_to => @user, :author => @author, :issue => @issue)
+      @issue.journal_notes = "This is the question for the user"
+      @issue.extra_journal_attributes = { :question => @question }
+      assert @issue.save
+      @journal = @issue.journals.last
+      
       Setting.mail_from = "redmine@example.com"
       Setting.bcc_recipients = false
       @mail = QuestionMailer.create_asked_question(@journal)
@@ -75,9 +79,12 @@ class QuestionMailerTest < ActiveSupport::TestCase
       @project = Project.generate!
       @issue = Issue.generate_for_project!(@project, :subject => "Add new stuff")
 
-      @question = Question.generate!(:assigned_to => nil, :author => @author, :issue => @issue)
-      @journal = Journal.generate!(:details => [], :notes => "This is the question for the user", :question => @question)
-      
+      @question = Question.new(:assigned_to => nil, :author => @author, :issue => @issue)
+      @issue.journal_notes = "This is the question for the user"
+      @issue.extra_journal_attributes = { :question => @question }
+      assert @issue.save
+      @journal = @issue.journals.last
+
       @mail = QuestionMailer.create_asked_question(@journal)
       assert_nil @mail.to
       assert_nil @mail.cc
@@ -92,10 +99,17 @@ class QuestionMailerTest < ActiveSupport::TestCase
       @project = Project.generate!
       @issue = Issue.generate_for_project!(@project, :subject => "Add new stuff")
 
-      @journal_with_question = Journal.generate!(:details => [], :notes => "This is the question for the user", :question => @question)
-      @journal_with_answer = Journal.generate!(:details => [], :notes => "This is the answer for the user", :question => @question)
+      @question = Question.new(:assigned_to => @user, :author => @author, :issue => @issue)
+      @issue.journal_notes = "This is the question for the user"
+      @issue.extra_journal_attributes = { :question => @question }
+      assert @issue.save
+      @journal_with_question = @issue.journals.last
 
-      @question = Question.generate!(:assigned_to => @user, :author => @author, :issue => @issue, :journal => @journal_with_question)
+
+      @issue.journal_notes = "This is the answer for the user"
+      assert @issue.save
+      @journal_with_answer = @issue.journals.last
+      
       Setting.mail_from = "redmine@example.com"
       Setting.bcc_recipients = false
       @mail = QuestionMailer.create_answered_question(@question, @journal_with_answer)

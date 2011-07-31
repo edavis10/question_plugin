@@ -30,10 +30,12 @@ class QuestionQueriesHelperPatchTest < HelperTestCase
       @content = 'This is a journal note that is supposed to have the question content in it but only up the 120th character, but does it really work?'
       @project = Project.generate!
       @issue = Issue.generate_for_project!(@project)
-      @journal = Journal.generate!(:notes => @content, :created_on => Date.today, :issue => @issue)
       @author = User.generate!
       @assignee = User.generate!
-      @question = Question.generate!(:journal => @journal, :issue => @issue, :author => @author, :assigned_to => @assignee)
+      @question = Question.new(:issue => @issue, :author => @author, :assigned_to => @assignee)
+      @issue.journal_notes = @content
+      @issue.extra_journal_attributes = { :question => @question }
+      assert @issue.save
       @questions = [@question]
     end
     
@@ -55,8 +57,10 @@ class QuestionQueriesHelperPatchTest < HelperTestCase
 
     should 'not have ellipses when there are under 120 characters of content' do
       content = 'Short question'
+      @journal = @issue.journals.last
       @journal.notes = content
       assert @journal.save
+      assert @question.reload
 
       question_content = for_assert_select(format_questions(@questions))
 
@@ -72,12 +76,21 @@ class QuestionQueriesHelperPatchTest < HelperTestCase
 
       @project = Project.generate!
       @issue = Issue.generate_for_project!(@project)
-      @journal_one = Journal.generate!(:notes => @content_one, :created_on => Date.today, :issue => @issue)
-      @journal_two = Journal.generate!(:notes => @content_two, :created_on => Date.today, :issue => @issue)
       @author = User.generate!
       @assignee = User.generate!
-      @question = Question.generate!(:journal => @journal_one, :issue => @issue, :author => @author, :assigned_to => @assignee)
-      @question_two = Question.generate!(:journal => @journal_two, :issue => @issue, :author => @author, :assigned_to => @assignee)
+      @question = Question.new(:issue => @issue, :author => @author, :assigned_to => @assignee)
+      @question_two = Question.new(:issue => @issue, :author => @author, :assigned_to => @assignee)
+
+      @issue.journal_notes = @content_one
+      @issue.extra_journal_attributes = { :question => @question }
+      assert @issue.save && @issue.reload
+      @journal_one = @issue.journals.last
+      
+      @issue.journal_notes = @content_two
+      @issue.extra_journal_attributes = { :question => @question_two }
+      assert @issue.save && @issue.reload
+      @journal_two = @issue.journals.last
+      
       @questions = [@question, @question_two]
     end
     
@@ -99,10 +112,12 @@ class QuestionQueriesHelperPatchTest < HelperTestCase
     setup do
       @project = Project.generate!
       @issue = Issue.generate_for_project!(@project)
-      @journal = Journal.generate!(:notes => 'A question', :created_on => Date.today, :issue => @issue)
       @author = User.generate!
       @assignee = User.generate!
-      @question = Question.generate!(:journal => @journal, :issue => @issue, :author => @author, :assigned_to => @assignee)
+      @question = Question.new(:issue => @issue, :author => @author, :assigned_to => @assignee)
+      @issue.journal_notes = "A question"
+      @issue.extra_journal_attributes = { :question => @question }
+      assert @issue.save
     end
    
     should 'use a special format for the questions column' do
