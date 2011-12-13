@@ -39,5 +39,29 @@ class QuestionMailer < Mailer
     RAILS_DEFAULT_LOGGER.debug 'Sending QuestionMailer#answered_question'
     render_multipart('answered_question', body)
   end
-  
+
+  # Creates an email with a list of issues that have open questions
+  # assigned to the user
+  def question_reminder(user, issues)
+    redmine_headers 'Type' => "Question"
+    set_language_if_valid user.language
+    recipients user.mail
+    subject l(:question_reminder_subject, :count => issues.size)
+    body :issues => issues,
+         :issues_url => url_for(:controller => 'questions', :action => 'my_issue_filter')
+    render_multipart('question_reminder', body)
+  end
+
+  # Send email reminders to users who have open questions.
+  def self.question_reminders
+
+    open_questions_by_assignee = Question.opened.all(:order => 'id desc').group_by(&:assigned_to)
+
+    open_questions_by_assignee.each do |assignee, questions|
+      next unless assignee.present?
+
+      issues = questions.collect(&:issue).try(:uniq)
+      deliver_question_reminder(assignee, issues)
+    end
+  end
 end

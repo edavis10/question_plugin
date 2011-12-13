@@ -18,3 +18,6 @@ en:
   question_text_ratio_questions_answered: "{{ratio}} questions answered"
   field_journal: "Journal"
   text_questions_asked_by_me: "Questions asked by me"
+  question_reminder_subject: "%{count} open question(s)"
+  question_reminder_body: "%{count} open questions(s) that are assigned to you:"
+

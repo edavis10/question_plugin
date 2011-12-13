@@ -1,0 +1,7 @@
+<%= l(:question_reminder_body, :count => @issues.size) %>:
+
+<% @issues.each do |issue| -%>
+* <%= "#{issue.project} - #{issue.tracker} ##{issue.id}: #{issue.subject}" %>
+<% end -%>
+
+<%= @issues_url %>
