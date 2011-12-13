@@ -150,4 +150,61 @@ class QuestionMailerTest < ActiveSupport::TestCase
     end
   end
 
+  context "#question_reminders" do
+    setup do
+      @user = User.generate!(:firstname => 'Test', :lastname => 'User', :mail => 'test@example.org')
+      @user2 = User.generate!(:firstname => 'Test2', :lastname => 'User', :mail => 'test2@example.org')
+      @user3 = User.generate!(:firstname => 'Test3', :lastname => 'User', :mail => 'test3@example.org')
+      @project = Project.generate!
+      @issue = Issue.generate_for_project!(@project, :subject => "Add new stuff issue1")
+      @another_issue = Issue.generate_for_project!(@project, :subject => "Add new stuff issue2")
+
+      @question1 = Question.generate!(:assigned_to => @user, :author => @user2, :issue => @issue)
+      @journal1 = Journal.generate!(:details => [], :notes => "This is the question1 for the user", :question => @question1)
+
+      @question2 = Question.generate!(:assigned_to => @user, :author => @user2, :issue => @another_issue)
+      @journal2 = Journal.generate!(:details => [], :notes => "This is the question2 for the user", :question => @question2)
+
+      @question3 = Question.generate!(:assigned_to => @user2, :author => @user3, :issue => @another_issue)
+      @journal3 = Journal.generate!(:details => [], :notes => "This is the question3 for the user", :question => @question3)
+
+      # user has questions on @issue and @another_issue
+      # user2 has questions on @another_issue
+      ActionMailer::Base.deliveries.clear
+      Setting.bcc_recipients = '0'
+
+      QuestionMailer.question_reminders
+    end
+    
+    should "send one email per user with open questions" do
+       assert_equal 2, ActionMailer::Base.deliveries.count
+    end
+    
+    should "list all questions for a user in the email" do
+      user1_mail = select_sent_mail_for(@user.mail).first
+      assert user1_mail.body.include?("Add new stuff issue1")
+      assert user1_mail.body.include?("Add new stuff issue2")
+
+      user2_mail = select_sent_mail_for(@user2.mail).first
+      assert user2_mail.body.include?("Add new stuff issue2")
+    end
+    
+    should "link to the issue with the question in the email" do
+      user1_mail = select_sent_mail_for(@user.mail).first
+      assert user1_mail.body.include?("http://localhost:3000/issues/#{@issue.id}")
+      assert user1_mail.body.include?("http://localhost:3000/issues/#{@another_issue.id}")
+    end
+    
+    should "link to the issues list in the email" do
+      user1_mail = select_sent_mail_for(@user.mail).first
+      assert user1_mail.body.include?("http://localhost:3000/questions/my_issue_filter")
+    end
+    
+
+  end
+
+  def select_sent_mail_for(email)
+    ActionMailer::Base.deliveries.select {|m| m.to.include?(email) }
+  end
+  
 end
