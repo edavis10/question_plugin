@@ -60,7 +60,7 @@ class QuestionMailer < Mailer
     open_questions_by_assignee.each do |assignee, questions|
       next unless assignee.present?
 
-      issues = questions.collect(&:issue).try(:uniq)
+      issues = questions.collect {|q| q.issue.visible?(assignee) }.uniq
       deliver_question_reminder(assignee, issues)
     end
   end
