@@ -61,6 +61,7 @@ class QuestionMailer < Mailer
       next unless assignee.present?
 
       issues = questions.collect {|q| q.issue.visible?(assignee) ? q.issue : nil }.compact.uniq
+      next if issues.count == 0
 
       deliver_question_reminder(assignee, issues)
     end
