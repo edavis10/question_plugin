@@ -15,3 +15,9 @@ de:
   question_text_asked_by: "gefragt von"
   question_text_assigned_to: "Zugewiesen an"
   question_text_created_on: "Erstellt am"
+  question_text_ratio_questions_answered: "{{ratio}} beantwortete Fragen"
+  field_journal: "Journal"
+  text_questions_asked_by_me: "meine gestellten Fragen"
+  questions_asked_by_me: Meine gestellten Fragen
+  questions_for_me: Fragen für mich
+  field_system_name: InfoMine
