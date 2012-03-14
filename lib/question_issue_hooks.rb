@@ -43,14 +43,13 @@ JS
     if params[:note] && !params[:note][:question_assigned_to].blank?
       unless journal.question # Update handled by Journal hooks
         # New
-        journal.question = Question.new(
-                                        :author => User.current,
-                                        :issue => journal.issue
-                                        )
-        if params[:note][:question_assigned_to].downcase != 'anyone'
-          # Assigned to a specific user
-          assign_question_to_user(journal, User.find_by_login(params[:note][:question_assigned_to]))
-        end
+        issue.extra_journal_attributes = {
+          :question => Question.new(
+                                    :author => User.current,
+                                    :issue => journal.issue,
+                                    :assigned_to => User.find_by_login(params[:note][:question_assigned_to])
+                                    )
+        }
       end
     end
     
