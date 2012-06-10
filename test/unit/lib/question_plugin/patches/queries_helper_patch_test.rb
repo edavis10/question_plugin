@@ -34,7 +34,7 @@ class QuestionQueriesHelperPatchTest < HelperTestCase
       @assignee = User.generate!
       @question = Question.new(:issue => @issue, :author => @author, :assigned_to => @assignee)
       @issue.journal_notes = @content
-      @issue.extra_journal_attributes = { :question => @question }
+      @issue.question = @question
       assert @issue.save
       @questions = [@question]
     end
@@ -82,12 +82,12 @@ class QuestionQueriesHelperPatchTest < HelperTestCase
       @question_two = Question.new(:issue => @issue, :author => @author, :assigned_to => @assignee)
 
       @issue.journal_notes = @content_one
-      @issue.extra_journal_attributes = { :question => @question }
+      @issue.question = @question
       assert @issue.save && @issue.reload
       @journal_one = @issue.journals.last
       
       @issue.journal_notes = @content_two
-      @issue.extra_journal_attributes = { :question => @question_two }
+      @issue.question = @question_two
       assert @issue.save && @issue.reload
       @journal_two = @issue.journals.last
       
@@ -116,7 +116,7 @@ class QuestionQueriesHelperPatchTest < HelperTestCase
       @assignee = User.generate!
       @question = Question.new(:issue => @issue, :author => @author, :assigned_to => @assignee)
       @issue.journal_notes = "A question"
-      @issue.extra_journal_attributes = { :question => @question }
+      @issue.question = @question
       assert @issue.save
     end
    

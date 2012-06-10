@@ -12,7 +12,7 @@ class MailHandlerTest < ActionController::IntegrationTest
       @issue = Issue.generate_for_project!(@project)
       @question = Question.new(:issue => @issue, :author => @asker, :assigned_to => @responder)
       @issue.journal_notes = "Test"
-      @issue.extra_journal_attributes = { :question => @question }
+      @issue.question = @question
       assert @issue.save
       @question_journal = @issue.journals.last
 

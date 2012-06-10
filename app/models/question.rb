@@ -11,11 +11,11 @@ class Question < ActiveRecord::Base
   validates_presence_of :issue
   validates_presence_of :journal
 
-  named_scope :opened, :conditions => {:opened => true}
-  named_scope :for_user, lambda {|user|
+  scope :opened, :conditions => {:opened => true}
+  scope :for_user, lambda {|user|
     { :conditions => {:assigned_to_id => user.id }}
   }
-  named_scope :by_user, lambda {|user|
+  scope :by_user, lambda {|user|
     { :conditions => {:author_id => user.id }}
   }
 
@@ -29,7 +29,7 @@ class Question < ActiveRecord::Base
     if self.opened
       self.opened = false
       if self.save && closing_journal
-        QuestionMailer.deliver_answered_question(self, closing_journal)
+        QuestionMailer.answered_question(self, closing_journal).deliver
       end
     end
   end
