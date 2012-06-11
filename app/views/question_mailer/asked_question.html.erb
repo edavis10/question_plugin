@@ -4,7 +4,7 @@
 
 <ul>
 <% for detail in @journal.details %>
-    <li><%= @journal.render_detail(detail, true) %></li>
+    <li><%= show_detail(detail, true) %></li>
 <% end %>
 </ul>
 
