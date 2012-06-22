@@ -9,6 +9,9 @@ Rails.configuration.to_prepare do
   require_dependency 'journal_observer'
   JournalObserver.send(:include, QuestionPlugin::Patches::JournalObserverPatch) unless JournalObserver.included_modules.include? QuestionPlugin::Patches::JournalObserverPatch
 
+  require_dependency 'active_record'
+  ActiveRecord::Relation.send(:include, QuestionActiveRecordRelationPatch) unless ActiveRecord::Relation.included_modules.include? QuestionActiveRecordRelationPatch
+
   require_dependency 'issue'
   Issue.send(:include, QuestionIssuePatch) unless Issue.included_modules.include? QuestionIssuePatch
 
