@@ -22,7 +22,7 @@ module QuestionPlugin
           if journal.is_a?(Journal)
             if journal.question
               journal.question.save
-              QuestionMailer.deliver_asked_question(journal)
+              QuestionMailer.asked_question(journal).deliver
             end
 
             # Close any open questions
