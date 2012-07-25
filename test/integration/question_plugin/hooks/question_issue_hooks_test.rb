@@ -103,7 +103,7 @@ class QuestionIssueHooksTest < ActionController::IntegrationTest
       @issue = Issue.generate_for_project!(@project)
       @question = Question.new(:author => @user1, :assigned_to => @user1, :opened => true, :issue => @issue)
       @issue.journal_notes = "A note"
-      @issue.extra_journal_attributes = { :question => @question }
+      @issue.question = @question
       assert @issue.save
       @journal = @issue.journals.last
       User.add_to_project(@user1, @project, Role.generate!(:permissions => [:view_issues, :add_issues, :edit_issues]))

@@ -9,7 +9,7 @@ class MyPageBlocksTest < ActionController::IntegrationTest
     @question = Question.new(:issue => @issue, :author => @me, :assigned_to => @me)
     @issue.journal_notes = "Test"
     @issue.journal_user = @me
-    @issue.extra_journal_attributes = { :question => @question }
+    @issue.question = @question
     assert @issue.save
     @question_journal = @issue.journals.last
   end

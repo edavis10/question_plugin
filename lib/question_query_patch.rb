@@ -7,18 +7,17 @@ module QuestionQueryPatch
     # Same as typing in the class 
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in development
+
       base.add_available_column(QueryColumn.new(:formatted_questions))
 
-      
       alias_method :available_filters_before_question, :available_filters
       alias_method :available_filters, :question_available_filters
 
       alias_method :sql_for_field_before_question, :sql_for_field
       alias_method :sql_for_field, :question_sql_for_field
     end
-
   end
-  
+
   module ClassMethods
     unless Query.respond_to?(:available_columns=)
       # Setter for +available_columns+ that isn't provided by the core.
@@ -36,7 +35,6 @@ module QuestionQueryPatch
   end
   
   module InstanceMethods
-    
     # Wrapper around the +available_filters+ to add a new Question filter
     def question_available_filters
       @available_filters = available_filters_before_question
@@ -69,7 +67,6 @@ module QuestionQueryPatch
           db_field = 'author_id'
         end
         
-        
         # "me" value subsitution
         v.push(User.current.logged? ? User.current.id.to_s : "0") if v.delete("me")
         
@@ -81,13 +78,9 @@ module QuestionQueryPatch
         end
 
         return sql
-        
       else
         return sql_for_field_before_question(field, operator, v, db_table, db_field, is_custom_filter)
       end
-      
     end
-    
   end  
 end
-

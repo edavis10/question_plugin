@@ -10,9 +10,7 @@ class AskingQuestionTest < ActionController::IntegrationTest
       @issue = Issue.generate_for_project!(@project)
 
       @issue.journal_notes = "Question"
-      @issue.extra_journal_attributes = {
-        :question => Question.new(:assigned_to => @author, :author => @author, :issue => @issue)
-      }
+      @issue.question = Question.new(:assigned_to => @author, :author => @author, :issue => @issue)
 
       assert_difference("Question.count") do
         assert @issue.save

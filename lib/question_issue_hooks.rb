@@ -27,7 +27,7 @@ JS
     @issue = context[:issue]
     o = ''
     o << content_tag(:p, 
-                     "<label>#{l(:field_question_assign_to)}</label> " +
+                     "<label>#{l(:field_question_assign_to)}</label> ".html_safe +
                      text_field_tag('note[question_assigned_to]', nil, :size => "40"))
 
     o << content_tag(:div,'', :id => "note_question_assigned_to_choices", :class => "autocomplete")
@@ -43,13 +43,14 @@ JS
     if params[:note] && !params[:note][:question_assigned_to].blank?
       unless journal.question # Update handled by Journal hooks
         # New
-        issue.extra_journal_attributes = {
-          :question => Question.new(
-                                    :author => User.current,
-                                    :issue => journal.issue,
-                                    :assigned_to => User.find_by_login(params[:note][:question_assigned_to])
-                                    )
-        }
+        journal.question = Question.new(
+                                        :author => User.current,
+                                        :issue => journal.issue
+                                        )
+        if params[:note][:question_assigned_to].downcase != 'anyone'
+          # Assigned to a specific user
+          assign_question_to_user(journal, User.find_by_login(params[:note][:question_assigned_to]))
+        end
       end
     end
     
@@ -73,7 +74,7 @@ JS
                        :only_path => true
                      },
                      { :class => 'question-link' }
-                     ) + '<br />'
+                     ) + '<br />'.html_safe
     else
       return ''
     end

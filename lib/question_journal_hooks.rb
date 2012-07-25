@@ -9,7 +9,7 @@ class QuestionJournalHooks < QuestionHooksBase
     
     o = ''
     o << content_tag(:p, 
-                     "<label>#{l(:field_question_assign_to)}</label> " +
+                     "<label>#{l(:field_question_assign_to)}</label> ".html_safe +
                      text_field_tag('question[assigned_to]', assigned_to, :size => "40"))
 
     o << content_tag(:div,'', :id => "question_assigned_to_choices", :class => "autocomplete")

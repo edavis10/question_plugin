@@ -13,7 +13,7 @@ class QuestionMailerTest < ActiveSupport::TestCase
       @issue = Issue.generate_for_project!(@project, :subject => "Add new stuff")
       @question = Question.new(:assigned_to => @user, :author => @author, :issue => @issue)
       @issue.journal_notes = "This is the question for the user"
-      @issue.extra_journal_attributes = { :question => @question }
+      @issue.question = @question
       assert @issue.save
       @journal = @issue.journals.last
       
@@ -81,7 +81,7 @@ class QuestionMailerTest < ActiveSupport::TestCase
 
       @question = Question.new(:assigned_to => nil, :author => @author, :issue => @issue)
       @issue.journal_notes = "This is the question for the user"
-      @issue.extra_journal_attributes = { :question => @question }
+      @issue.question = @question
       assert @issue.save
       @journal = @issue.journals.last
 
@@ -101,7 +101,7 @@ class QuestionMailerTest < ActiveSupport::TestCase
 
       @question = Question.new(:assigned_to => @user, :author => @author, :issue => @issue)
       @issue.journal_notes = "This is the question for the user"
-      @issue.extra_journal_attributes = { :question => @question }
+      @issue.question = @question
       assert @issue.save
       @journal_with_question = @issue.journals.last
 

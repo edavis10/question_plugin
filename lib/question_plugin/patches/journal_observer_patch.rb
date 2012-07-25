@@ -19,21 +19,18 @@ module QuestionPlugin
         def after_create_with_question(journal)
           after_create_without_question(journal)
 
-          if journal.is_a?(IssueJournal)
+          if journal.is_a?(Journal)
             if journal.question
               journal.question.save
-              QuestionMailer.deliver_asked_question(journal)
+              QuestionMailer.asked_question(journal).deliver
             end
 
             # Close any open questions
-            if journal.journaled.present? && journal.journaled.pending_question?(journal.user)
-              journal.journaled.close_pending_questions(journal.user, journal)
+            if journal.issue.present? && journal.issue.pending_question?(journal.user)
+              journal.issue.close_pending_questions(journal.user, journal)
             end
           end
-          
-
         end
-        
       end
     end
   end
