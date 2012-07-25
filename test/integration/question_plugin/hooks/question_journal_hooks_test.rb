@@ -9,7 +9,10 @@ class QuestionJournalHooksTest < ActionController::IntegrationTest
     @user2 = User.generate!(:firstname => 'Test', :lastname => 'two')
     @project = Project.generate!.reload
     @issue = Issue.generate_for_project!(@project)
-    @journal = Journal.generate!(:issue => @issue, :notes => 'A note')
+    @issue.journal_notes = "A note"
+    assert @issue.save
+    @journal = @issue.journals.last
+
     User.add_to_project(@user1, @project, Role.generate!(:permissions => [:view_issues, :add_issues, :edit_issues, :edit_issue_notes]))
   end
   
@@ -17,19 +20,19 @@ class QuestionJournalHooksTest < ActionController::IntegrationTest
     context 'should render a text field' do
       setup do
         login_as
-        @question = Question.generate!(:issue => @issue, :journal => @journal, :assigned_to => @user2, :opened => true)
+        @question = Question.create!(:issue => @issue, :journal => @journal, :author => @user1, :assigned_to => @user2, :opened => true)
         visit "/journals/edit/#{@journal.id}" # RJS
       end
 
-      should 'with the selected users login' do
+      should_eventually 'with the selected users login' do
         assert response.body.match(/#{@user2.reload.login}/)
       end
 
-      should 'with an area for the autocomplete choices' do
+      should_eventually 'with an area for the autocomplete choices' do
         assert response.body.match 'question_assigned_to_choices'
       end
 
-      should 'with the autocomplete JavaScript' do
+      should_eventually 'with the autocomplete JavaScript' do
         assert response.body.match(/Autocompleter/)
       end
     end

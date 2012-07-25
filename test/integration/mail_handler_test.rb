@@ -10,8 +10,12 @@ class MailHandlerTest < ActionController::IntegrationTest
       Member.generate!(:principal => @asker, :roles => [@role], :project => @project)
       Member.generate!(:principal => @responder, :roles => [@role], :project => @project)
       @issue = Issue.generate_for_project!(@project)
-      @question_journal = Journal.generate!(:issue => @issue, :user => @asker)
-      @question = Question.generate!(:issue => @issue, :journal => @question_journal, :author => @asker, :assigned_to => @responder)
+      @question = Question.new(:issue => @issue, :author => @asker, :assigned_to => @responder)
+      @issue.journal_notes = "Test"
+      @issue.extra_journal_attributes = { :question => @question }
+      assert @issue.save
+      @question_journal = @issue.journals.last
+
     end
     
     should 'the asked question email' do
@@ -30,7 +34,11 @@ class MailHandlerTest < ActionController::IntegrationTest
 
     
     should 'the answered question email' do
-      @answer = Journal.generate!(:issue => @issue, :user => @responder)
+      @issue.reload
+      @issue.journal_notes = "Answer"
+      @issue.journal_user = @responder
+      assert @issue.save
+      @answer = @issue.journals.last
       
       @mail = QuestionMailer.create_answered_question(@question, @answer)
 
