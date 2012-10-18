@@ -1,6 +1,6 @@
 class QuestionHooksBase < Redmine::Hook::ViewListener
   # Have to inclue Gravatars because ApplicationHelper will not get it
-  include Gravatarify::Helper
+  include GravatarHelper::PublicMethods
   
   protected
   

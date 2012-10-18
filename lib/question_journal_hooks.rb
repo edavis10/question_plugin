@@ -6,25 +6,28 @@ class QuestionJournalHooks < QuestionHooksBase
     else
       assigned_to = ''
     end
-    
-    o = ''
-    o << content_tag(:p, 
-                     "<label>#{l(:field_question_assign_to)}</label> ".html_safe +
-                     text_field_tag('question[assigned_to]', assigned_to, :size => "40"))
 
-    o << content_tag(:div,'', :id => "question_assigned_to_choices", :class => "autocomplete")
-    o << javascript_tag("new Ajax.Autocompleter('question_assigned_to', 'question_assigned_to_choices', '#{ url_for(:controller => 'questions', :action => 'autocomplete_for_user_login', :id => @journal.project, :issue_id => @journal.issue) }', { minChars: 1, frequency: 0.5, paramName: 'user', select: 'field' });")
+    o = ''
+    o << content_tag(:p,
+                     "<label>#{l(:field_question_assign_to)}</label> ".html_safe +
+                         text_field_tag('question[assigned_to]', assigned_to, :size => "40"))
+
+    users = User.active.all(:order => 'login ASC')
+    users = users.map { |u| "{value: '#{u.login}',label: '#{u.name(:lastname_coma_firstname)} (#{u.login})'}" }.join(',')
+    o << javascript_tag("$('#question_assigned_to').autocomplete({
+                    source: [#{users}]
+                });")
 
     return o
   end
-  
+
   def controller_journals_edit_post(context = { })
     journal = context[:journal]
-    params = context[:params]
+    params  = context[:params]
 
     # Handle destroying journals through the 'edit' action (done by clearing notes)
     return '' if journal.destroyed?
-    
+
     if params[:question] && params[:question][:assigned_to]
       if journal.question && params[:question][:assigned_to].blank?
         # Wants to remove the question
@@ -51,13 +54,14 @@ class QuestionJournalHooks < QuestionHooksBase
       end
 
     end
-    
+
     return ''
   end
-  
-  def view_journals_update_rjs_bottom(context = { })
+
+  def view_journals_update_js_bottom(context = { })
     @journal = context[:journal]
-    page = context[:page]
+    page     = context[:page]
+    page = ""
     unless @journal.frozen?
       @journal.reload
       if @journal && @journal.question && @journal.question.opened?
@@ -69,27 +73,27 @@ class QuestionJournalHooks < QuestionHooksBase
           html = unassigned_question_html(question)
         end
 
-        page << "$('change-#{@journal.id}').addClassName('question');"
-        page << "$$('#change-#{@journal.id} h4 div span.question-line').each(function(ele) {ele.remove()});"
-        page << "$$('#change-#{@journal.id} h4 div').each(function(ele) { ele.insert({ top: ' #{html} ' }) });"
-      
+        page << "$('#change-#{@journal.id}').addClass('question');"
+        page << "$('#change-#{@journal.id} h4 span.question-line').remove();"
+        page << "$('#change-#{@journal.id} h4 .journal-link').prepend(' #{html} ') ;"
+
       elsif @journal && @journal.question.nil?
         # No question found, make sure the UI reflects this
-        page << "$('change-#{@journal.id}').removeClassName('question');"
-        page << "$$('#change-#{@journal.id} h4 div span.question-line').each(function(ele) {ele.remove()});"
+        page << "$('#change-#{@journal.id}').removeClass('question');"
+        page << "$('#change-#{@journal.id} h4 span.question-line').remove();"
       end
     end
-    return ''
+    return page
   end
-  
+
   private
-  
+
   def add_new_question(journal, assigned_to=nil)
     journal.question = Question.new(
-                                    :author => User.current,
-                                    :issue => journal.issue,
-                                    :assigned_to => assigned_to
-                                    )
+        :author      => User.current,
+        :issue       => journal.issue,
+        :assigned_to => assigned_to
+    )
     journal.question.save!
     journal.save
   end
