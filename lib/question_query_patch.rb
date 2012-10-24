@@ -9,9 +9,8 @@ module QuestionQueryPatch
       unloadable # Send unloadable so it will not be unloaded in development
 
       base.add_available_column(QueryColumn.new(:formatted_questions))
-
-      alias_method :available_filters_before_question, :available_filters
-      alias_method :available_filters, :question_available_filters
+      
+      alias_method_chain :available_filters, :question
 
       alias_method :sql_for_field_before_question, :sql_for_field
       alias_method :sql_for_field, :question_sql_for_field
@@ -36,23 +35,18 @@ module QuestionQueryPatch
   
   module InstanceMethods
     # Wrapper around the +available_filters+ to add a new Question filter
-    def question_available_filters
-      @available_filters = available_filters_before_question
+    def available_filters_with_question
+      return @available_filters if @available_filters
+      available_filters_without_question
       
-      user_values = []
-      user_values << ["<< #{l(:label_me)} >>", "me"] if User.current.logged?
-      if project
-        user_values += project.users.sort.collect{|s| [s.name, s.id.to_s] }
-      else
-        user_values += User.current.projects.collect(&:users).flatten.uniq.sort.collect{|s| [s.name, s.id.to_s] }
-      end
+      if @available_filters["assigned_to_id"]
+        user_values = @available_filters["assigned_to_id"][:values]
 
-      question_filters = {
-        "question_assigned_to_id" => { :type => :list, :order => 14, :values => user_values },
-        "question_asked_by_id" => { :type => :list, :order => 14, :values => user_values }
-      }
+        @available_filters["question_assigned_to_id"] = { :name => l("question_text_assigned_to"), :type => :list_optional, :order => 16, :values => user_values }
+        @available_filters["question_asked_by_id"] = { :name => l("question_text_asked_by"), :type => :list_optional, :order => 16, :values => user_values }
+      end
       
-      return @available_filters.merge(question_filters)
+      @available_filters
     end
     
     # Wrapper for +sql_for_field+ so Questions can use a different table than Issues

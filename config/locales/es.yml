@@ -1,19 +1,19 @@
 es:
-  field_question_assign_to: Asigne la pregunta a
-  field_question_assigned_to: Pregunata se asigna a
-  field_question_asked_by: Pregunta fue hecha cerca
-  field_formatted_questions: Preguntas
-  text_question: Pregunta
-  text_question_answered: Pregunta contestó
-  text_answer: Respuesta
-  text_anyone: Cualquier persona
-  text_question_for: Pregunta para
-  text_question_for_anyone: Pregunta para cualquier persona
-  text_questions_for_me: Preguntas para mí
-  text_question_asked: Pregunta pidió
+  field_question_assign_to: "Asigne la pregunta a"
+  field_question_assigned_to: "Pregunata se asigna a"
+  field_question_asked_by: "Pregunta fue hecha cerca"
+  field_formatted_questions: "Preguntas"
+  text_question: "Pregunta"
+  text_question_answered: "Pregunta contestó"
+  text_answer: "Respuesta"
+  text_anyone: "Cualquier persona"
+  text_question_for: "Pregunta para"
+  text_question_for_anyone: "Pregunta para cualquier persona"
+  text_questions_for_me: "Preguntas para mí"
+  text_question_asked: "Pregunta pidió"
   text_question_remove: "<< Quite la pregunta >>"
   question_text_asked_by: "Pedido Cerca"
   question_text_assigned_to: "Asignado A"
   question_text_created_on: "Creada hace"
-  question_text_ratio_questions_answered: "%{ratio} Preguntas contestaron"
+  question_text_ratio_questions_answered: "{{ratio}} Preguntas contestaron"
   field_journal: "Diario"
