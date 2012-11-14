@@ -25,7 +25,7 @@ class QuestionMailer < Mailer
   def answered_question(question, closing_journal)
     from = question.assigned_to ? "#{question.assigned_to.name} (#{l(:field_system_name)}) <#{Setting.mail_from}>" : nil
     to = question.author ? question.author.mail : nil
-    subject =  "[Antwort #{question.issue.project.name} ##{question.issue.id}] #{question.issue.subject}"
+    subject =  "[#{I18n.t(:text_answer)} #{question.issue.project.name} ##{question.issue.id}] #{question.issue.subject}"
 
     @from = "#{question.assigned_to.name} (#{l(:field_system_name)}) <#{Setting.mail_from}>" unless question.assigned_to.nil?
     @question = question

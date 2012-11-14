@@ -20,4 +20,4 @@ en:
   text_questions_asked_by_me: "Otázky položené mnou"
   question_reminder_subject: "%{count} nezodpovězených otázek"
   question_reminder_body: "%{count} Vám položených nezodpovězených otázek:"
-
+  field_system_name: igloonet, s.r.o. 
