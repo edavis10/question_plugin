@@ -14,7 +14,7 @@ class QuestionIssueHooks < QuestionHooksBase
       o += <<JS
 <script type='text/javascript'>
    $('#change-#{context[:journal].id}').addClass('question');
-   $('#change-#{context[:journal].id} h4 .journal-link').prepend(' #{html} ');
+   $('#change-#{context[:journal].id} h4 .journal-link').after(' #{html} ');
 </script>
 JS
 

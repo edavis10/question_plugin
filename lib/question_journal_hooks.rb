@@ -75,7 +75,7 @@ class QuestionJournalHooks < QuestionHooksBase
 
         page << "$('#change-#{@journal.id}').addClass('question');"
         page << "$('#change-#{@journal.id} h4 span.question-line').remove();"
-        page << "$('#change-#{@journal.id} h4 .journal-link').prepend(' #{html} ') ;"
+        page << "$('#change-#{@journal.id} h4 .journal-link').after(' #{html} ') ;"
 
       elsif @journal && @journal.question.nil?
         # No question found, make sure the UI reflects this
