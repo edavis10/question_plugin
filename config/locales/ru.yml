@@ -20,3 +20,6 @@ ru:
   text_questions_asked_by_me: "Вопросы заданные мной"
   question_reminder_subject: "%{count} не отвеченных вопросов"
   question_reminder_body: "%{count}  не отвеченных вопросов заданных Вам:"
+  label_question_plugin_only_members: Вопрос может быть задан
+  text_question_all: Любому пользователю
+  text_question_project_member: Только участникам проекта

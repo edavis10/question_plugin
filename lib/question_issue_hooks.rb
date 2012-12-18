@@ -30,13 +30,7 @@ JS
                      "<label>#{l(:field_question_assign_to)}</label> ".html_safe +
                          text_field_tag('note[question_assigned_to]', nil, :size => "40"))
 
-    users = @issue.project.users.active.all(:order      => 'login ASC')
-    users = users.map {|u| "{value: '#{u.login}',label: '#{u.name(:lastname_coma_firstname)} (#{u.login})'}"}.join(',')
-    o << javascript_tag("$('#note_question_assigned_to').autocomplete({
-                source: [#{users}]
-            });")
-
-    o << content_tag(:div, '', :id => "note_question_assigned_to_choices", :class => "autocomplete")
+    o << javascript_tag("observeAutocompleteField('note_question_assigned_to', '#{escape_javascript questions_autocomplete_for_user_login_path(@issue.project, @issue)}')")
 
     return o
   end

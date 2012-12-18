@@ -34,6 +34,11 @@ p = Redmine::Plugin.register :question_plugin do
   version '0.3.0'
 
   requires_redmine :version_or_higher => '2.0.0'
+
+  settings :default => {
+    :only_members => 0
+  }, :partial => 'settings/question_plugin'
+
 end
 
 # Ensure ActionMailer knows where to find the views for the question plugin

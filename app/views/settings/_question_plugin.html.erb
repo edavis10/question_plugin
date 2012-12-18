@@ -1,0 +1,8 @@
+<p>
+  <%= label_tag "label_settings", l(:label_question_plugin_only_members) %>
+  <%= select_tag 'settings[only_members]', options_for_select([
+        [l(:text_question_all), 0],
+        [l(:text_question_project_member), 1],
+      ], Setting.plugin_question_plugin[:only_members]) %>
+
+</p>

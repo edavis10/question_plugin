@@ -12,11 +12,7 @@ class QuestionJournalHooks < QuestionHooksBase
                      "<label>#{l(:field_question_assign_to)}</label> ".html_safe +
                          text_field_tag('question[assigned_to]', assigned_to, :size => "40"))
 
-    users = @journal.issue.project.users.active.all(:order => 'login ASC')
-    users = users.map { |u| "{value: '#{u.login}',label: '#{u.name(:lastname_coma_firstname)} (#{u.login})'}" }.join(',')
-    o << javascript_tag("$('#question_assigned_to').autocomplete({
-                    source: [#{users}]
-                });")
+    o << javascript_tag("observeAutocompleteField('question_assigned_to', '#{escape_javascript questions_autocomplete_for_user_login_path(@journal.issue.project, @journal.issue)}')")
 
     return o
   end
