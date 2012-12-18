@@ -2,7 +2,7 @@ class QuestionIssueHooks < QuestionHooksBase
   # Applies the question class to each journal div if they are questions
   def view_issues_history_journal_bottom(context = { })
     o = ''
-    if context[:journal] && context[:journal].question && context[:journal].question.opened?
+    if context[:journal] && context[:journal].question
       question = context[:journal].question
 
       if question.assigned_to
@@ -11,13 +11,13 @@ class QuestionIssueHooks < QuestionHooksBase
         html = unassigned_question_html(question)
       end
 
+      className = question.opened == 1 ? 'question' : 'question-closed'
       o += <<JS
 <script type='text/javascript'>
-   $('#change-#{context[:journal].id}').addClass('question');
+   $('#change-#{context[:journal].id}').addClass('#{className}');
    $('#change-#{context[:journal].id} h4 .journal-link').after(' #{html} ');
 </script>
 JS
-
     end
     return o
   end
