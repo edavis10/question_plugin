@@ -23,3 +23,7 @@ en:
   label_question_plugin_only_members: Question can be assigned to
   text_question_all: Any user
   text_question_project_member: Project members only
+  label_question_plugin_close_settings: When add comment close
+  text_question_close_all: all opened questions in issue
+  text_question_close_selected: only selected question
+  field_question_to_answer: Answer question

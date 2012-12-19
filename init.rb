@@ -36,7 +36,8 @@ p = Redmine::Plugin.register :question_plugin do
   requires_redmine :version_or_higher => '2.0.0'
 
   settings :default => {
-    :only_members => 0
+    :only_members => 1,
+    :close_all_questions => 1,
   }, :partial => 'settings/question_plugin'
 
 end

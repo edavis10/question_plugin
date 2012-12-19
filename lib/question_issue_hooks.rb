@@ -26,10 +26,17 @@ JS
     f      = context[:form]
     @issue = context[:issue]
     o      = ''
+
+    if @issue.pending_question?(User.current) && Setting.plugin_question_plugin[:close_all_questions] != "1"
+      questions = @issue.pending_questions(User.current)
+      o << content_tag(:p,
+                    "<label>#{l(:field_question_to_answer)}</label> ".html_safe +
+                    select_tag('question_to_answer', options_for_select([[]] + questions.collect {|q| [truncate(q.journal.notes, :length => Question::TruncateTo), q.id]}))
+                    )
+    end
     o << content_tag(:p,
                      "<label>#{l(:field_question_assign_to)}</label> ".html_safe +
-                         text_field_tag('note[question_assigned_to]', nil, :size => "40"))
-
+                     text_field_tag('note[question_assigned_to]', nil, :size => "40"))
     o << javascript_tag("observeAutocompleteField('note_question_assigned_to', '#{escape_javascript questions_autocomplete_for_user_login_path(@issue.project, @issue)}')")
 
     return o
@@ -50,6 +57,19 @@ JS
           # Assigned to a specific user
           assign_question_to_user(journal, User.find_by_login(params[:note][:question_assigned_to]))
         end
+      end
+    end
+
+    if Setting.plugin_question_plugin[:close_all_questions] == "1"
+      # Close any open questions
+      if journal.issue.present? && journal.issue.pending_question?(journal.user)
+        journal.issue.close_pending_questions(journal.user, journal)
+      end
+    else
+      # Close specific question
+      if params[:question_to_answer] and !params[:question_to_answer].empty?
+        question = Question.find(params[:question_to_answer])
+        question.close!(journal)
       end
     end
 
