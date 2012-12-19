@@ -4,9 +4,9 @@ class QuestionMailer < Mailer
   def asked_question(journal)
     question = journal.question
 
-    from = question.author ? "#{question.author.name} (#{l(:field_system_name)}) <#{Setting.mail_from}>" : nil
+    from = question.author ? "#{question.author.name} (#{l(:field_system_name)} - #{I18n.t(:text_question)}) <#{Setting.mail_from}>" : nil
     to = question.assigned_to ? question.assigned_to.mail : nil
-    subject = "[Frage #{question.issue.project.name} ##{question.issue.id}] #{question.issue.subject}"
+    subject = "[#{question.issue.project.name} ##{question.issue.id}] #{question.issue.subject}"
     
     @from = from
     @question = question
@@ -23,11 +23,11 @@ class QuestionMailer < Mailer
   end
   
   def answered_question(question, closing_journal)
-    from = question.assigned_to ? "#{question.assigned_to.name} (#{l(:field_system_name)}) <#{Setting.mail_from}>" : nil
+    from = question.assigned_to ? "#{question.assigned_to.name} (#{l(:field_system_name)} - #{I18n.t(:text_answer)}) <#{Setting.mail_from}>" : nil
     to = question.author ? question.author.mail : nil
-    subject =  "[#{I18n.t(:text_answer)} #{question.issue.project.name} ##{question.issue.id}] #{question.issue.subject}"
+    subject =  "[#{question.issue.project.name} ##{question.issue.id}] #{question.issue.subject}"
 
-    @from = "#{question.assigned_to.name} (#{l(:field_system_name)}) <#{Setting.mail_from}>" unless question.assigned_to.nil?
+    @from = "#{question.assigned_to.name} (#{l(:field_system_name)} - #{I18n.t(:text_answer)}) <#{Setting.mail_from}>" unless question.assigned_to.nil?
     @question = question
     @issue = question.issue
     @journal = closing_journal
