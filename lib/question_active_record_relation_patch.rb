@@ -10,6 +10,7 @@ module QuestionActiveRecordRelationPatch
       alias_method :count_before_question, :count
       alias_method :sum_before_question, :sum
       alias_method :find_before_question, :find
+      alias_method :all_before_question, :all
       alias_method :find_ids_before_question, :find_ids
 
       # Override ActiveRecord::Calculations.count
@@ -28,6 +29,12 @@ module QuestionActiveRecordRelationPatch
       def find(*args)
         scan_for_options_hash_and_add_includes_if_needed(self.klass, args)
         find_before_question(*args)
+      end
+
+      # Override ActiveRecord::FinderMethods.all
+      def all(*args)
+        scan_for_options_hash_and_add_includes_if_needed(self.klass, args)
+        all_before_question(*args)
       end
 
       # Override ActiveRecord::FinderMethods.find_ids
@@ -73,7 +80,7 @@ module QuestionActiveRecordRelationPatch
       def add_questions_to_the_includes(arg)
         if arg[:include]
           # Has includes
-          if arg[:include].is_a?(Hash)
+          if arg[:include].is_a?(Hash) || arg[:include].is_a?(Array)
             # Hash includes
             arg[:include] << :questions
           else

@@ -18,11 +18,21 @@ Rails.configuration.to_prepare do
   require_dependency 'journal'
   Journal.send(:include, QuestionJournalPatch) unless Journal.included_modules.include? QuestionJournalPatch
 
-  require_dependency 'queries_helper'
-  QueriesHelper.send(:include, QuestionQueriesHelperPatch) unless QueriesHelper.included_modules.include? QuestionQueriesHelperPatch
+  if ActiveSupport::Dependencies::search_for_file('issue_queries_helper')
+    require_dependency 'issue_queries_helper'
+    IssueQueriesHelper.send(:include, QuestionQueriesHelperPatch) unless QueriesHelper.included_modules.include? QuestionQueriesHelperPatch
+  else
+    require_dependency 'queries_helper'
+    QueriesHelper.send(:include, QuestionQueriesHelperPatch) unless QueriesHelper.included_modules.include? QuestionQueriesHelperPatch
+  end
 
-  require_dependency 'query'
-  Query.send(:include, QuestionQueryPatch) unless Query.included_modules.include? QuestionQueryPatch
+  if ActiveSupport::Dependencies::search_for_file('issue_query')
+    require_dependency 'issue_query'
+    IssueQuery.send(:include, QuestionQueryPatch) unless Query.included_modules.include? QuestionQueryPatch
+  else
+    require_dependency 'query'
+    Query.send(:include, QuestionQueryPatch) unless Query.included_modules.include? QuestionQueryPatch
+  end
 end
 
 p = Redmine::Plugin.register :question_plugin do
@@ -34,6 +44,12 @@ p = Redmine::Plugin.register :question_plugin do
   version '0.3.0'
 
   requires_redmine :version_or_higher => '2.0.0'
+
+  settings :default => {
+    :only_members => 1,
+    :close_all_questions => 1,
+  }, :partial => 'settings/question_plugin'
+
 end
 
 # Ensure ActionMailer knows where to find the views for the question plugin

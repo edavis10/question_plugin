@@ -14,14 +14,15 @@ class QuestionsController < ApplicationController
   end
 
   def autocomplete_for_user_login
-    if params[:issue_id]
+    if params[:issue_id] && Setting.plugin_question_plugin[:only_members] == "1"
       @issue = Issue.find_by_id(params[:issue_id])
-      base = issue.project.users
+      base = @issue.project.users
     else
-      User
+      base = User
     end
-    if params[:user]
-      @users = base.active.all(:conditions => ["LOWER(login) LIKE :user OR LOWER(firstname) LIKE :user OR LOWER(lastname) LIKE :user", {:user => params[:user]+"%" }],
+    q = (params[:q] || params[:term] || params[:user]).to_s.strip.downcase
+    if q.present?
+      @users = base.active.all(:conditions => ["LOWER(login) LIKE :user OR LOWER(firstname) LIKE :user OR LOWER(lastname) LIKE :user", {:user => q + "%" }],
                                :limit => 10,
                                :order => 'login ASC')
     end
@@ -35,7 +36,7 @@ class QuestionsController < ApplicationController
   def new_filter_for_questions_assigned_to(user_id)
     @project = Project.find(params[:project]) unless params[:project].nil?
     
-    @query = Query.new(:name => "_",
+    @query = (ActiveSupport::Dependencies::search_for_file('issue_query') ? IssueQuery : Query).new(:name => "_",
                        :filters => {'status_id' => {:operator => '*', :values => [""]}}
                        )
     @query.project = @project unless params[:project].nil?
