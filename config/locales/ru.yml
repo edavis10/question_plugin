@@ -12,8 +12,8 @@ ru:
   text_questions_for_me: Вопросы ко мне
   text_question_asked: Вопрос задан
   text_question_remove: "<< Удалить вопрос >>"
-  question_text_asked_by: "Задан"
-  question_text_assigned_to: "Назначен"
+  question_text_asked_by: "Автор вопроса"
+  question_text_assigned_to: "Вопрос назначен"
   question_text_created_on: "Создан"
   question_text_ratio_questions_answered: "{{ratio}} вопросов отвечено"
   field_journal: "Journal"
