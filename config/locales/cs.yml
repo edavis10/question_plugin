@@ -1,0 +1,23 @@
+en:
+  field_question_assign_to: Přiřadit otázku
+  field_question_assigned_to: Otázka přiřazena
+  field_question_asked_by: Otázku položil
+  field_formatted_questions: Otázky
+  text_question: Otázka
+  text_question_answered: Otázka zodpovězena
+  text_answer: Odpověď
+  text_anyone: Kdokoliv
+  text_question_for: Otázka pro
+  text_question_for_anyone: Otázka pro kohokoliv
+  text_questions_for_me: Otázky pro mě
+  text_question_asked: Položené otázky
+  text_question_remove: "<< Odstranit Otázku>>"
+  question_text_asked_by: "Položeno"
+  question_text_assigned_to: "Přiřazeno"
+  question_text_created_on: "Vytvořeno"
+  question_text_ratio_questions_answered: "{{ratio}} zodpovězených otázek"
+  field_journal: "Žurnál"
+  text_questions_asked_by_me: "Otázky položené mnou"
+  question_reminder_subject: "%{count} nezodpovězených otázek"
+  question_reminder_body: "%{count} Vám položených nezodpovězených otázek:"
+  field_system_name: igloonet, s.r.o. 

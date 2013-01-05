@@ -14,17 +14,20 @@ class QuestionsController < ApplicationController
   end
 
   def autocomplete_for_user_login
+    if params[:issue_id]
+      @issue = Issue.find_by_id(params[:issue_id])
+      base = issue.project.users
+    else
+      User
+    end
     if params[:user]
-      @users = User.active.all(:conditions => ["LOWER(login) LIKE :user OR LOWER(firstname) LIKE :user OR LOWER(lastname) LIKE :user", {:user => params[:user]+"%" }],
+      @users = base.active.all(:conditions => ["LOWER(login) LIKE :user OR LOWER(firstname) LIKE :user OR LOWER(lastname) LIKE :user", {:user => params[:user]+"%" }],
                                :limit => 10,
                                :order => 'login ASC')
     end
     @users ||=[]
 
-    if params[:issue_id]
-      @issue = Issue.find_by_id(params[:issue_id])
-    end
-    render :layout => false
+   render :layout => false
   end
 
   private
