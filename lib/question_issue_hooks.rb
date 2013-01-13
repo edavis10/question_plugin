@@ -11,7 +11,7 @@ class QuestionIssueHooks < QuestionHooksBase
         html = unassigned_question_html(question)
       end
 
-      className = question.opened == 1 ? 'question' : 'question-closed'
+      className = question.opened ? 'question' : 'question-closed'
       o += <<JS
 <script type='text/javascript'>
    $('#change-#{context[:journal].id}').addClass('#{className}');
