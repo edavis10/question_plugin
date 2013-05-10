@@ -21,8 +21,8 @@ Rails.configuration.to_prepare do
   require_dependency 'queries_helper'
   QueriesHelper.send(:include, QuestionQueriesHelperPatch) unless QueriesHelper.included_modules.include? QuestionQueriesHelperPatch
 
-  require_dependency 'query'
-  Query.send(:include, QuestionQueryPatch) unless Query.included_modules.include? QuestionQueryPatch
+  require_dependency 'issue_query'
+  IssueQuery.send(:include, QuestionQueryPatch) unless IssueQuery.included_modules.include? QuestionQueryPatch
 end
 
 p = Redmine::Plugin.register :question_plugin do
