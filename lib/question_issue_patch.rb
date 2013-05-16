@@ -24,9 +24,17 @@ module QuestionIssuePatch
       return false
     end
 
-    def close_pending_questions(user, closing_journal)
+    def pending_questions(user)
+      q = []
       self.open_questions.find(:all).each do |question|
-        question.close!(closing_journal) if question.assigned_to == user || question.for_anyone?
+        q << question if question.assigned_to == user || question.for_anyone?
+      end
+      return q
+    end
+
+    def close_pending_questions(user, closing_journal)
+      self.pending_questions(user).each do |question|
+        question.close!(closing_journal) 
       end
     end
 
