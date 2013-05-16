@@ -35,7 +35,7 @@ class QuestionsController < ApplicationController
   def new_filter_for_questions_assigned_to(user_id)
     @project = Project.find(params[:project]) unless params[:project].nil?
     
-    @query = Query.new(:name => "_",
+    @query = IssueQuery.new(:name => "_",
                        :filters => {'status_id' => {:operator => '*', :values => [""]}}
                        )
     @query.project = @project unless params[:project].nil?
