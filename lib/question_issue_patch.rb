@@ -40,7 +40,7 @@ module QuestionIssuePatch
 
     def formatted_questions
       open_questions.collect do |question|
-        truncate(question.journal.notes, Question::TruncateTo)
+        truncate(question.journal.notes, :length => Question::TruncateTo)
       end.join(", ")
     end
   end
