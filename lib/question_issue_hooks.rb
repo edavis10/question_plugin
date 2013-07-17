@@ -87,7 +87,7 @@ JS
     if question_count > 0
       return link_to(l(:text_questions_for_me) + " (#{question_count})",
                      {
-                         :controller => 'questions',
+                         :controller => 'issuequestions',
                          :action     => 'my_issue_filter',
                          :project    => project,
                          :only_path  => true

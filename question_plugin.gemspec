@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
-     "app/controllers/questions_controller.rb",
+     "app/controllers/issuequestions_controller.rb",
      "app/models/journal_questions_observer.rb",
      "app/models/question.rb",
      "app/models/question_mailer.rb",

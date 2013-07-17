@@ -49,7 +49,7 @@ class QuestionMailer < Mailer
     subject = l(:question_reminder_subject, :count => issues.size)
 
     @issues = issues
-    @issues_url = url_for(:controller => 'questions', :action => 'my_issue_filter')
+    @issues_url = url_for(:controller => 'issuequestions', :action => 'my_issue_filter')
 
     redmine_headers 'Type' => 'Question'
 
