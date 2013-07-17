@@ -7,17 +7,23 @@ de:
   text_question_answered: "Frage beantwortet"
   text_answer: "Antwort"
   text_anyone: "Irgendwer"
-  text_question_for: "Frage f&uuml;r"
-  text_question_for_anyone: "Frage f&uuml;r irgendjemanden"
-  text_questions_for_me: "Fragen f&uuml;r mich"
+  text_question_for: "Frage für"
+  text_question_for_anyone: "Frage für irgendjemanden"
+  text_questions_for_me: "Fragen für mich"
   text_question_asked: "Frage gestellt"
   text_question_remove: "<<Frage entfernen>>"
   question_text_asked_by: "gefragt von"
   question_text_assigned_to: "Zugewiesen an"
-  question_text_created_on: "Erstellt am"
+  question_text_created_on: "erstellt am"
   question_text_ratio_questions_answered: "{{ratio}} beantwortete Fragen"
   field_journal: "Journal"
   text_questions_asked_by_me: "meine gestellten Fragen"
-  questions_asked_by_me: "Meine gestellten Fragen"
-  questions_for_me: "Fragen für mich"
-  field_system_name: "InfoMine"
+  question_reminder_subject: "%{count} offene Frage(n)"
+  question_reminder_body: "%{count} offene dir zugewiesene Frage(n)"
+  label_question_plugin_only_members: Die Frage kann diesem Benutzer zugewiesen werden
+  text_question_all: jedem Benutzer
+  text_question_project_member: Projektmitarbeitern
+  label_question_plugin_close_settings: Frage des Tickets abschließend beantworten
+  text_question_close_all: alle offene Fragen
+  text_question_close_selected: ausschließlich aktuell ausgewählte Frage
+  field_question_to_answer: Frage beantworten
