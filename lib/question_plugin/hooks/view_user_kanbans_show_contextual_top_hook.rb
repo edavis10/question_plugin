@@ -10,7 +10,7 @@ module QuestionPlugin
           if count > 0
             return link_to(l(:field_formatted_questions) + " (#{count})",
                            {
-                             :controller => 'questions',
+                             :controller => 'issuequestions',
                              :action => 'user_issue_filter',
                              :user_id => user.id,
                              :only_path => true
