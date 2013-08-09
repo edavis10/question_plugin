@@ -1,7 +1,0 @@
-<%= raw @users.map {|user| {
-      'id' => user.login,
-      'label' => "#{user.login}: #{user.name(:lastname_coma_firstname)}",
-      'value' => user.login
-      }
-    }.to_json
-%>

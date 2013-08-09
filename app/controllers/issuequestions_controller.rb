@@ -14,7 +14,7 @@ class IssuequestionsController < ApplicationController
   end
 
   def autocomplete_for_user_login
-    if params[:issue_id] && Setting.plugin_question_plugin[:only_members] == "1"
+    if params[:issue_id] && Setting.plugin_question_plugin[:only_members] == 1
       @issue = Issue.find_by_id(params[:issue_id])
       base = @issue.project.users
     else
