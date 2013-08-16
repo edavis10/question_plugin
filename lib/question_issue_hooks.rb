@@ -37,7 +37,7 @@ JS
     o << content_tag(:p,
                      "<label>#{l(:field_question_assign_to)}</label> ".html_safe +
                      text_field_tag('note[question_assigned_to]', nil, :size => "40"))
-    o << javascript_tag("observeAutocompleteField('note_question_assigned_to', '#{escape_javascript questions_autocomplete_for_user_login_path(@issue.project, @issue)}')")
+    o << javascript_tag("observeAutocompleteField('note_question_assigned_to', '#{escape_javascript issuequestions_autocomplete_for_user_login_path(@issue.project, @issue)}')")
 
     return o
   end
