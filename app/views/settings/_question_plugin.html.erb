@@ -13,3 +13,12 @@
       ], Setting.plugin_question_plugin[:close_all_questions]) %>
 
 </p>
+<p>
+  <%= label_tag "settings[obfuscate_author]", l(:label_question_plugin_notifications_obfuscate_author_settings) %>
+  <%= check_box_tag 'settings[obfuscate_author]', 1, (Setting.plugin_question_plugin[:obfuscate_author] ? true : false) %>
+
+</p>
+<p>
+  <%= label_tag "settings[obfuscate_content]", l(:label_question_plugin_notifications_obfuscate_content_settings) %>
+  <%= check_box_tag 'settings[obfuscate_content]', 1, (Setting.plugin_question_plugin[:obfuscate_content] ? true : false) %>
+</p>

@@ -1,5 +1,8 @@
-<%= l(:text_question_asked) %> <%= h "##{@issue.id}" %> <%= @question.author %>
+<%= l(:text_question_asked) %> <%= h "##{@issue.id}" %> <%= @question.author unless Setting.plugin_question_plugin[:obfuscate_author] == "1" %>
 
+<% if Setting.plugin_question_plugin[:obfuscate_content] == "1" %>
+<%= textilizable(l(:mail_body_question_link)) %>
+<% else %>
 <%= textilizable(@journal, :notes, :only_path => false) %>
 
 <ul>
@@ -9,4 +12,6 @@
 </ul>
 
 <hr />
+<% end %>
+
 <%= render :partial => "mailer/issue", :locals => { :issue => @issue, :issue_url => @issue_url } %>

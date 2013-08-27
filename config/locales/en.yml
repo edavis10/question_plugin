@@ -11,6 +11,8 @@ en:
   text_question_for_anyone: Question for anyone
   text_questions_for_me: Questions for me
   text_question_asked: Question asked
+  mail_body_question_link: Display question by clicking on the issue link below
+  mail_body_answer_link: "Your question has received an answer: click on the issue link below to display it"
   text_question_remove: "<< Remove Question>>"
   question_text_asked_by: "Asked By"
   question_text_assigned_to: "Question assigned To"
@@ -26,4 +28,6 @@ en:
   label_question_plugin_close_settings: When add comment close
   text_question_close_all: all opened questions in issue
   text_question_close_selected: only selected question
+  label_question_plugin_notifications_obfuscate_author_settings: Obfuscate asker/answerer name and e-mail address in notifications
+  label_question_plugin_notifications_obfuscate_content_settings: Obfuscate question/answer text in notifications
   field_question_to_answer: Answer question
