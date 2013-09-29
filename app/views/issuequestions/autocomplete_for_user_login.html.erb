@@ -1,7 +1,16 @@
+<<<<<<< HEAD
 <%= raw @users.map {|user| {
       'id' => user.login,
       'label' => "#{user.login}: #{user.name(:lastname_coma_firstname)}",
       'value' => user.login
       }
     }.to_json
+=======
+<%= raw @users.map {|user| {
+        'id' => user.login,
+        'label' => "#{user.login}: #{user.name(:lastname_coma_firstname)}",
+        'value' => user.login
+        }
+    }.to_json
+>>>>>>> 930533be7753fd7b2abea5d69d6d69896dbb4ea7
 %>
