@@ -12,7 +12,7 @@ class QuestionJournalHooks < QuestionHooksBase
                      "<label>#{l(:field_question_assign_to)}</label> ".html_safe +
                          text_field_tag('question[assigned_to]', assigned_to, :size => "40"))
 
-    o << javascript_tag("observeAutocompleteField('question_assigned_to', '#{escape_javascript questions_autocomplete_for_user_login_path(@journal.issue.project, @journal.issue)}')")
+    o << javascript_tag("observeAutocompleteField('question_assigned_to', '#{escape_javascript issuequestions_autocomplete_for_user_login_path(@journal.issue.project, @journal.issue)}')")
 
     return o
   end
