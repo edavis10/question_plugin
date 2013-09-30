@@ -26,4 +26,8 @@ de:
   label_question_plugin_close_settings: Frage des Tickets abschließend beantworten
   text_question_close_all: alle offene Fragen
   text_question_close_selected: ausschließlich aktuell ausgewählte Frage
+  label_question_plugin_notifications_obfuscate_author_settings: Name und Email des Fragestellers in Email Benachrichtigungen verbergen
+  label_question_plugin_notifications_obfuscate_content_settings: Frage- und Anworttext in  Email Benachrichtigungen verbergen
   field_question_to_answer: Frage beantworten
+  mail_body_question_link: Zeige Sie die Frage für sich an, indem sie auf den nachfolgenden Link für das Ticket klicken
+  mail_body_answer_link: "Ihre Frage wurde beantwortet: Klicken Sie auf den nachfolgenden Link für das Ticket um die Antwort zu sehen"
