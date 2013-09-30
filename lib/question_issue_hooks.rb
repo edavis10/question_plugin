@@ -31,8 +31,8 @@ JS
       questions = @issue.pending_questions(User.current)
       o << content_tag(:p,
                     "<label>#{l(:field_question_to_answer)}</label> ".html_safe +
-                    select_tag('question_to_answer', options_for_select([[]] + questions.collect {|q| [truncate(q.journal.notes, :length => Question::TruncateTo), q.id]}, [questions.last.id])),
-                    :style => 'display: none;')
+                     select_tag('question_to_answer', options_for_select([[]] + questions.collect {|q| [truncate(q.journal.notes, :length => Question::TruncateTo), q.id]}))
+                    )
     end
     o << content_tag(:p,
                      "<label>#{l(:field_question_assign_to)}</label> ".html_safe +
