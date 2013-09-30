@@ -1,9 +1,14 @@
+<% if Setting.plugin_question_plugin[:obfuscate_content] == "1" %>
+<%= textilizable(l(:mail_body_answer_link)) %>
+<% else %>
 <h1><%= l(:text_answer) %></h1>
 <%= textilizable(@journal, :notes, :only_path => false) %>
+<% end %>
 
 <h1><%= l(:text_question) %></h1>
 <%= textilizable(@question.journal, :notes, :only_path => false) %>
 
+<% if Setting.plugin_question_plugin[:obfuscate_content] == "0" %>
 <ul>
 <% for detail in @journal.details %>
     <li><%= show_detail(detail, true) %></li>
@@ -11,4 +16,6 @@
 </ul>
 
 <hr />
+<% end %>
+
 <%= render :partial => "mailer/issue", :locals => { :issue => @issue, :issue_url => @issue_url } %>

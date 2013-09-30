@@ -4,7 +4,13 @@ class QuestionMailer < Mailer
   def asked_question(journal)
     question = journal.question
 
-    from = question.author ? "#{question.author.name} (#{l(:field_system_name)} - #{I18n.t(:text_question)}) <#{Setting.mail_from}>" : nil
+    if Setting.plugin_question_plugin[:obfuscate_author] == "1"
+      # Obfuscate author infos
+      from = "#{Setting.app_title} <#{Setting.mail_from}>"
+    else
+      # Clear author infos
+      from = question.author ? "#{question.author.name} (#{l(:field_system_name)} - #{I18n.t(:text_question)}) <#{Setting.mail_from}>" : nil
+    end
     to = question.assigned_to ? question.assigned_to.mail : nil
     subject = "[#{question.issue.project.name} ##{question.issue.id}] #{question.issue.subject}"
     
@@ -23,11 +29,18 @@ class QuestionMailer < Mailer
   end
   
   def answered_question(question, closing_journal)
-    from = question.assigned_to ? "#{question.assigned_to.name} (#{l(:field_system_name)} - #{I18n.t(:text_answer)}) <#{Setting.mail_from}>" : nil
+    if Setting.plugin_question_plugin[:obfuscate_author] == "1"
+      # Obfuscate author infos
+      from = "#{Setting.app_title} <#{Setting.mail_from}>"
+      @from = from
+    else
+      # Clear author infos
+      from = question.assigned_to ? "#{question.assigned_to.name} (#{l(:field_system_name)} - #{I18n.t(:text_answer)}) <#{Setting.mail_from}>" : nil
+      @from = "#{question.assigned_to.name} (#{l(:field_system_name)} - #{I18n.t(:text_answer)}) <#{Setting.mail_from}>" unless question.assigned_to.nil?
+    end
     to = question.author ? question.author.mail : nil
     subject =  "[#{question.issue.project.name} ##{question.issue.id}] #{question.issue.subject}"
 
-    @from = "#{question.assigned_to.name} (#{l(:field_system_name)} - #{I18n.t(:text_answer)}) <#{Setting.mail_from}>" unless question.assigned_to.nil?
     @question = question
     @issue = question.issue
     @journal = closing_journal

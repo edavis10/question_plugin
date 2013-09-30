@@ -48,6 +48,8 @@ p = Redmine::Plugin.register :question_plugin do
   settings :default => {
     :only_members => 1,
     :close_all_questions => 1,
+    :obfuscate_author => 0,
+    :obfuscate_content => 0,
   }, :partial => 'settings/question_plugin'
 
 end

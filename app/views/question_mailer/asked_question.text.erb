@@ -1,5 +1,8 @@
-<%= l(:text_question_asked) %> <%= h "##{@issue.id}" %> <%= @question.author %>
+<%= l(:text_question_asked) %> <%= h "##{@issue.id}" %> <%= @question.author unless Setting.plugin_question_plugin[:obfuscate_author] == "1" %>
 
+<% if Setting.plugin_question_plugin[:obfuscate_content] == "1" %>
+<%= l(:mail_body_question_link) %>
+<% else %>
 <%= @journal.notes if @journal.notes? %>
 
 <% for detail in @journal.details -%>
@@ -7,4 +10,6 @@
 <% end -%>
 
 ----------------------------------------
+<% end %>
+
 <%= render :partial => "mailer/issue", :locals => { :issue => @issue, :issue_url => @issue_url } %>
