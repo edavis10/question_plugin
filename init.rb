@@ -12,6 +12,9 @@ Rails.configuration.to_prepare do
   require_dependency 'journal'
   Journal.send(:include, QuestionPlugin::Patches::JournalPatch) unless Journal.included_modules.include? QuestionPlugin::Patches::JournalPatch
 
+  require_dependency 'application_helper'
+  ApplicationHelper.send(:include, QuestionPlugin::Patches::ApplicationHelperPatch) unless ApplicationHelper.included_modules.include? QuestionPlugin::Patches::ApplicationHelperPatch
+
   if ActiveSupport::Dependencies::search_for_file('journal_observer')
     require_dependency 'journal_observer'
     JournalObserver.send(:include, QuestionPlugin::Patches::JournalObserverPatch) unless JournalObserver.included_modules.include? QuestionPlugin::Patches::JournalObserverPatch
