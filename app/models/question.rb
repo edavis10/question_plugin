@@ -21,8 +21,6 @@ class Question < ActiveRecord::Base
 
   delegate :notes, :to => :journal, :allow_nil => true
   
-  after_save :send_notification
-  
   def for_anyone?
     self.assigned_to.nil?
   end
@@ -36,10 +34,6 @@ class Question < ActiveRecord::Base
     end
   end
   
-  def send_notification
-    QuestionMailer.asked_question(self.journal).deliver
-  end
-
   # TODO: refactor to named_scope
   def self.count_of_open_for_user(user)
     Question.count(:conditions => {:assigned_to_id => user.id, :opened => true})

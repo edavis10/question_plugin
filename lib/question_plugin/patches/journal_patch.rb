@@ -22,7 +22,7 @@ module QuestionPlugin
       module InstanceMethods
         def send_notification_with_question
             send_notification_without_question
-            if journal.question
+            if question
               QuestionMailer.asked_question(self).deliver
             end
         end
