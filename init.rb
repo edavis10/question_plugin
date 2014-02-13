@@ -1,37 +1,36 @@
 require 'redmine'
 
-require 'question_issue_hooks'
-require 'question_kanban_hooks'
-require 'question_layout_hooks'
-require 'question_journal_hooks'
+require 'question_plugin/hooks/issue_hooks'
+require 'question_plugin/hooks/kanban_hooks'
+require 'question_plugin/hooks/layout_hooks'
+require 'question_plugin/hooks/journal_hooks'
 
 Rails.configuration.to_prepare do
-  require_dependency 'journal_observer'
-  JournalObserver.send(:include, QuestionPlugin::Patches::JournalObserverPatch) unless JournalObserver.included_modules.include? QuestionPlugin::Patches::JournalObserverPatch
-
-  require_dependency 'active_record'
-  ActiveRecord::Relation.send(:include, QuestionActiveRecordRelationPatch) unless ActiveRecord::Relation.included_modules.include? QuestionActiveRecordRelationPatch
-
   require_dependency 'issue'
-  Issue.send(:include, QuestionIssuePatch) unless Issue.included_modules.include? QuestionIssuePatch
+  Issue.send(:include, QuestionPlugin::Patches::IssuePatch) unless Issue.included_modules.include? QuestionPlugin::Patches::IssuePatch
 
   require_dependency 'journal'
-  Journal.send(:include, QuestionJournalPatch) unless Journal.included_modules.include? QuestionJournalPatch
+  Journal.send(:include, QuestionPlugin::Patches::JournalPatch) unless Journal.included_modules.include? QuestionPlugin::Patches::JournalPatch
+
+  if ActiveSupport::Dependencies::search_for_file('journal_observer')
+    require_dependency 'journal_observer'
+    JournalObserver.send(:include, QuestionPlugin::Patches::JournalObserverPatch) unless JournalObserver.included_modules.include? QuestionPlugin::Patches::JournalObserverPatch
+  end
 
   if ActiveSupport::Dependencies::search_for_file('issue_queries_helper')
     require_dependency 'issue_queries_helper'
-    IssueQueriesHelper.send(:include, QuestionQueriesHelperPatch) unless QueriesHelper.included_modules.include? QuestionQueriesHelperPatch
+    IssueQueriesHelper.send(:include, QuestionPlugin::Patches::QueriesHelperPatch) unless IssueQueriesHelper.included_modules.include? QuestionPlugin::Patches::QueriesHelperPatch
   else
     require_dependency 'queries_helper'
-    QueriesHelper.send(:include, QuestionQueriesHelperPatch) unless QueriesHelper.included_modules.include? QuestionQueriesHelperPatch
+    QueriesHelper.send(:include, QuestionPlugin::Patches::QueriesHelperPatch) unless QueriesHelper.included_modules.include? QuestionPlugin::Patches::QueriesHelperPatch
   end
 
   if ActiveSupport::Dependencies::search_for_file('issue_query')
     require_dependency 'issue_query'
-    IssueQuery.send(:include, QuestionQueryPatch) unless Query.included_modules.include? QuestionQueryPatch
+    IssueQuery.send(:include, QuestionPlugin::Patches::QueryPatch) unless Query.included_modules.include? QuestionPlugin::Patches::QueryPatch
   else
     require_dependency 'query'
-    Query.send(:include, QuestionQueryPatch) unless Query.included_modules.include? QuestionQueryPatch
+    Query.send(:include, QuestionPlugin::Patches::QueryPatch) unless Query.included_modules.include? QuestionPlugin::Patches::QueryPatch
   end
 end
 

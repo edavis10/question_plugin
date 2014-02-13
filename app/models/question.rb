@@ -5,12 +5,12 @@ class Question < ActiveRecord::Base
   belongs_to :assigned_to, :class_name => "User", :foreign_key => "assigned_to_id"
   belongs_to :author, :class_name => "User", :foreign_key => "author_id"
   belongs_to :issue
-  belongs_to :journal
+  belongs_to :journal, :class_name => "Journal", :foreign_key => "journal_id"
   
   validates_presence_of :author
   validates_presence_of :issue
   validates_presence_of :journal
-
+  
   scope :opened, :conditions => {:opened => true}
   scope :for_user, lambda {|user|
     { :conditions => {:assigned_to_id => user.id }}
@@ -20,6 +20,8 @@ class Question < ActiveRecord::Base
   }
 
   delegate :notes, :to => :journal, :allow_nil => true
+  
+  after_save :send_notification
   
   def for_anyone?
     self.assigned_to.nil?
@@ -32,6 +34,10 @@ class Question < ActiveRecord::Base
         QuestionMailer.answered_question(self, closing_journal).deliver
       end
     end
+  end
+  
+  def send_notification
+    QuestionMailer.asked_question(self.journal).deliver
   end
 
   # TODO: refactor to named_scope

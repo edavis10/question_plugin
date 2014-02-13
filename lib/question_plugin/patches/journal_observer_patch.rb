@@ -1,3 +1,7 @@
+#
+# used for redmine < 2.3.2
+#
+
 module QuestionPlugin
   module Patches
     module JournalObserverPatch
@@ -21,7 +25,6 @@ module QuestionPlugin
 
           if journal.is_a?(Journal)
             if journal.question
-              journal.question.save
               QuestionMailer.asked_question(journal).deliver
             end
           end
