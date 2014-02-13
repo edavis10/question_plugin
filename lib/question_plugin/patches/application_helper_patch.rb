@@ -17,7 +17,8 @@ module QuestionPlugin
 
       module InstanceMethods
         def render_flash_messages_with_question
-          s = render :partial => 'layouts/questions', :layout => false
+          s = "" 
+          s = render :partial => 'layouts/questions', :layout => false unless Setting.plugin_question_plugin[:show_banner] != "1"
           s << render_flash_messages_without_question
           s.html_safe
         end

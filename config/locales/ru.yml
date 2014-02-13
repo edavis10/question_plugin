@@ -10,6 +10,8 @@ ru:
   text_question_for: Вопрос к
   text_question_for_anyone: Вопрос ко всем
   text_questions_for_me: Вопросы ко мне
+  mail_body_question_link:  Для просмотра вопроса нажмите на нижеследующую ссылку на задачу
+  mail_body_answer_link: "Ваш вопрос получил ответ: Для его просмотра нажмите на нижеследующую ссылку на задачу"
   text_question_asked: Вопрос задан
   text_question_remove: "<< Удалить вопрос >>"
   question_text_asked_by: "Автор вопроса"
@@ -26,4 +28,7 @@ ru:
   label_question_plugin_close_settings: При добавлении комментария закрывать
   text_question_close_all: все неотвеченные вопросы в задаче
   text_question_close_selected: только выбранный вопрос
+  label_question_plugin_notifications_obfuscate_author_settings: Прятать имя и e-mail спрашивающего/отвечающего в оповещениях
+  label_question_plugin_notifications_obfuscate_content_settings: Прятать текст вопроса/ответа в оповещениях
   field_question_to_answer: Ответ на вопрос
+  label_question_plugin_show_banner_settings: Показывать неотвеченные вопросы на каждой странице
