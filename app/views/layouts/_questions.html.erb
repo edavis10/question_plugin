@@ -2,24 +2,13 @@
 <% if questions && questions.any? %>
 <div class="question">
   <h3><%= l(:text_questions_for_me)%> (<%= h(questions.length) %>)</h3>
-  <table class="list">
-    <thead><tr>
-    <th><%=l(:field_project)%></th>
-    <th><%=l(:field_issue)%></th>
-    <th><%=l(:text_question)%></th>
-    </tr></thead>
-    <tbody>.
+  <ol>
     <% questions.each do |question| %>
-    <tr id="question-<%= question.id %>" class="<%= cycle('odd', 'even') %>">
-      <td class="project"><%= link_to_project(question.issue.project) %></td>
-      <td class="issue"><%= link_to_issue(question.issue, :project => false) %></td>
-      <td class="question-content">
-        <%= link_to h(truncate(question.notes, :length => 60)), :controller => 'issues', :action => 'show', :id => question.issue %>
-      </td>
-    </tr>
+    <li>
+      <%= link_to_issue(question.issue, :project => true, :subject => false) %>: <%= truncate(question.notes, :length => 120) %><br/>
+    </li>
     <% end %>
-    </tbody>
-  </table>
+  </ol>
 </div>
 <% end %>
 
