@@ -19,6 +19,7 @@ class QuestionMailer < Mailer
     @issue = question.issue
     @journal = journal
     @issue_url = url_for(:controller => 'issues', :action => 'show', :id => question.issue)
+    @users = [question.assigned_to] 
 
     redmine_headers 'Issue-Id' => question.issue.id
     redmine_headers 'Question-Asked' => question.author.login if question.author.present?
