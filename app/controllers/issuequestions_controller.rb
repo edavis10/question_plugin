@@ -12,6 +12,15 @@ class IssuequestionsController < ApplicationController
     new_filter_for_questions_assigned_to(params[:user_id])
     redirect_to :controller => 'issues', :action => 'index', :project_id => params[:project]
   end
+  
+  def hide
+    @question = Question.find(params[:id])
+    @question.hidden = true
+    if @question.save
+      redirect_to :back
+    end
+    
+  end
 
   def autocomplete_for_user_login
     if params[:issue_id] && Setting.plugin_question_plugin[:only_members] == 1

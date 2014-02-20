@@ -31,4 +31,5 @@ en:
   label_question_plugin_notifications_obfuscate_author_settings: Obfuscate asker/answerer name and e-mail address in notifications
   label_question_plugin_notifications_obfuscate_content_settings: Obfuscate question/answer text in notifications
   field_question_to_answer: Answer question
-  label_question_plugin_show_banner_settings: Show unanswered questions on every page 
+  label_question_plugin_show_banner_settings: Show unanswered questions on every page
+  label_question_plugin_hide: Hide 

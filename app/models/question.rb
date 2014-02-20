@@ -12,6 +12,8 @@ class Question < ActiveRecord::Base
   validates_presence_of :journal
   
   scope :opened, :conditions => {:opened => true}
+  scope :not_hidden, :conditions => {:hidden => false}
+
   scope :for_user, lambda {|user|
     { :conditions => {:assigned_to_id => user.id }}
   }

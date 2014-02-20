@@ -1,11 +1,13 @@
-<% questions = Question.opened.for_user(User.current) %>
+<% questions = Question.opened.not_hidden.for_user(User.current) %>
 <% if questions && questions.any? %>
 <div class="question">
   <h3><%= l(:text_questions_for_me)%> (<%= h(questions.length) %>)</h3>
   <ol>
     <% questions.each do |question| %>
     <li>
-      <%= link_to_issue(question.issue, :project => true, :subject => false) %>: <%= truncate(question.notes, :length => 120) %><br/>
+      <%= link_to_issue(question.issue, :project => true, :subject => false) %>: 
+      <%= truncate(question.notes, :length => 120) %> 
+      <%= link_to l(:label_question_plugin_hide), hide_path(question) %>
     </li>
     <% end %>
   </ol>

@@ -32,3 +32,4 @@ ru:
   label_question_plugin_notifications_obfuscate_content_settings: Прятать текст вопроса/ответа в оповещениях
   field_question_to_answer: Ответ на вопрос
   label_question_plugin_show_banner_settings: Показывать неотвеченные вопросы на каждой странице
+  label_question_plugin_hide: Скрыть 
