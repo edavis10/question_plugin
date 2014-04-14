@@ -43,9 +43,8 @@ class Question < ActiveRecord::Base
 
   # TODO: refactor to named_scope
   def self.count_of_open_for_user_on_project(user, project)
-    Question.count(:conditions => ["#{Question.table_name}.assigned_to_id = ? AND #{Project.table_name}.id = ? AND #{Question.table_name}.opened = ?",
+    Question.count(:conditions => ["(#{Question.table_name}.assigned_to_id = ?) AND #{project.project_condition(Setting.display_subprojects_issues?)} AND (#{Question.table_name}.opened = ?)",
                                    user.id,
-                                   project.id,
                                    true],
                    :include => [:issue => [:project]])
   end
