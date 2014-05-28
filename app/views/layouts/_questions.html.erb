@@ -1,6 +1,6 @@
 <% questions = Question.opened.not_hidden.for_user(User.current) %>
 <% if questions && questions.any? %>
-<div class="question">
+<div class="flash question">
   <h3><%= l(:text_questions_for_me)%> (<%= h(questions.length) %>)</h3>
   <ol>
     <% questions.each do |question| %>
