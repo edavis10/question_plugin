@@ -6,7 +6,8 @@ module QuestionPlugin
       def view_layouts_base_html_head(context = { })
       o = <<CSS
   <style type="text/css">
-.question { background-color:#FFEBC1; border:2px solid #FDBD3B; margin-bottom:12px; padding:0px 4px 8px 4px; }
+
+.question, div.flash.question { background-color:#FFEBC1; border:2px solid; margin-bottom:12px; padding:0px 4px 8px 4px; border-color: #fdbd2b}
 .question-line { float: right; }
 td.formatted_questions { text-align: left; white-space: normal}
 td.formatted_questions ol { margin-top: 0px; margin-bottom: 0px; }
