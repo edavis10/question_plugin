@@ -10,6 +10,7 @@ en:
   text_question_for: Otázka pro
   text_question_for_anyone: Otázka pro kohokoliv
   text_questions_for_me: Otázky pro mě
+  text_question_for_in_by: "Dotaz na %{name} u %{issue} položil/a %{author}"
   text_question_asked: Položené otázky
   text_question_remove: "<< Odstranit Otázku>>"
   question_text_asked_by: "Položeno"
