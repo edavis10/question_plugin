@@ -5,7 +5,7 @@
 <%= textilizable(@journal, :notes, :only_path => false) %>
 <% end %>
 
-<h1><%= l(:text_question_for) %> <%= @question.assigned_to.try(:full_name) %></h1>
+<h1><%= l(:text_question_for) %> <%= @question.assigned_to %></h1>
 <%= textilizable(@question.journal, :notes, :only_path => false) %>
 
 <% if Setting.plugin_question_plugin[:obfuscate_content] == "0" %>
