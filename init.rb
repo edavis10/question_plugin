@@ -15,11 +15,6 @@ Rails.configuration.to_prepare do
   require_dependency 'application_helper'
   ApplicationHelper.send(:include, QuestionPlugin::Patches::ApplicationHelperPatch) unless ApplicationHelper.included_modules.include? QuestionPlugin::Patches::ApplicationHelperPatch
 
-  if ActiveSupport::Dependencies::search_for_file('journal_observer')
-    require_dependency 'journal_observer'
-    JournalObserver.send(:include, QuestionPlugin::Patches::JournalObserverPatch) unless JournalObserver.included_modules.include? QuestionPlugin::Patches::JournalObserverPatch
-  end
-
   if ActiveSupport::Dependencies::search_for_file('issue_queries_helper')
     require_dependency 'issue_queries_helper'
     IssueQueriesHelper.send(:include, QuestionPlugin::Patches::QueriesHelperPatch) unless IssueQueriesHelper.included_modules.include? QuestionPlugin::Patches::QueriesHelperPatch
