@@ -35,17 +35,17 @@ module QuestionPlugin
             if params[:question][:assigned_to].downcase == 'anyone'
               journal.question.update_attributes(:assigned_to => nil)
             else
-              journal.question.update_attributes(:assigned_to => User.find_by_login(params[:question][:assigned_to]))
+              journal.question.update_attributes(:assigned_to => User.find_by(:login => params[:question][:assigned_to]))
             end
           elsif journal.question && !journal.question.opened
             # Existing question, destry it first and then add a new question
             journal.question.destroy
-            add_new_question(journal, User.find_by_login(params[:question][:assigned_to]))
+            add_new_question(journal, User.find_by(:login => params[:question][:assigned_to]))
           else
             if params[:question][:assigned_to].downcase == 'anyone'
               add_new_question(journal)
             elsif !params[:question][:assigned_to].blank?
-              add_new_question(journal, User.find_by_login(params[:question][:assigned_to]))
+              add_new_question(journal, User.find_by(:login => params[:question][:assigned_to]))
             else
               # No question
             end

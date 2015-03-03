@@ -9,7 +9,7 @@ module QuestionPlugin
         base.class_eval do
           unloadable # Send unloadable so it will not be unloaded in development
           has_many :questions
-          has_many :open_questions, :class_name => 'Question', :conditions => { :opened => true }
+          has_many :open_questions, lambda { Question.opened }, :class_name => 'Question'
     
           include ActionView::Helpers::TextHelper # for truncate
         end
@@ -20,7 +20,7 @@ module QuestionPlugin
     
       module InstanceMethods
         def pending_question?(user)
-          self.open_questions.find(:all).each do |question|
+          self.open_questions.all.each do |question|
             return true if question.assigned_to == user || question.for_anyone?
           end
           return false
@@ -28,7 +28,7 @@ module QuestionPlugin
     
         def pending_questions(user)
           q = []
-          self.open_questions.find(:all).each do |question|
+          self.open_questions.all.each do |question|
             q << question if question.assigned_to == user || question.for_anyone?
           end
           return q

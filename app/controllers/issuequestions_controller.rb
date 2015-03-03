@@ -24,20 +24,20 @@ class IssuequestionsController < ApplicationController
 
   def autocomplete_for_user_login
     if params[:issue_id] && Setting.plugin_question_plugin[:only_members] == 1
-      @issue = Issue.find_by_id(params[:issue_id])
+      @issue = Issue.find(params[:issue_id])
       base = @issue.project.users
     else
       base = User
     end
     q = (params[:q] || params[:term] || params[:user]).to_s.strip.downcase
     if q.present?
-      @users = base.active.all(:conditions => ["LOWER(login) LIKE :user OR LOWER(firstname) LIKE :user OR LOWER(lastname) LIKE :user", {:user => q + "%" }],
-                               :limit => 10,
-                               :order => 'login ASC')
+      @users = base.active.where(["LOWER(login) LIKE :user OR LOWER(firstname) LIKE :user OR LOWER(lastname) LIKE :user", {:user => q + "%" }]).
+                           limit(10).
+                           order('login ASC')
     end
     @users ||=[]
 
-   render :layout => false
+    render :layout => false
   end
 
   private

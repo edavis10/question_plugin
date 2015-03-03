@@ -26,7 +26,7 @@ module QuestionPlugin
         def preload_journals_details_custom_fields_with_question(journals)
           
           # preload questions for all journal entries for faster display
-          ActiveRecord::Associations::Preloader.new(journals, :question).run
+          ActiveRecord::Associations::Preloader.new.preload(journals, :question)
           
           preload_journals_details_custom_fields_without_question(journals)
         end

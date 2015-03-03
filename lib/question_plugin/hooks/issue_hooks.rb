@@ -57,7 +57,7 @@ JS
             )
             if params[:note][:question_assigned_to].downcase != 'anyone'
               # Assigned to a specific user
-              assign_question_to_user(journal, User.find_by_login(params[:note][:question_assigned_to]))
+              assign_question_to_user(journal, User.find_by(:login => params[:note][:question_assigned_to]))
             end
           end
         end

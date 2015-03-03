@@ -11,14 +11,14 @@ class Question < ActiveRecord::Base
   validates_presence_of :issue
   validates_presence_of :journal
   
-  scope :opened, :conditions => {:opened => true}
-  scope :not_hidden, :conditions => {:hidden => false}
+  scope :opened, lambda { where(:opened => true) }
+  scope :not_hidden, lambda { where(:hidden => false) }
 
   scope :for_user, lambda {|user|
-    { :conditions => {:assigned_to_id => user.id }}
+     where(:assigned_to_id => user.id)
   }
   scope :by_user, lambda {|user|
-    { :conditions => {:author_id => user.id }}
+     where(:author_id => user.id)
   }
 
   delegate :notes, :to => :journal, :allow_nil => true
@@ -38,14 +38,13 @@ class Question < ActiveRecord::Base
   
   # TODO: refactor to named_scope
   def self.count_of_open_for_user(user)
-    Question.count(:conditions => {:assigned_to_id => user.id, :opened => true})
+    Question.where(:assigned_to_id => user.id, :opened => true).count
   end
 
   # TODO: refactor to named_scope
   def self.count_of_open_for_user_on_project(user, project)
-    Question.count(:conditions => ["(#{Question.table_name}.assigned_to_id = ?) AND #{project.project_condition(Setting.display_subprojects_issues?)} AND (#{Question.table_name}.opened = ?)",
-                                   user.id,
-                                   true],
-                   :include => [:issue => [:project]])
+    Question.where(["(#{Question.table_name}.assigned_to_id = ?) AND #{project.project_condition(Setting.display_subprojects_issues?)} AND (#{Question.table_name}.opened = ?)",
+                    user.id, true]).
+             joins(:issue => :project).preload(:project).count
   end
 end
