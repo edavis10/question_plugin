@@ -45,7 +45,7 @@ p = Redmine::Plugin.register :question_plugin do
   description 'This is a plugin for Redmine that will allow users to ask questions to each other in issue notes'
   version '0.3.0'
 
-  requires_redmine :version_or_higher => '2.0.0'
+  requires_redmine :version_or_higher => '3.0.0'
 
   settings :default => {
     :only_members => 1,
