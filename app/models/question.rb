@@ -11,6 +11,8 @@ class Question < ActiveRecord::Base
   validates_presence_of :issue
   validates_presence_of :journal
   
+  attr_protected :journal
+
   scope :opened, lambda { where(:opened => true) }
   scope :not_hidden, lambda { where(:hidden => false) }
 
