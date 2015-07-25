@@ -1,0 +1,29 @@
+tr:
+  field_question_assign_to: Soruyu şu kişiye ata
+  field_question_assigned_to: Soru şu kişiye atanmış
+  field_question_asked_by: Soruyu soran
+  field_formatted_questions: Sorular
+  text_question: Soru
+  text_question_answered: Soru Cevaplandı
+  text_answer: Cevap
+  text_anyone: Herhangi biri
+  text_question_for: Şu kişiye sor
+  text_question_for_anyone: Herhangi birine sor
+  text_questions_for_me: Bana sorulmuş sorular
+  text_question_asked: Sorulmuş sorular
+  text_question_remove: "<< Soruyu Sil >>"
+  question_text_asked_by: "Şu kişi sormuş"
+  question_text_assigned_to: "Soru şu kişiye atanmış"
+  question_text_created_on: "Oluşturulma"
+  question_text_ratio_questions_answered: "{{ratio}} soru cevaplandı"
+  field_journal: "Günlük"
+  text_questions_asked_by_me: "Benim sorduğum sorular"
+  question_reminder_subject: "%{count} açık soru"
+  question_reminder_body: "Bana atanmış %{count} açık soru:"
+  label_question_plugin_only_members: Soru şu kişilere atanabilir
+  text_question_all: Herhangi bir kullanıcı
+  text_question_project_member: Sadece birim üyeleri
+  label_question_plugin_close_settings: Not ekleyince kapat
+  text_question_close_all: İş içindeki tüm sorular
+  text_question_close_selected: sadece seçilmiş soru
+  field_question_to_answer: Soruyu cevapla
