@@ -11,7 +11,8 @@ cs:
   text_question_for_anyone: Otázka pro kohokoliv
   text_questions_for_me: Otázky pro mě
   text_question_asked: Položené otázky
-  mail_body_question_link: Otázku zobrazíte kliknutím na odkaz níže
+  mail_body_title: "Máte novou otázku od %{author}"
+  mail_body_question_link: Otázku zobrazíte kliknutím na následující odkaz
   mail_body_answer_link: "Vaše otázka byla zodpovězena: klikněte na odkaz níže k jejímu zobrazení"
   text_question_remove: "<< Odstranit Otázku >>"
   question_text_asked_by: "Otázka od"

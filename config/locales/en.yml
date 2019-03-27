@@ -11,6 +11,7 @@ en:
   text_question_for_anyone: Question for anyone
   text_questions_for_me: Questions for me
   text_question_asked: Question asked
+  mail_body_title: "You have new question from %{author}"
   mail_body_question_link: Display question by clicking on the issue link below
   mail_body_answer_link: "Your question has received an answer: click on the issue link below to display it"
   text_question_remove: "<< Remove Question>>"
