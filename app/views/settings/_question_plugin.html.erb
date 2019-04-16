@@ -1,0 +1,28 @@
+<p>
+  <%= label_tag "settings[only_members]", l(:label_question_plugin_only_members) %>
+  <%= select_tag 'settings[only_members]', options_for_select([
+        [l(:text_question_all), 0],
+        [l(:text_question_project_member), 1],
+      ], Setting.plugin_question_plugin[:only_members]) %>
+</p>
+<p>
+  <%= label_tag "settings[close_all_questions]", l(:label_question_plugin_close_settings) %>
+  <%= select_tag 'settings[close_all_questions]', options_for_select([
+        [l(:text_question_close_all), 1],
+        [l(:text_question_close_selected), 0],
+      ], Setting.plugin_question_plugin[:close_all_questions]) %>
+
+</p>
+<p>
+  <%= label_tag "settings[obfuscate_author]", l(:label_question_plugin_notifications_obfuscate_author_settings) %>
+  <%= check_box_tag 'settings[obfuscate_author]', 1, (Setting.plugin_question_plugin[:obfuscate_author] ? true : false) %>
+
+</p>
+<p>
+  <%= label_tag "settings[obfuscate_content]", l(:label_question_plugin_notifications_obfuscate_content_settings) %>
+  <%= check_box_tag 'settings[obfuscate_content]', 1, (Setting.plugin_question_plugin[:obfuscate_content] ? true : false) %>
+</p>
+<p>
+  <%= label_tag "settings[show_banner]", l(:label_question_plugin_show_banner_settings) %>
+  <%= check_box_tag 'settings[show_banner]', 1, (Setting.plugin_question_plugin[:show_banner] ? true : false) %>
+</p>

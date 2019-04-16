@@ -1,0 +1,36 @@
+cs:
+  field_question_assign_to: Položit otázku na
+  field_question_assigned_to: Otázka pro
+  field_question_asked_by: Otázka od
+  field_formatted_questions: Otázky
+  text_question: Otázka
+  text_question_answered: Otázka zodpovězena
+  text_answer: Odpověď
+  text_anyone: Kdokoliv
+  text_question_for: Otázka pro
+  text_question_for_anyone: Otázka pro kohokoliv
+  text_questions_for_me: Otázky pro mě
+  text_question_asked: Položené otázky
+  mail_body_title: "Máte novou otázku od %{author}"
+  mail_body_question_link: Otázku zobrazíte kliknutím na následující odkaz
+  mail_body_answer_link: "Vaše otázka byla zodpovězena: klikněte na odkaz níže k jejímu zobrazení"
+  text_question_remove: "<< Odstranit Otázku >>"
+  question_text_asked_by: "Otázka od"
+  question_text_assigned_to: "Otázka pro"
+  question_text_created_on: "Vytvořeno"
+  question_text_ratio_questions_answered: "{{ratio}} zodpovězených otázek"
+  field_journal: "Žurnál"
+  text_questions_asked_by_me: "Otázky ode mne"
+  question_reminder_subject: "%{count} nezodpovězených otázek"
+  question_reminder_body: "%{count} nezodpovězených otázek, které jsou položeny na vás:"
+  label_question_plugin_only_members: Otázku lze položit na
+  text_question_all: Jakéhokoliv uživatele
+  text_question_project_member: Pouze členy projektu
+  label_question_plugin_close_settings: Zodpovědět při přidání komentáře
+  text_question_close_all: všechny nezodpovězené otázky v úkolu
+  text_question_close_selected: pouze vybranou otázku
+  label_question_plugin_notifications_obfuscate_author_settings: Skrýt jméno a e-mail dotazujícího/dotazovaného v notifikacích
+  label_question_plugin_notifications_obfuscate_content_settings: Skrýt otázku/odpověď v notifikacích
+  field_question_to_answer: Otázka k zodpovězení
+  label_question_plugin_show_banner_settings: Zobrazit nezodpovězenou otázku na každé stránce
+  label_question_plugin_hide: Skrýt

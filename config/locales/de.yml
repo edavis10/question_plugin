@@ -1,17 +1,33 @@
 de:
-  field_question_assign_to: Frage zuweisen an
-  field_question_assigned_to: Frage ist gestellt an
-  field_question_asked_by: Frage wurde gestellt durch
-  field_formatted_questions: Fragen
-  text_question: Frage
-  text_question_answered: Frage beantwortet
-  text_answer: Antwort
-  text_anyone: Irgendwer
-  text_question_for: Frage f&uuml;r
-  text_question_for_anyone: Frage f&uuml;r irgendjemanden
-  text_questions_for_me: Fragen f&uuml;r mich
-  text_question_asked: Frage gestellt
+  field_question_assign_to: "Frage zuweisen an"
+  field_question_assigned_to: "Frage ist gestellt an"
+  field_question_asked_by: "Frage wurde gestellt durch"
+  field_formatted_questions: "Fragen"
+  text_question: "Frage"
+  text_question_answered: "Frage beantwortet"
+  text_answer: "Antwort"
+  text_anyone: "Irgendwer"
+  text_question_for: "Frage für"
+  text_question_for_anyone: "Frage für irgendjemanden"
+  text_questions_for_me: "Fragen für mich"
+  text_question_asked: "Frage gestellt"
   text_question_remove: "<<Frage entfernen>>"
   question_text_asked_by: "gefragt von"
   question_text_assigned_to: "Zugewiesen an"
-  question_text_created_on: "Erstellt am"
+  question_text_created_on: "erstellt am"
+  question_text_ratio_questions_answered: "{{ratio}} beantwortete Fragen"
+  field_journal: "Journal"
+  text_questions_asked_by_me: "meine gestellten Fragen"
+  question_reminder_subject: "%{count} offene Frage(n)"
+  question_reminder_body: "%{count} offene dir zugewiesene Frage(n)"
+  label_question_plugin_only_members: Die Frage kann diesem Benutzer zugewiesen werden
+  text_question_all: jedem Benutzer
+  text_question_project_member: Projektmitarbeitern
+  label_question_plugin_close_settings: Frage des Tickets abschließend beantworten
+  text_question_close_all: alle offene Fragen
+  text_question_close_selected: ausschließlich aktuell ausgewählte Frage
+  label_question_plugin_notifications_obfuscate_author_settings: Name und Email des Fragestellers in Email Benachrichtigungen verbergen
+  label_question_plugin_notifications_obfuscate_content_settings: Frage- und Anworttext in  Email Benachrichtigungen verbergen
+  field_question_to_answer: Frage beantworten
+  mail_body_question_link: Zeige Sie die Frage für sich an, indem sie auf den nachfolgenden Link für das Ticket klicken
+  mail_body_answer_link: "Ihre Frage wurde beantwortet: Klicken Sie auf den nachfolgenden Link für das Ticket um die Antwort zu sehen"

@@ -11,13 +11,26 @@ en:
   text_question_for_anyone: Question for anyone
   text_questions_for_me: Questions for me
   text_question_asked: Question asked
+  mail_body_title: "You have new question from %{author}"
+  mail_body_question_link: Display question by clicking on the issue link below
+  mail_body_answer_link: "Your question has received an answer: click on the issue link below to display it"
   text_question_remove: "<< Remove Question>>"
   question_text_asked_by: "Asked By"
-  question_text_assigned_to: "Assigned To"
+  question_text_assigned_to: "Question assigned To"
   question_text_created_on: "Created On"
   question_text_ratio_questions_answered: "{{ratio}} questions answered"
   field_journal: "Journal"
   text_questions_asked_by_me: "Questions asked by me"
   question_reminder_subject: "%{count} open question(s)"
   question_reminder_body: "%{count} open questions(s) that are assigned to you:"
-
+  label_question_plugin_only_members: Question can be assigned to
+  text_question_all: Any user
+  text_question_project_member: Project members only
+  label_question_plugin_close_settings: When add comment close
+  text_question_close_all: all opened questions in issue
+  text_question_close_selected: only selected question
+  label_question_plugin_notifications_obfuscate_author_settings: Obfuscate asker/answerer name and e-mail address in notifications
+  label_question_plugin_notifications_obfuscate_content_settings: Obfuscate question/answer text in notifications
+  field_question_to_answer: Answer question
+  label_question_plugin_show_banner_settings: Show unanswered questions on every page
+  label_question_plugin_hide: Hide 

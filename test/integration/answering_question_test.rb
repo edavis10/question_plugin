@@ -10,9 +10,7 @@ class AnsweringQuestionTest < ActionController::IntegrationTest
       @question = Question.new(:assigned_to => @author, :author => @author, :issue => @issue)
       @issue.journal_notes = "Question"
       
-      @issue.extra_journal_attributes = {
-        :question => @question
-      }
+      @issue.question = @question
       assert @issue.save
       ActionMailer::Base.deliveries.clear
     end

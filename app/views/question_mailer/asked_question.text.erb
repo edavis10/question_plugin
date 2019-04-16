@@ -1,0 +1,14 @@
+<%= l(:mail_body_title, name: @question.assigned_to, issue: "##{@issue.id}", author: @question.author) %>
+
+<% if Setting.plugin_question_plugin[:obfuscate_content] == "1" %>
+<%= l(:mail_body_question_link) %>
+<% else %>
+<%= @journal.notes if @journal.notes? %>
+
+<% for detail in @journal.details -%>
+<%= show_detail(detail, true) %>
+<% end -%>
+
+----------------------------------------
+<% end %>
+<%= render :partial => "mailer/issue", :locals => { :issue => @issue, :issue_url => @issue_url, :users => @users } %>

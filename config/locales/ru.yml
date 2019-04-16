@@ -1,0 +1,35 @@
+ru:
+  field_question_assign_to: Спросить у
+  field_question_assigned_to: Вопрос к
+  field_question_asked_by: Вопрос задал
+  field_formatted_questions: Вопросы
+  text_question: Вопрос
+  text_question_answered: Вопрос отвечен
+  text_answer: Ответ
+  text_anyone: Все
+  text_question_for: Вопрос к
+  text_question_for_anyone: Вопрос ко всем
+  text_questions_for_me: Вопросы ко мне
+  mail_body_question_link:  Для просмотра вопроса нажмите на нижеследующую ссылку на задачу
+  mail_body_answer_link: "Ваш вопрос получил ответ: Для его просмотра нажмите на нижеследующую ссылку на задачу"
+  text_question_asked: Вопрос задан
+  text_question_remove: "<< Удалить вопрос >>"
+  question_text_asked_by: "Автор вопроса"
+  question_text_assigned_to: "Вопрос назначен"
+  question_text_created_on: "Создан"
+  question_text_ratio_questions_answered: "{{ratio}} вопросов отвечено"
+  field_journal: "Journal"
+  text_questions_asked_by_me: "Вопросы заданные мной"
+  question_reminder_subject: "%{count} не отвеченных вопросов"
+  question_reminder_body: "%{count}  не отвеченных вопросов заданных Вам:"
+  label_question_plugin_only_members: Вопрос может быть задан
+  text_question_all: Любому пользователю
+  text_question_project_member: Только участникам проекта
+  label_question_plugin_close_settings: При добавлении комментария закрывать
+  text_question_close_all: все неотвеченные вопросы в задаче
+  text_question_close_selected: только выбранный вопрос
+  label_question_plugin_notifications_obfuscate_author_settings: Прятать имя и e-mail спрашивающего/отвечающего в оповещениях
+  label_question_plugin_notifications_obfuscate_content_settings: Прятать текст вопроса/ответа в оповещениях
+  field_question_to_answer: Ответ на вопрос
+  label_question_plugin_show_banner_settings: Показывать неотвеченные вопросы на каждой странице
+  label_question_plugin_hide: Скрыть 
